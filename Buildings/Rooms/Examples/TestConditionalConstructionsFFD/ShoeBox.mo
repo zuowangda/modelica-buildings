@@ -42,7 +42,7 @@ model ShoeBox "A shoebox room model with only walls"
     "Number of surface that are connected to constructions that are modeled inside the room";
   parameter Integer nSurBou=1
     "Number of surface that are connected to the room air volume";
-  parameter String cfdFilNam "CFD input file name";
+
   Buildings.Rooms.FFD roo(
     redeclare package Medium = MediumA,
     nConBou=nConBou,
@@ -76,9 +76,8 @@ model ShoeBox "A shoebox room model with only walls"
       each absIR=0.9,
       each absSol=0.9,
       each til=Buildings.HeatTransfer.Types.Tilt.Wall),
-    cfdFilNam = cfdFilNam,
     lat=0.73268921998722,
-    cfddFilNam="Buildings/Resources/Data/Rooms/FFD/ShoeBox.ffd") "Room model"
+    cfdFilNam="Resources/Data/Rooms/FFD/ShoeBox.ffd") "Room model"
     annotation (Placement(transformation(extent={{46,20},{86,60}})));
 
   Modelica.Blocks.Sources.Constant qConGai_flow(k=0) "Convective heat gain"
