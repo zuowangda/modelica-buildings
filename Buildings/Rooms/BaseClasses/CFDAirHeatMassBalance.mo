@@ -28,6 +28,7 @@ model CFDAirHeatMassBalance
     "Names of fluid ports as declared in the CFD input file";
   // fixme: for the cfd instance, need to correctly assign flaWri
   CFDExchange cfd(
+    final cfdFilNam=cfdFilNam,
     final startTime=startTime,
     final activateInterface=useFFD,
     final samplePeriod = if useFFD then samplePeriod else Modelica.Constants.inf,
