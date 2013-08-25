@@ -3,6 +3,7 @@ model FFD
   "Model of a room in which the air is computed using fast fluid flow dynamics"
   extends Buildings.Rooms.BaseClasses.RoomHeatMassBalance(
   redeclare BaseClasses.CFDAirHeatMassBalance air(
+    final cfdFilNam = cfdFilNam,
     final useFFD=useFFD,
     final samplePeriod=samplePeriod,
     final startTime=startTime,
@@ -28,7 +29,7 @@ model FFD
     "Names of sensors as declared in the CFD input file";
   parameter String portName[nPorts]
     "Names of fluid ports as declared in the CFD input file";
-  parameter String cfddFilNam "CFD input file name" annotation (Dialog(
+  parameter String cfdFilNam "CFD input file name" annotation (Dialog(
         __Dymola_loadSelector(caption=
             "Select CFD input file")));
   Modelica.Blocks.Interfaces.RealOutput yCFD[nSen] if
