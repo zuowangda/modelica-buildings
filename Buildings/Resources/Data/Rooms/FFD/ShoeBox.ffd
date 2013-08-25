@@ -3,7 +3,7 @@
 //------------------------------------------------------------------------------
 
 inpu.parameter_file_format SCI // Foramt of extra parameter file: SCI
-inpu.parameter_file_name ShoeBox.cfd // Name of extra parameter file
+inpu.parameter_file_name Resources/Data/Rooms/FFD/ShoeBox.cfd // Name of extra parameter file
 
 inpu.old_ffd_file_name ShoeBox.plt// Name of previous FFD simulation data file
 
