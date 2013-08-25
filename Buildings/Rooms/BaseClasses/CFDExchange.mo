@@ -307,6 +307,7 @@ initial equation
 
   // Send parameters to the CFD interface
   sendParameters(
+    cfdFilNam=cfdFilNam,
     name={surIde[i].name for i in 1:nSur},
     A={surIde[i].A for i in 1:nSur},
     til={surIde[i].til for i in 1:nSur},
