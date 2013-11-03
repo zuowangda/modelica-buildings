@@ -38,7 +38,7 @@ geom.uniform 1 // Only for generating grid by FFD. 1: uniform grid; 0: non-unifo
 
 outp.cal_mean 1 // 1: Calculate mean value; 0: False
 outp.v_ref 0.1 // Reference velocity for visualization
-outp.Temp_ref 1.0 // Reference temperature for visualizations
+outp.Temp_ref 10 // Reference temperature for visualizations
 outp.v_length 1 // Change of velocity vector length in demo window
 outp.i_N 1 // Number of grids plotted in x direction
 outp.j_N 1 // Number of grids plotted in y direction
@@ -58,7 +58,7 @@ prob.Prt 0.9 // Turbulent Prandl number
 prob.Temp_Buoyancy 20.0 // Reference temperature for calucating bouyance force
 
 mytime.t_steady 100.0 //Necessary time for reaching the steady state from initial condition
-mytime.dt_cosim 0.1  // Time step for co-simulation data exchange 
+ 
 
 solv.solver GS // Solver type: GS, TDMA
 solv.check_residual 0 // 1: check, 0: donot check
