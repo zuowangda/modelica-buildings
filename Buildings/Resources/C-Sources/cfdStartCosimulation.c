@@ -43,11 +43,17 @@ int cfdStartCosimulation(char *cfdFilNam, char **name, double *A, double *til,
                 int nConExtWin, int nC, int nXi) {
   int i, nBou;
   /****************************************************************************
-  | For call FFD-DLL.dll
+  | For call FFD-DLL
   ****************************************************************************/
+#ifdef _MSC_VER //Windows
   typedef int (*MYPROC)(CosimulationData *);
   HINSTANCE hinstLib; 
   MYPROC ProcAdd;
+#else //Linux
+  void *hinstLib;
+  double (*ProcAdd)(CosimulationData *); 
+  MYPROC ProcAdd;
+#endif
 
   printf("Start to allcoate memory for data exchange.\n");
 
@@ -78,7 +84,7 @@ int cfdStartCosimulation(char *cfdFilNam, char **name, double *A, double *til,
   cosim->para->bouCon = (int *) malloc(nSur*sizeof(int));
 
   for(i=0; i<nSur; i++) { 
-    cosim->para->name[i] = (char *)malloc(sizeof(char) *strlen(name[i]));
+    cosim->para->name[i] = (char *)malloc(sizeof(char) *(strlen(name[i])+1));
     strcpy(cosim->para->name[i], name[i]);
     printf("Boundary name:%s\n", cosim->para->name[i]);
 
@@ -95,7 +101,7 @@ int cfdStartCosimulation(char *cfdFilNam, char **name, double *A, double *til,
   cosim->para->portName = (char**) malloc(nPorts*sizeof(char *));
 
   for(i=0; i<nPorts; i++) {
-    cosim->para->portName[i] = (char *)malloc(sizeof(char)*strlen(portName[i]));
+    cosim->para->portName[i] = (char *)malloc(sizeof(char)*(strlen(portName[i])+1));
     strcpy(cosim->para->portName[i], portName[i]);
     printf("Boundary name:%s\n", cosim->para->portName[i]);
   }
@@ -103,7 +109,7 @@ int cfdStartCosimulation(char *cfdFilNam, char **name, double *A, double *til,
   if(haveSensor) {
     cosim->para->sensorName = (char **) malloc(nSen*sizeof(char *));
     for(i=0; i<nSen; i++) {
-      cosim->para->sensorName[i] = (char *)malloc(sizeof(char)*strlen(sensorName[i]));
+      cosim->para->sensorName[i] = (char *)malloc(sizeof(char)*(strlen(sensorName[i])+1));
       strcpy(cosim->para->sensorName[i], sensorName[i]);
       printf("Sensor Name:%s\n", cosim->para->sensorName[i]);
     }
@@ -146,11 +152,19 @@ int cfdStartCosimulation(char *cfdFilNam, char **name, double *A, double *til,
   /****************************************************************************
   | Get a handle to the DLL module.
   ****************************************************************************/
+#ifdef _MSC_VER //Windows
   hinstLib = LoadLibrary(TEXT("Resources/bin/FFD-DLL.dll")); 
+#else //Linux
+  hinstLib = dlopen("Resources/bin/FFD-DLL.so", RTLD_LAZY);
+#endif
 
   // If the handle is valid, try to get the function address.
-  if(hinstLib != NULL) {
+  if(hinstLib!=NULL) {
+#ifdef _MSC_VER
     ProcAdd = (MYPROC) GetProcAddress(hinstLib, "ffd_dll");
+#else
+    ProcAdd = dlsym(hinstLib, "ffd_dll");
+#endif
   }
   else {
     printf("instantiate(): Could not find dll handle.\n");
@@ -158,13 +172,18 @@ int cfdStartCosimulation(char *cfdFilNam, char **name, double *A, double *til,
   }
 
   // If the function address is valid, call the function.
-    if (NULL!=ProcAdd) {
-      ProcAdd(cosim);   //call function: passing pointer of NAME struct
-    }
-    else{
-      printf("instantiate(): Could not find dll function address.\n");
-      return 1;
-    }
+  if (ProcAdd!=NULL) {
+  //call function: passing pointer of NAME struct
+#ifdef _MSC_VER // Windows
+    ProcAdd(cosim);   
+#else // Linux
+    (*ProcAdd)(cosim);
+#endif
+  }
+  else{
+    printf("instantiate(): Could not find dll function address.\n");
+    return 1;
+  }
 
   return 0;
 } // End of cfdStartCosimulation()
