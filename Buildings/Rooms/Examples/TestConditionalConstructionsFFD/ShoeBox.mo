@@ -1,10 +1,10 @@
 within Buildings.Rooms.Examples.TestConditionalConstructionsFFD;
-model ShoeBox "A shoebox room model with only walls"
+model ShoeBox "A shoe box room model with only walls"
   extends Modelica.Icons.Example;
   package MediumA = Buildings.Media.GasesConstantDensity.MoistAirUnsaturated
     "Medium model";
 
-  inner Modelica.Fluid.System system
+  inner Modelica.Fluid.System system(T_ambient=273.15)
     annotation (Placement(transformation(extent={{-72,-32},{-52,-12}})));
 
   parameter
@@ -16,9 +16,8 @@ model ShoeBox "A shoebox room model with only walls"
     "Construction material for partition walls"
     annotation (Placement(transformation(extent={{-20,140},{0,160}})));
 
-  parameter Buildings.HeatTransfer.Data.OpaqueConstructions.Generic matLayRoo(
-      material={HeatTransfer.Data.Solids.InsulationBoard(x=0.2),
-        HeatTransfer.Data.Solids.Concrete(x=0.2)}, final nLay=2)
+  parameter Buildings.HeatTransfer.Data.OpaqueConstructions.Generic matLayRoo(final
+      nLay=1, material={HeatTransfer.Data.Solids.Concrete(x=0.0001)})
     "Construction material for roof"
     annotation (Placement(transformation(extent={{20,140},{40,160}})));
 
@@ -37,10 +36,10 @@ model ShoeBox "A shoebox room model with only walls"
     haveExteriorShade=false) "Data record for the glazing system"
     annotation (Placement(transformation(extent={{100,140},{120,160}})));
 
-  parameter Integer nConExtWin=1 "Number of constructions with a window";
-  parameter Integer nConBou=1
+  parameter Integer nConExtWin=0 "Number of constructions with a window";
+  parameter Integer nConBou=6
     "Number of surface that are connected to constructions that are modeled inside the room";
-  parameter Integer nSurBou=1
+  parameter Integer nSurBou=0
     "Number of surface that are connected to the room air volume";
 
   Buildings.Rooms.FFD roo(
@@ -48,36 +47,24 @@ model ShoeBox "A shoebox room model with only walls"
     nConBou=nConBou,
     nSurBou=nSurBou,
     sensorName={"Occupied zone air temperature","Velocity"},
-    linearizeRadiation=false,
     useFFD=true,
     startTime=0,
-    samplePeriod=1,
     nConPar=0,
-    nConExt=4,
     nConExtWin=0,
     AFlo=1*1,
     hRoo=1,
+    cfdFilNam="Resources/Data/Rooms/FFD/ShoeBox.ffd",
+    nConExt=0,
     datConBou(
-      name={"Floor"},
-      layers={matLayFlo},
+      name={"East Wall","West Wall","North Wall","South Wall","Floor","Ceiling"},
+      layers={matLayRoo,matLayRoo,matLayRoo,matLayRoo,matLayRoo,matLayRoo},
       each A=1*1,
-      each til=Buildings.HeatTransfer.Types.Tilt.Floor),
-    datConExt(
-      name={"Ceiling","West Wall","North Wall","South Wall"},
-      layers={matLayRoo,matLayExt,matLayExt,matLayExt},
-      A={1*1,1*1,1*1,1*1},
-      til={Buildings.HeatTransfer.Types.Tilt.Ceiling,Buildings.HeatTransfer.Types.Tilt.Wall,
-          Buildings.HeatTransfer.Types.Tilt.Wall,Buildings.HeatTransfer.Types.Tilt.Wall},
-      azi={Buildings.HeatTransfer.Types.Azimuth.S,Buildings.HeatTransfer.Types.Azimuth.W,
-          Buildings.HeatTransfer.Types.Azimuth.N,Buildings.HeatTransfer.Types.Azimuth.S}),
-    surBou(
-      name={"East Wall"},
-      each A=1*1,
-      each absIR=0.9,
-      each absSol=0.9,
-      each til=Buildings.HeatTransfer.Types.Tilt.Wall),
-    lat=0.73268921998722,
-    cfdFilNam="Resources/Data/Rooms/FFD/ShoeBox.ffd") "Room model"
+      til={Buildings.HeatTransfer.Types.Tilt.Wall,Buildings.HeatTransfer.Types.Tilt.Wall,
+          Buildings.HeatTransfer.Types.Tilt.Wall,Buildings.HeatTransfer.Types.Tilt.Wall,
+          Buildings.HeatTransfer.Types.Tilt.Floor,Buildings.HeatTransfer.Types.Tilt.Ceiling}),
+    linearizeRadiation=true,
+    lat=0.00022318989969804,
+    samplePeriod=10) "Room model"
     annotation (Placement(transformation(extent={{46,20},{86,60}})));
 
   Modelica.Blocks.Sources.Constant qConGai_flow(k=0) "Convective heat gain"
@@ -99,21 +86,18 @@ model ShoeBox "A shoebox room model with only walls"
     annotation (Placement(transformation(extent={{-20,90},{0,110}})));
   Modelica.Blocks.Routing.Replicator replicator(nout=max(1, nConExtWin))
     annotation (Placement(transformation(extent={{10,90},{30,110}})));
-  Buildings.HeatTransfer.Sources.FixedTemperature TSoi[nConBou](each T=283.15)
-    "Boundary condition for construction" annotation (Placement(transformation(
+  Buildings.HeatTransfer.Sources.FixedTemperature TWalRes[nConBou - 1](each T=273.15)
+    "Boundary condition for the rest of walls"
+                                          annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=0,
-        origin={110,-10})));
-  Buildings.HeatTransfer.Sources.FixedTemperature TBou[nSurBou](each T=288.15)
-    "Boundary condition for construction" annotation (Placement(transformation(
-        extent={{10,-10},{-10,10}},
-        rotation=0,
-        origin={150,-50})));
-  HeatTransfer.Conduction.MultiLayer conOut[nSurBou](redeclare
-      Buildings.HeatTransfer.Data.OpaqueConstructions.Brick120 layers, each A=6
-        *4) "Construction that is modeled outside of room"
-    annotation (Placement(transformation(extent={{100,-60},{120,-40}})));
+        origin={110,-30})));
 
+  Buildings.HeatTransfer.Sources.FixedTemperature TEasWal(each T=283.15)
+    "Temperature of east wall"            annotation (Placement(transformation(
+        extent={{10,-10},{-10,10}},
+        rotation=0,
+        origin={110,10})));
 equation
   connect(qRadGai_flow.y, multiplex3_1.u1[1]) annotation (Line(
       points={{-39,90},{-32,90},{-32,57},{-22,57}},
@@ -142,35 +126,39 @@ equation
       points={{1,100},{8,100}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(TSoi.port, roo.surf_conBou) annotation (Line(
-      points={{100,-10},{72,-10},{72,24}},
+  for i in 1: nConBou-1 loop
+    connect(TWalRes[i].port, roo.surf_conBou[i+1])
+    annotation (Line(
+      points={{100,-30},{72,-30},{72,24}},
       color={191,0,0},
       smooth=Smooth.None));
-  connect(TBou.port, conOut.port_b) annotation (Line(
-      points={{140,-50},{120,-50}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(roo.surf_surBou, conOut.port_a) annotation (Line(
-      points={{62.2,26},{62,26},{62,-50},{100,-50}},
-      color={191,0,0},
-      smooth=Smooth.None));
+
+  end for;
+
   connect(roo.uSha, replicator.y) annotation (Line(
       points={{44,56},{40,56},{40,100},{31,100}},
       color={0,0,127},
       smooth=Smooth.None));
+
+  connect(TEasWal.port, roo.surf_conBou[1]) annotation (Line(
+      points={{100,10},{72,10},{72,24}},
+      color={191,0,0},
+      smooth=Smooth.None));
   annotation (
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
-            200,200}}), graphics),
+    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{200,
+            200}}),     graphics),
     __Dymola_Commands(file=
-          "modelica://Buildings/Resources/Scripts/Dymola/Rooms/Examples/TestConditionalConstructionsFFD/FreeResponse.mos"
+          "modelica://Buildings/Resources/Scripts/Dymola/Rooms/Examples/TestConditionalConstructionsFFD/ShoeBox.mos"
         "Simulate and plot"),
     Documentation(info="<html>
 <p>
 This model tests whether 
 <a href=\"modelica://Buildings.Rooms.FFD\">
 Buildings.Rooms.FFD</a>
-can conduct cosimulation with FFD program with only the walls. 
+can conduct cosimulation with FFD program with only interior walls. 
 The dimension of the room is 1m x 1m x 1m.
+The temperature of east wall is set to 10 degC and the rest walls are 0 degC.
+The initial temperature of indoor air is 0 degC and it will increase due to the warm wall on the east.
 </p>
 <p>
 <b>Note:</b> This model has an unrealistic geometry as it is used only 
