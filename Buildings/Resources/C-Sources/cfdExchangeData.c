@@ -101,9 +101,9 @@ int cfdExchangeData(double t0, double dt, double *u, int nU, int nY,
   // Set the flag to new data
   cosim->modelica->flag = 1;
 
-  /*-----------------------------------------------------------------------
+  /****************************************************************************
   | Copy data from CFD
-  ------------------------------------------------------------------------*/
+  ****************************************************************************/
   // If the data is not ready or not updated, check again
   while(cosim->ffd->flag!=1) {
     if(cosim->para->ffdError==1) {
@@ -114,32 +114,41 @@ int cfdExchangeData(double t0, double dt, double *u, int nU, int nY,
       Sleep(1000);
   }
 
-
+  // Get the temperature/heat flux for solid surface
   for(i=0; i<cosim->para->nSur; i++) 
     y[i] = cosim->ffd->temHea[i];
 
+  // Get the averaged room temperature
   y[i] = cosim->ffd->TRoo;
-  
+  i++;
+  // Get the temperature of shading device if there is a shading device
   if(cosim->para->sha==1)
-    for(j=0; j<cosim->para->nConExtWin; j++) {
+    for(j=0; j<cosim->para->nConExtWin; j++)
       y[i+j] = cosim->ffd->TSha[j];
-    }
 
   i = i + cosim->para->nConExtWin;
 
+  // Get the temperature fluid at the fluid ports
   for(j=0; j<cosim->para->nPorts; j++)
     y[j+i] = cosim->ffd->TPor[j];
 
   i = i + cosim->para->nPorts;
 
+  // Get the mass fraction at fluid ports
   for(j=0; j<cosim->para->nPorts; j++)
     for(k=0; k<cosim->para->nXi; k++)
        y[i+j*cosim->para->nXi+k] = cosim->ffd->XiPor[j][k];
-  
-  i = i + cosim->para->nPorts*cosim->para->nC;
+  i = i + cosim->para->nPorts*cosim->para->nXi;  
+
+  // Get the trace substance at fluid ports
   for(j=0; j<cosim->para->nPorts; j++)
     for(k=0; k<cosim->para->nC; k++)
        y[i+j*cosim->para->nC+k] = cosim->ffd->CPor[j][k];
+  i = i + cosim->para->nPorts*cosim->para->nC;
+
+  // Get the sensor data
+  for(j=0; j<=cosim->para->nSen; j++)
+    y[i+j] = cosim->ffd->senVal[j];
 
   printf("\n FFD: \t\ttime=%f, status=%d\n", cosim->ffd->t, cosim->ffd->flag);
   printf("Modelica: \ttime=%f, status=%d\n", cosim->modelica->t, cosim->modelica->flag);
@@ -148,8 +157,8 @@ int cfdExchangeData(double t0, double dt, double *u, int nU, int nY,
   cosim->ffd->flag = 0;
 
   *t1 = cosim->ffd->t;
-  for(i=0; i<nY; i++)
-    y[i] = 273.15;
+
+
 
   return 0;
 } // End of cfdExchangeData()

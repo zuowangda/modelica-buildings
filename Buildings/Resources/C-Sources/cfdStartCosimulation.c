@@ -51,7 +51,7 @@ int cfdStartCosimulation(char *cfdFilNam, char **name, double *A, double *til,
   MYPROC ProcAdd;
 #else //Linux
   void *hinstLib;
-  double (*ProcAdd)(CosimulationData *); 
+  double (*MYPROC)(CosimulationData *); 
   MYPROC ProcAdd;
 #endif
 
@@ -108,6 +108,7 @@ int cfdStartCosimulation(char *cfdFilNam, char **name, double *A, double *til,
 
   if(haveSensor) {
     cosim->para->sensorName = (char **) malloc(nSen*sizeof(char *));
+    cosim->ffd->senVal = (float *) malloc(nSen*sizeof(float));
     for(i=0; i<nSen; i++) {
       cosim->para->sensorName[i] = (char *)malloc(sizeof(char)*(strlen(sensorName[i])+1));
       strcpy(cosim->para->sensorName[i], sensorName[i]);
