@@ -1,40 +1,16 @@
 within Buildings.Rooms.Examples.TestConditionalConstructionsFFD;
 model ShoeBox "A shoe box room model with only walls"
   extends Modelica.Icons.Example;
-  package MediumA = Buildings.Media.GasesConstantDensity.MoistAirUnsaturated
+  package MediumA = Buildings.Media.GasesConstantDensity.MoistAirUnsaturated (T_default = 283.15)
     "Medium model";
 
-  inner Modelica.Fluid.System system(T_ambient=273.15)
-    annotation (Placement(transformation(extent={{-72,-32},{-52,-12}})));
-
-  parameter
-    Buildings.HeatTransfer.Data.OpaqueConstructions.Insulation100Concrete200
-    matLayExt "Construction material for exterior walls"
-    annotation (Placement(transformation(extent={{-60,140},{-40,160}})));
-
-  parameter Buildings.HeatTransfer.Data.OpaqueConstructions.Brick120 matLayPar
-    "Construction material for partition walls"
-    annotation (Placement(transformation(extent={{-20,140},{0,160}})));
+  inner Modelica.Fluid.System system(T_ambient=283.15)
+    annotation (Placement(transformation(extent={{-80,-40},{-60,-20}})));
 
   parameter Buildings.HeatTransfer.Data.OpaqueConstructions.Generic matLayRoo(final
       nLay=1, material={HeatTransfer.Data.Solids.Concrete(x=0.0001)})
     "Construction material for roof"
     annotation (Placement(transformation(extent={{20,140},{40,160}})));
-
-  parameter Buildings.HeatTransfer.Data.OpaqueConstructions.Generic matLayFlo(
-      material={HeatTransfer.Data.Solids.Concrete(x=0.2),
-        HeatTransfer.Data.Solids.InsulationBoard(x=0.15),
-        HeatTransfer.Data.Solids.Concrete(x=0.05)}, final nLay=3)
-    "Construction material for floor"
-    annotation (Placement(transformation(extent={{60,140},{80,160}})));
-
-  parameter Buildings.HeatTransfer.Data.GlazingSystems.DoubleClearAir13Clear
-    glaSys(
-    UFra=2,
-    shade=Buildings.HeatTransfer.Data.Shades.Gray(),
-    haveInteriorShade=false,
-    haveExteriorShade=false) "Data record for the glazing system"
-    annotation (Placement(transformation(extent={{100,140},{120,160}})));
 
   parameter Integer nConExtWin=0 "Number of constructions with a window";
   parameter Integer nConBou=6
@@ -63,8 +39,8 @@ model ShoeBox "A shoe box room model with only walls"
           Buildings.HeatTransfer.Types.Tilt.Wall,Buildings.HeatTransfer.Types.Tilt.Wall,
           Buildings.HeatTransfer.Types.Tilt.Floor,Buildings.HeatTransfer.Types.Tilt.Ceiling}),
     linearizeRadiation=true,
-    lat=0.00022318989969804,
-    samplePeriod=10) "Room model"
+    samplePeriod=100,
+    lat=0.00022318989969804) "Room model"
     annotation (Placement(transformation(extent={{46,20},{86,60}})));
 
   Modelica.Blocks.Sources.Constant qConGai_flow(k=0) "Convective heat gain"
@@ -81,19 +57,14 @@ model ShoeBox "A shoe box room model with only walls"
     TDryBul=293.15)
     annotation (Placement(transformation(extent={{160,140},{180,160}})));
 
-  Modelica.Blocks.Sources.Constant uSha(k=0)
-    "Control signal for the shading device"
-    annotation (Placement(transformation(extent={{-20,90},{0,110}})));
-  Modelica.Blocks.Routing.Replicator replicator(nout=max(1, nConExtWin))
-    annotation (Placement(transformation(extent={{10,90},{30,110}})));
-  Buildings.HeatTransfer.Sources.FixedTemperature TWalRes[nConBou - 1](each T=273.15)
+  Buildings.HeatTransfer.Sources.FixedTemperature TWalRes[nConBou - 1](each T=283.15)
     "Boundary condition for the rest of walls"
                                           annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=0,
         origin={110,-30})));
 
-  Buildings.HeatTransfer.Sources.FixedTemperature TEasWal(each T=283.15)
+  Buildings.HeatTransfer.Sources.FixedTemperature TEasWal(each T=293.15)
     "Temperature of east wall"            annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=0,
@@ -122,10 +93,6 @@ equation
       color={255,204,51},
       thickness=0.5,
       smooth=Smooth.None));
-  connect(uSha.y, replicator.u) annotation (Line(
-      points={{1,100},{8,100}},
-      color={0,0,127},
-      smooth=Smooth.None));
   for i in 1: nConBou-1 loop
     connect(TWalRes[i].port, roo.surf_conBou[i+1])
     annotation (Line(
@@ -135,10 +102,6 @@ equation
 
   end for;
 
-  connect(roo.uSha, replicator.y) annotation (Line(
-      points={{44,56},{40,56},{40,100},{31,100}},
-      color={0,0,127},
-      smooth=Smooth.None));
 
   connect(TEasWal.port, roo.surf_conBou[1]) annotation (Line(
       points={{100,10},{72,10},{72,24}},
@@ -173,7 +136,7 @@ First implementation.
 </ul>
 </html>"),
     experiment(
-      StopTime=3,
+      StopTime=1000,
       __Dymola_fixedstepsize=0.1,
       __Dymola_Algorithm="Dassl"),
     __Dymola_experimentSetupOutput);
