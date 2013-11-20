@@ -3,7 +3,7 @@
 //------------------------------------------------------------------------------
 
 inpu.parameter_file_format SCI // Foramt of extra parameter file: SCI
-inpu.parameter_file_name Resources/Data/Rooms/FFD/ShoeBox.cfd // Name of extra parameter file
+inpu.parameter_file_name Resources/Data/Rooms/FFD/OnlyInteriorWall.cfd // Name of extra parameter file
 
 inpu.old_ffd_file_name ShoeBox.plt// Name of previous FFD simulation data file
 
@@ -29,7 +29,7 @@ prob.cond 0.026240 // Conductivity
 prob.Cp 1005.0 // Specific heat capacity
 
 //------------------------------------------------------------------------------
-// The following parameters can only be defined in this input.cfd
+// The following parameters can only be defined in this file
 //------------------------------------------------------------------------------
 geom.dx 0.1 // Length delta_x of one cell in x-direction for uniform grid only
 geom.dy 0.1 // Length delta_y of one cell in y-direction for uniform grid only
