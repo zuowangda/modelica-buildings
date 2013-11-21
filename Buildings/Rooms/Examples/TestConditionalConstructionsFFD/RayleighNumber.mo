@@ -4,7 +4,8 @@ model RayleighNumber "An ideal flow with Rayleigh number of 10E4"
     Buildings.Rooms.Examples.TestConditionalConstructionsFFD.OnlyInteriorWall(
     TEasWal(T=274.15),
     TWesWal(T=273.15),
-    roo(cfdFilNam="Resources/Data/Rooms/FFD/RayleighNumber.ffd",
+    roo(
+      cfdFilNam="Resources/Data/Rooms/FFD/RayleighNumber.ffd",
       T_start=273.15,
       datConBou(
         name={"East Wall","West Wall","North Wall","South Wall","Floor",
@@ -16,7 +17,12 @@ model RayleighNumber "An ideal flow with Rayleigh number of 10E4"
             Buildings.HeatTransfer.Types.Tilt.Floor,Buildings.HeatTransfer.Types.Tilt.Ceiling},
 
         T_a_start={274.15,273.15,273.15,273.15,273.15,273.15},
-        T_b_start={274.15,273.15,273.15,273.15,273.15,273.15})),
+        T_b_start={274.15,273.15,273.15,273.15,273.15,273.15},
+        steadyStateInitial={false,false,false,false,false,false},
+        boundaryCondition={Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,
+            Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,
+            Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,
+            Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate})),
     system(T_ambient=273.15));
 
   annotation (
