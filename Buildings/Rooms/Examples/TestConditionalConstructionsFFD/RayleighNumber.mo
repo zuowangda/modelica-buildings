@@ -4,8 +4,19 @@ model RayleighNumber "An ideal flow with Rayleigh number of 10E4"
     Buildings.Rooms.Examples.TestConditionalConstructionsFFD.OnlyInteriorWall(
     TEasWal(T=274.15),
     TWesWal(T=273.15),
-    roo(cfdFilNam="Resources/Data/Rooms/FFD/RayleighNumber.ffd", T_start=273.15),
+    roo(cfdFilNam="Resources/Data/Rooms/FFD/RayleighNumber.ffd",
+      T_start=273.15,
+      datConBou(
+        name={"East Wall","West Wall","North Wall","South Wall","Floor",
+            "Ceiling"},
+        layers={matLayRoo,matLayRoo,matLayRoo,matLayRoo,matLayRoo,matLayRoo},
+        each A=1*1,
+        til={Buildings.HeatTransfer.Types.Tilt.Wall,Buildings.HeatTransfer.Types.Tilt.Wall,
+            Buildings.HeatTransfer.Types.Tilt.Wall,Buildings.HeatTransfer.Types.Tilt.Wall,
+            Buildings.HeatTransfer.Types.Tilt.Floor,Buildings.HeatTransfer.Types.Tilt.Ceiling},
 
+        T_a_start={274.15,273.15,273.15,273.15,273.15,273.15},
+        T_b_start={274.15,273.15,273.15,273.15,273.15,273.15})),
     system(T_ambient=273.15));
 
   annotation (
