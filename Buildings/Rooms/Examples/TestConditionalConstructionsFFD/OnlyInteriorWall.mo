@@ -3,7 +3,27 @@ model OnlyInteriorWall
   "Buoyancy force driven natural convection in a room with only interior walls"
   extends Modelica.Icons.Example;
   extends
-    Buildings.Rooms.Examples.TestConditionalConstructionsFFD.BaseClasses.PartialOnlyInteriorWall;
+    Buildings.Rooms.Examples.TestConditionalConstructionsFFD.BaseClasses.PartialOnlyInteriorWall(
+      roo(datConBou(
+        name={"East Wall","West Wall","North Wall","South Wall","Floor",
+            "Ceiling"},
+        layers={matLayRoo,matLayRoo,matLayRoo,matLayRoo,matLayRoo,matLayRoo},
+        each A=1*1,
+        til={Buildings.HeatTransfer.Types.Tilt.Wall,Buildings.HeatTransfer.Types.Tilt.Wall,
+            Buildings.HeatTransfer.Types.Tilt.Wall,Buildings.HeatTransfer.Types.Tilt.Wall,
+            Buildings.HeatTransfer.Types.Tilt.Floor,Buildings.HeatTransfer.Types.Tilt.Ceiling},
+        T_a_start={313.15,283.15,283.15,283.15,283.15,283.15},
+        T_b_start={313.15,283.15,283.15,283.15,283.15,283.15},
+        steadyStateInitial={false,false,true,true,true,true},
+        boundaryCondition={Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,
+            Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,
+            Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,
+            Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate})));
+
+  //Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,
+  //Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,
+  //Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,
+  //Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate
 
   Buildings.HeatTransfer.Sources.FixedTemperature TWesWal(each T=283.15)
     "Boundary condition for the west wall" annotation (Placement(transformation(
