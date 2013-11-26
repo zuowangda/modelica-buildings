@@ -13,10 +13,18 @@
 #	"Districts.Electrical.Analog.Conversion.DCDCConverter" "Districts.Electrical.DC.Conversion.DCDCConverter" \
 #	"Districts.Electrical.Analog.Conversion.Examples.DCDCConverter" "Districts.Electrical.DC.Conversion.Examples.DCDCConverter")
 
-LIST=(  "raleigh" "rayleigh" )
+LIST=(  "AirHeatMassBalanceMixed" "MixedAirHeatMassBalance" )
+## "FFDAirHeatMassBalance" "CFDAirHeatMassBalance" \
+##         "ffd" "cfd" \
+##         "AirHeatMassBalancedMixed" "MixedAirHeatMassBalance" \
+##         "FFDExchange" "CFDExchange" \
+##         "FFDFluidInterface" "CFDFluidInterface" \
+##         "FFDSurfaceInterface" "CFDSurfaceInterface" \
+##         "FFDSurfaceIdentifier" "CFDSurfaceIdentifier" \ 
+## )
 
 i=0
-while [ $i -le 1 ]; do
+while [ $i -le 0 ]; do
  OLD=${LIST[$i]}
  NEW=${LIST[$i+1]}
  i=$[ i + 2 ]
@@ -33,7 +41,7 @@ echo "Processing $OLD $NEW"
 #echo $OLDMS $NEWMS
 
 # replace string in files
-fl=`find . \( -name '*.mos' -or -name '*.mo' \)`
+fl=`find . \( -name '*.mos' -or -name '*.mo' -or -name 'package.order' \)`
 for ff in $fl; do
     egrep $OLD $ff > /dev/null
     if [ $? == 0 ]; then
