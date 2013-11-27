@@ -45,15 +45,15 @@ int cfdStartCosimulation(char *cfdFilNam, char **name, double *A, double *til,
   /****************************************************************************
   | For call FFD-DLL
   ****************************************************************************/
+  //Define loaded library handel
 #ifdef _MSC_VER //Windows
-  typedef int (*MYPROC)(CosimulationData *);
   HINSTANCE hinstLib; 
-  MYPROC ProcAdd;
 #else //Linux
   void *hinstLib;
-  double (*MYPROC)(CosimulationData *); 
-  MYPROC ProcAdd;
 #endif
+  //Define function type
+  typedef int (*MYPROC)(CosimulationData *);
+  MYPROC ProcAdd;
 
   printf("Start to allcoate memory for data exchange.\n");
 
@@ -65,7 +65,7 @@ int cfdStartCosimulation(char *cfdFilNam, char **name, double *A, double *til,
   /****************************************************************************
   | allocate the memory and assign the data
   ****************************************************************************/
-  cosim->para->fileName = (char *) malloc(sizeof(char)*strlen(cfdFilNam));
+  cosim->para->fileName = (char *) malloc(sizeof(char)*(strlen(cfdFilNam)+1));
   strcpy(cosim->para->fileName, cfdFilNam); 
 
   cosim->para->nSur = nSur;
@@ -164,7 +164,7 @@ int cfdStartCosimulation(char *cfdFilNam, char **name, double *A, double *til,
 #ifdef _MSC_VER
     ProcAdd = (MYPROC) GetProcAddress(hinstLib, "ffd_dll");
 #else
-    ProcAdd = dlsym(hinstLib, "ffd_dll");
+    ProcAdd = (MYPROC) dlsym(hinstLib, "ffd_dll");
 #endif
   }
   else {
@@ -175,11 +175,7 @@ int cfdStartCosimulation(char *cfdFilNam, char **name, double *A, double *til,
   // If the function address is valid, call the function.
   if (ProcAdd!=NULL) {
   //call function: passing pointer of NAME struct
-#ifdef _MSC_VER // Windows
-    ProcAdd(cosim);   
-#else // Linux
-    (*ProcAdd)(cosim);
-#endif
+    ProcAdd(cosim); 
   }
   else{
     printf("instantiate(): Could not find dll function address.\n");
