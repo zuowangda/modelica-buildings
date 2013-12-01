@@ -42,7 +42,7 @@ Solution:
 Override the definition in glut.h with that in stdlib.h. 
 Place the stdlib.h line above the glut.h line in the code.
 -----------------------------------------------------------------------------*/
-#include <glut.h>
+#include "glut.h"
 
 #define IX(i,j,k) ((i)+(IMAX)*(j)+(IJMAX)*(k))
 #define FOR_EACH_CELL for(i=1; i<=imax; i++) { for(j=1; j<=jmax; j++) { for(k=1; k<=kmax; k++) {
@@ -331,6 +331,13 @@ typedef struct {
 }SOLV_DATA;
 
 typedef struct {
+  REAL T; // Initial temperature
+  REAL u; // Initial velocity for u
+  REAL v; // Initial velocity for v
+  REAL w; // Initial velocity for w
+}INIT_DATA;
+
+typedef struct {
   GEOM_DATA  *geom;
   INPU_DATA  *inpu;
   OUTP_DATA  *outp;
@@ -340,6 +347,7 @@ typedef struct {
   SOLV_DATA  *solv;
   CosimulationData *cosim;
   SENSOR_DATA *sens;
+  INIT_DATA *init;
 }PARA_DATA;
 
 typedef struct {
