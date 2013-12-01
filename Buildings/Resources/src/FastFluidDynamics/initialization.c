@@ -118,8 +118,7 @@ void set_default_parameter(PARA_DATA *para) {
 ///
 ///\return 0 if no error occurred
 ///////////////////////////////////////////////////////////////////////////////
-int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX)
-{
+int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX) {
   int i; 
   int size = (para->geom->imax+2)*(para->geom->jmax+2)*(para->geom->kmax+2);
   int flag = 0;
@@ -135,16 +134,16 @@ int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX)
     var[GX][i]     = 0.0;
     var[GY][i]     = 0.0;
     var[GZ][i]     = 0.0;
-    var[VX][i]     = (REAL) 0.001;
-    var[VY][i]     = (REAL) 0.001;
-    var[VZ][i]     = (REAL) 0.001;
+    var[VX][i]     = para->init->u;
+    var[VY][i]     = para->init->v;
+    var[VZ][i]     = para->init->w;
     var[VXM][i]    = 0.0;
     var[VYM][i]    = 0.0;
     var[VZM][i]    = 0.0;
     var[VXS][i]    = 0.0;
     var[VYS][i]    = 0.0;
     var[VZS][i]    = 0.0;
-    var[TEMP][i]   = 0.0;
+    var[TEMP][i]   = para->init->T;
     var[TEMPM][i]  = 0.0;
     var[TEMPS][i]  = 0.0;
     var[IP][i]     = 0.0;
@@ -211,7 +210,7 @@ int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX)
   }
 
   /****************************************************************************
-  | Allocate memory for Xi
+  | Allocate memory for Species
   ****************************************************************************/
   if(para->bc->nb_port>0&&para->bc->nb_Xi>0) {
     para->bc->XiPort = (REAL **) malloc(sizeof(REAL *)*para->bc->nb_port);
@@ -238,7 +237,7 @@ int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX)
   }
 
   /****************************************************************************
-  | Allocate memory for C
+  | Allocate memory for Substances
   ****************************************************************************/
   if(para->bc->nb_port>0&&para->bc->nb_C>0) {
     para->bc->CPort = (REAL **) malloc(sizeof(REAL *)*para->bc->nb_port);

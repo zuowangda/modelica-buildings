@@ -23,10 +23,21 @@
 ///\return 0 if no error occurred
 ///////////////////////////////////////////////////////////////////////////////
 int assign_parameter(PARA_DATA *para, char *string) {
-  char tmp[400], tmp2[100];
+  char tmp[400];
+  // tmp2 needs to be initialized to avoid crash 
+  // when the input for tmp2 is empty
+  char tmp2[100] = ""; 
   int senId = -1;
 
-  sscanf(string, "%s", tmp);
+  /****************************************************************************
+  sscanf() reads data from string and stores them according to parameter format 
+  into the locations given by the additional arguments. 
+  When sscanf() scans an empty line, it gets nothing and returns EOF.
+  Thus, when sscanf returns EOF, no need to compare the tmp with parameter.
+  ****************************************************************************/
+  if (EOF==sscanf(string, "%s", tmp)){
+    return 0;
+  }
 
   if(!strcmp(tmp, "geom.Lx")) {
     sscanf(string, "%s%f", tmp, &para->geom->Lx);
@@ -174,6 +185,11 @@ int assign_parameter(PARA_DATA *para, char *string) {
   else if(!strcmp(tmp, "prob.rho")) {
     sscanf(string, "%s%f", tmp, &para->prob->rho);
     sprintf(msg, "assign_parameter(): %s=%f", tmp, para->prob->rho);
+    ffd_log(msg, FFD_NORMAL);
+  }
+  else if(!strcmp(tmp, "prob.beta")) {
+    sscanf(string, "%s%f", tmp, &para->prob->beta);
+    sprintf(msg, "assign_parameter(): %s=%f", tmp, para->prob->beta);
     ffd_log(msg, FFD_NORMAL);
   }
   else if(!strcmp(tmp, "prob.diff")) {
@@ -326,6 +342,29 @@ int assign_parameter(PARA_DATA *para, char *string) {
     ffd_log(msg, FFD_NORMAL);
   }
   /****************************************************************************
+  | get the initial condition
+  ****************************************************************************/
+  else if(!strcmp(tmp, "init.T")) {
+    sscanf(string, "%s%f", tmp, &para->init->T);
+    sprintf(msg, "assign_parameter(): %s=%f", tmp, para->init->T);
+    ffd_log(msg, FFD_NORMAL);
+  }
+  else if(!strcmp(tmp, "init.u")) {
+    sscanf(string, "%s%f", tmp, &para->init->u);
+    sprintf(msg, "assign_parameter(): %s=%f", tmp, para->init->u);
+    ffd_log(msg, FFD_NORMAL);
+  }
+  else if(!strcmp(tmp, "init.v")) {
+    sscanf(string, "%s%f", tmp, &para->init->v);
+    sprintf(msg, "assign_parameter(): %s=%f", tmp, para->init->v);
+    ffd_log(msg, FFD_NORMAL);
+  }
+  else if(!strcmp(tmp, "init.w")) {
+    sscanf(string, "%s%f", tmp, &para->init->w);
+    sprintf(msg, "assign_parameter(): %s=%f", tmp, para->init->w);
+    ffd_log(msg, FFD_NORMAL);
+  }
+  /****************************************************************************
   | get the number of sensor
   ****************************************************************************/
   else if(!strcmp(tmp, "sensor.nb_sensor")) {
@@ -392,29 +431,58 @@ int assign_parameter(PARA_DATA *para, char *string) {
 int read_parameter(PARA_DATA *para) {
   char string[400];
 
-  // Open the file
-  if((file_para=fopen(para->cosim->para->fileName,"r"))==NULL) {
-//  if((file_para=fopen("Resources/Data/Rooms/FFD/ShoeBox.ffd","r"))==NULL) {
-  sprintf(msg, "read_parameter(): Could not open the FFD parameter file %s", 
-            para->cosim->para->fileName);
-    ffd_log(msg, FFD_ERROR);
-    return 1;
-  } 
+  /****************************************************************************
+  | Open the FFD parameter file
+  /***************************************************************************/
+  /*---------------------------------------------------------------------------
+  | Stand alone simulation
+  ---------------------------------------------------------------------------*/
+  if(para->solv->cosimulation==0) {
+    if((file_para=fopen("input.ffd","r"))==NULL) {
+      sprintf(msg, "read_parameter(): "
+                   "Could not open the default FFD parameter file input.ffd");
+      ffd_log(msg, FFD_ERROR);
+      return 1;
+    }
+    else {
+      sprintf(msg, "read_parameter(): Opened input.ffd for FFD parameters");
+      ffd_log(msg, FFD_NORMAL);
+    }
+  }
+  /*---------------------------------------------------------------------------
+  | Co-simulation
+  ---------------------------------------------------------------------------*/
   else {
-    sprintf(msg, "read_parameter(): Opened file %s for FFD parameters", 
-            para->cosim->para->fileName);
-    ffd_log(msg, FFD_NORMAL);
+    if((file_para=fopen(para->cosim->para->fileName,"r"))==NULL) {
+      sprintf(msg, "read_parameter(): Could not open the FFD parameter file %s",
+              para->cosim->para->fileName);
+      ffd_log(msg, FFD_ERROR);
+      return 1;
+    } 
+    else {
+      sprintf(msg, "read_parameter(): Opened file %s for FFD parameters", 
+              para->cosim->para->fileName);
+      ffd_log(msg, FFD_NORMAL);
+    }
   }
 
-
-  while(!feof(file_para)) {
-    fgets(string, 400, file_para);
+  //Use fgets(...) as loop condition, it reutrns null when it fail to read more characters.
+  while(fgets(string, 400, file_para) != NULL) {
     if(assign_parameter(para, string)) {
       sprintf(msg, "read_parameter(): Could not read data from file %s", 
             para->cosim->para->fileName);
       ffd_log(msg, FFD_ERROR);
       return 1;
     }
+  }// End of while
+
+  //Check if it is end of file
+  //Use feof() to detect what went wrong after one of the main I/O functions failed
+  //Do not use feof() as condition of while loop. It will read one more time after last line.
+  if (!feof(file_para)){
+      sprintf(msg, "read_parameter(): Could not read data from file %s", 
+            para->cosim->para->fileName);
+      ffd_log(msg, FFD_ERROR);
   }
 
   fclose(file_para);

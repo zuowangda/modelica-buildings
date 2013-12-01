@@ -74,7 +74,7 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
   int IWWALL,IEWALL,ISWALL,INWALL,IBWALL,ITWALL;
   int SI,SJ,SK,EI,EJ,EK,FLTMP;
   REAL TMP,MASS,U,V,W;
-  REAL trefmax;
+  //REAL trefmax;
   char name[100];
   int imax = para->geom->imax;
   int jmax = para->geom->jmax;
@@ -212,7 +212,7 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
 
     bcnameid = -1;
     /*-------------------------------------------------------------------------
-    | Loop for rad each inlet boundary
+    | Loop for rwad each inlet boundary
     --------------------------------------------------------------------------*/
     for(i=0; i<para->bc->nb_inlet; i++) {
       /*.......................................................................
@@ -224,7 +224,7 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
         continue;
       }
       bcnameid++;
-      inletName[i] = (char*)malloc(j*sizeof(char));
+      inletName[i] = (char*)malloc((j+1)*sizeof(char));
       strncpy(inletName[i], (const char*)string, j);
       // Add an ending
       inletName[i] = '\0';
@@ -307,7 +307,7 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
         continue;
       }
       bcnameid++;
-      outletName[i] = (char*)malloc(j*sizeof(char));
+      outletName[i] = (char*)malloc((j+1)*sizeof(char));
       if(outletName[i]==NULL) {
         sprintf(msg, "read_sci_input(): Could not allocate memory "
           "for outletName[%d].", i);
@@ -390,7 +390,7 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
     }
     // Copy the inlet names
     for(i=0; i<para->bc->nb_inlet; i++) {
-      para->bc->portName[i] = (char*) malloc(sizeof(char)*sizeof(inletName[i]));
+      para->bc->portName[i] = (char*) malloc(sizeof(char)*(sizeof(inletName[i])+1));
       if(para->bc->portName[i]==NULL) {
         ffd_log("read_sci_input():"
                 "Could not allocate memory for para->bc->portName.",
@@ -407,7 +407,7 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
     j = para->bc->nb_inlet;
     // Copy the outlet names
     for(i=0; i<para->bc->nb_outlet; i++) {      
-      para->bc->portName[i+j] = (char*) malloc(sizeof(char)*sizeof(outletName[i]));
+      para->bc->portName[i+j] = (char*) malloc(sizeof(char)*(sizeof(outletName[i])+1));
       if(para->bc->portName[i+j]==NULL) {
         ffd_log("read_sci_input(): Could not allocate memory for para->bc->portName.",
         FFD_ERROR);
@@ -490,7 +490,7 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
   bcnameid = -1;
 
   if(para->bc->nb_block!=0) {
-    para->bc->blockName = (char**) malloc(sizeof(char*));
+    para->bc->blockName = (char**) malloc(para->bc->nb_block*sizeof(char*));
     if(para->bc->blockName==NULL)
       ffd_log("read_sci_input(): Could not allocate memory for para->bc->blockName.",
       FFD_ERROR);
@@ -500,12 +500,12 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
       | Get the names of boundary
       .......................................................................*/
       fgets(string, 400, file_params);
-      // Ge the length of name (The name may contain white space)
+      // Get the length of name (The name may contain white space)
       for(j=0; string[j] != '\n'; j++) {
         continue;
       }
       bcnameid++;
-      para->bc->blockName[bcnameid] = (char*)malloc(j*sizeof(char));
+      para->bc->blockName[bcnameid] = (char*)malloc((j+1)*sizeof(char));
       strncpy(para->bc->blockName[bcnameid], (const char*)string, j);
       // Add an ending
       para->bc->blockName[bcnameid][j] = '\0';
@@ -591,7 +591,7 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
     /*-------------------------------------------------------------------------
     | Allocate the memory for bc name and id
     -------------------------------------------------------------------------*/
-    para->bc->wallName = (char**)malloc(sizeof(char*));
+    para->bc->wallName = (char**)malloc(para->bc->nb_wall*sizeof(char*));
     para->bc->wallId = (int *)malloc(sizeof(int)*para->bc->nb_wall);
     for(i=0; i<para->bc->nb_wall; i++)
       para->bc->wallId[i] = -1;
@@ -629,7 +629,7 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
         continue;
       }
 
-      para->bc->wallName[i] = (char*)malloc(j*sizeof(char));
+      para->bc->wallName[i] = (char*)malloc((j+1)*sizeof(char));
       strncpy(para->bc->wallName[i], (const char*)string, j);
       // Add an ending
       para->bc->wallName[i][j] = '\0';
@@ -695,7 +695,7 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
   } // End of assigning value for wall boundary 
 
   /*****************************************************************************
-  | Read the boundary conditions for contamiant source
+  | Read the boundary conditions for contaminant source
   | Fixme: The data is ignored in current version
   *****************************************************************************/
   fgets(string, 400, file_params);
@@ -734,20 +734,22 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
   fgets(string, 400, file_params); //reference point
   fgets(string, 400, file_params); //monitering point
 
-  // Read setting for restarting the old FFD simulation
+  // Discard setting for restarting the old FFD simulation
   fgets(string, 400, file_params);
+  /*
   sscanf(string,"%d", &para->inpu->read_old_ffd_file);
   sprintf(msg, "read_sci_input(): para->inpu->read_old_ffd_file=%d",
           para->inpu->read_old_ffd_file);
   ffd_log(msg, FFD_NORMAL);
-
+  */
   // Discard the unused data
   fgets(string, 400, file_params); //print frequency
   fgets(string, 400, file_params); //Pressure variable Y/N
   fgets(string, 400, file_params); //Steady state, buoyancy.
 
-  // Read physical properties
+  // Discard physical properties
   fgets(string, 400, file_params);
+  /*
   sscanf(string,"%f %f %f %f %f %f %f %f %f", &para->prob->rho, 
          &para->prob->nu, &para->prob->cond, 
          &para->prob->gravx, &para->prob->gravy, &para->prob->gravz, 
@@ -777,13 +779,14 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
   //para->prob->trefmax=trefmax;
   sprintf(msg, "read_sci_input(): para->prob->Cp=%f", para->prob->Cp);
   ffd_log(msg, FFD_NORMAL);
+  */
 
   // Read simulation time settings
   fgets(string, 400, file_params);
   sscanf(string,"%f %lf %d", &para->mytime->t_start, &para->mytime->dt,
     &para->mytime->step_total);
 
-  sprintf(msg, "read_sci_input(): para->mytime->t_start=%f", 
+  sprintf(msg, "read_sci_input(): para->mytime->t_start=%lu", 
           para->mytime->t_start);
   ffd_log(msg, FFD_NORMAL);
 
