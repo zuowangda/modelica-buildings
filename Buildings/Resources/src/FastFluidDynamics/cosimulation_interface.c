@@ -36,12 +36,9 @@ int read_cosim_parameter(PARA_DATA *para, REAL **var, int **BINDEX) {
            FFD_NORMAL);
 
   /****************************************************************************
-  | Read and compare the numbers of BC
-  ****************************************************************************/
-  /*---------------------------------------------------------------------------
   | Compare number of solid surface boundaries 
   | (Wall, Window Glass and Window Frame)
-  ---------------------------------------------------------------------------*/
+  ****************************************************************************/
   if(para->cosim->para->nSur==para->bc->nb_wall) {
     sprintf(msg, "\tnSur=%d", para->cosim->para->nSur);
     ffd_log(msg, FFD_NORMAL);    
@@ -65,9 +62,9 @@ int read_cosim_parameter(PARA_DATA *para, REAL **var, int **BINDEX) {
     return 1;
   }
 
-  /*---------------------------------------------------------------------------
+  /****************************************************************************
   | Compare the number of fluid ports
-  ---------------------------------------------------------------------------*/
+  ****************************************************************************/
   if(para->cosim->para->nPorts==para->bc->nb_port) {
     sprintf(msg, "\tnPorts=%d", para->cosim->para->nPorts);
     ffd_log(msg, FFD_NORMAL);
@@ -81,7 +78,9 @@ int read_cosim_parameter(PARA_DATA *para, REAL **var, int **BINDEX) {
     return 1;
   }
 
-  // Compare the number of sensors
+  /****************************************************************************
+  | Compare the number of sensors
+  ****************************************************************************/
   if(para->cosim->para->nSen==para->sens->nb_sensor) {
     sprintf(msg, "\tnSen=%d", para->cosim->para->nSen);
     ffd_log(msg, FFD_NORMAL);
@@ -95,7 +94,9 @@ int read_cosim_parameter(PARA_DATA *para, REAL **var, int **BINDEX) {
     return 1;
   }
 
-  // Compare the number of Xi
+  /****************************************************************************
+  | Compare the number of trace species
+  ****************************************************************************/
   if(para->cosim->para->nXi==para->bc->nb_Xi) {
     sprintf(msg, "\tnXi=%d", para->cosim->para->nXi);
     ffd_log(msg, FFD_NORMAL);
@@ -109,7 +110,9 @@ int read_cosim_parameter(PARA_DATA *para, REAL **var, int **BINDEX) {
     return 1;
   }
 
-  // Compare the number of Xi
+  /****************************************************************************
+  | Compare the number of substances
+  ****************************************************************************/
   if(para->cosim->para->nC==para->bc->nb_C) {
     sprintf(msg, "\tnC=%d", para->cosim->para->nC);
     ffd_log(msg, FFD_NORMAL);
@@ -129,6 +132,9 @@ int read_cosim_parameter(PARA_DATA *para, REAL **var, int **BINDEX) {
   sprintf(msg, "\tsha=%d", para->cosim->para->sha);
   ffd_log(msg, FFD_NORMAL);
 
+  /****************************************************************************
+  | Print the information for surface boundaries
+  ****************************************************************************/
   for(i=0; i<para->cosim->para->nSur; i++) {
     sprintf(msg, "\tSurface %d: %s", i, para->cosim->para->name[i]);
     ffd_log(msg, FFD_NORMAL);
@@ -162,6 +168,9 @@ int read_cosim_parameter(PARA_DATA *para, REAL **var, int **BINDEX) {
     ffd_log(msg, FFD_NORMAL); 
   }
 
+  /****************************************************************************
+  | Compare name and surface area of boundaries
+  ****************************************************************************/
   if(compare_boundary_names(para)!=0) {
     ffd_log("read_cosim_parameter(): The boundary names were not consistent.",
     FFD_ERROR);
@@ -219,7 +228,7 @@ int read_cosim_data(PARA_DATA *para, REAL **var, int **BINDEX) {
 
   /****************************************************************************
   | Read and assign the shading boundary conditions
-  | Warning: This is not been used
+  | Warning: This is not been used in current version
   ****************************************************************************/
   if(para->cosim->para->sha==1) {
     ffd_log("Shading control signal and absorded radiation by the shade:",
@@ -286,7 +295,7 @@ int write_cosim_data(PARA_DATA *para, REAL **var) {
   }
 
   /****************************************************************************
-  | Write new data
+  | Start to write new data
   ****************************************************************************/
   para->cosim->ffd->t = para->mytime->t;
 
@@ -298,8 +307,9 @@ int write_cosim_data(PARA_DATA *para, REAL **var) {
   | Set the time and space averaged temperature of space
   | Convert T from degC to K
   ****************************************************************************/
-  para->cosim->ffd->TRoo = average_volume(para, var, var[TEMPM]) + 273.15; 
-  sprintf(msg, "\tAveraged Room temperature %f[K]", para->cosim->ffd->TRoo);
+  para->cosim->ffd->TRoo = average_volume(para, var, var[TEMPM]); 
+  sprintf(msg, "\tAveraged room temperature %f[degC]", para->cosim->ffd->TRoo);
+  para->cosim->ffd->TRoo += 273.15;
   ffd_log(msg, FFD_NORMAL);
 
   /****************************************************************************
@@ -308,7 +318,7 @@ int write_cosim_data(PARA_DATA *para, REAL **var) {
   if(para->cosim->para->sha==1) {
     ffd_log("\tTemperature of the shade:", FFD_NORMAL);
     for(i=0; i<para->cosim->para->nConExtWin; i++) {
-      //Waring: The shade feature is to be implemented
+      //Fixme: The shade feature is to be implemented
       para->cosim->ffd->TSha[i] = 20 + 273.15; 
       sprintf(msg, "\t\tSurface %d: %f[K]\n",
               i, para->cosim->ffd->TSha[i]);
@@ -348,7 +358,7 @@ int write_cosim_data(PARA_DATA *para, REAL **var) {
 
     if(para->cosim->para->bouCon[id]==2) {
       para->cosim->ffd->temHea[id] = para->bc->temHeaMean[i] 
-                                   / para->bc->AWall[i];
+                                   / para->bc->AWall[i] + 273.15;
       sprintf(msg, "\t\t%s: %f[K]",
               para->cosim->para->name[id], para->cosim->ffd->temHea[id]);
     }
@@ -361,7 +371,24 @@ int write_cosim_data(PARA_DATA *para, REAL **var) {
   }
 
   /****************************************************************************
-  | Inform Modelica know the data is updated
+  | Set data for sensors
+  ****************************************************************************/
+  if (set_sensor_data(para, var)!=0) {
+    ffd_log("\tCould not get sensor data", FFD_ERROR);
+    return 1;
+  }
+  else
+    ffd_log("\tSensor Information:", FFD_NORMAL); 
+
+  for(i=0; i<para->cosim->para->nSen; i++) {
+    para->cosim->ffd->senVal[i] = para->sens->senVal[i];
+    sprintf(msg, "\t\t%s: %f", 
+            para->cosim->para->sensorName[i], para->cosim->ffd->senVal[i]);
+    ffd_log(msg, FFD_NORMAL);
+  }
+
+  /****************************************************************************
+  | Inform Modelica the data is updated
   ****************************************************************************/
   para->cosim->ffd->flag = 1;
 
@@ -498,7 +525,8 @@ int compare_boundary_area(PARA_DATA *para, REAL **var, int **BINDEX) {
   int i, j;
   REAL *A0 = para->bc->AWall, *A1 = para->cosim->para->are;
 
-  ffd_log("compare_boundary_area(): Start to compare the area of solid surfaces.",
+  ffd_log("compare_boundary_area(): "
+          "Start to compare the area of solid surfaces.",
           FFD_NORMAL);
   for(i=0; i<para->bc->nb_wall; i++) {
     j = para->bc->wallId[i];
@@ -508,8 +536,10 @@ int compare_boundary_area(PARA_DATA *para, REAL **var, int **BINDEX) {
       ffd_log(msg, FFD_NORMAL);
     }
     else {
-      sprintf(msg, "compare_boundary_area(): Area of surface %s are different: Modelica (%f[m2]) and FFD (%f[m2])",
-        para->bc->wallName[i], A1[j], A0[i]);
+      sprintf(msg, 
+              "compare_boundary_area(): Area of surface %s are different: "
+              "Modelica (%f[m2]) and FFD (%f[m2])",
+              para->bc->wallName[i], A1[j], A0[i]);
       ffd_log(msg, FFD_ERROR);
       return 1;
     }
@@ -824,3 +854,28 @@ int surface_integrate(PARA_DATA *para, REAL **var, int **BINDEX) {
   
   return 0;
 } // End of surface_integrate()
+
+///////////////////////////////////////////////////////////////////////////////
+/// Set sensor data
+///
+///\param para Pointer to FFD parameters
+///\param var Pointer to FFD data
+///
+///\return 0 if no error occurred
+///////////////////////////////////////////////////////////////////////////////
+int set_sensor_data(PARA_DATA *para, REAL **var) {
+  int imax = para->geom->imax, jmax = para->geom->jmax,
+      kmax = para->geom->kmax;
+  int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
+  REAL u = var[VX][IX(imax/2,jmax/2,kmax/2)],
+       v = var[VY][IX(imax/2,jmax/2,kmax/2)],
+       w = var[VZ][IX(imax/2,jmax/2,kmax/2)];
+
+  // Averaged room temperature
+  para->sens->senVal[0] = para->cosim->ffd->TRoo;
+
+  //Velocity at the center of the space
+  para->sens->senVal[1] = sqrt(u*u + v*v + w*w);
+
+  return 0;
+} // End of set_sensor_data

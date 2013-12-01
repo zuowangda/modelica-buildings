@@ -374,7 +374,7 @@ int reset_time_averaged_data (PARA_DATA *para, REAL **var) {
   
   // Wall surfaces
   for(i=0; i<para->bc->nb_wall; i++) 
-    para->bc->temHeaMean[i] = 0;
+    para->bc->temHeaMean[i] = para->init->T;
 
   // Fluid ports
   for(i=0; i<para->bc->nb_port; i++) {

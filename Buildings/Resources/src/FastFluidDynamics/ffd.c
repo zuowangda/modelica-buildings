@@ -30,6 +30,7 @@ static OUTP_DATA outp1;
 static BC_DATA bc;
 static SOLV_DATA solv;
 static SENSOR_DATA sens;
+static INIT_DATA init;
 
 clock_t start, end;
 
@@ -262,12 +263,23 @@ static void reshape_func(int width, int height) {
 ///
 ///\return 0 if no error occurred
 ///////////////////////////////////////////////////////////////////////////////
+#ifdef _MSC_VER //Windows
 DWORD WINAPI ffd_thread(void *p){ 
   ULONG workerID = (ULONG)(ULONG_PTR)p;
-  CosimulationData *cosim = (CosimulationData *) p;
+#else //Linux
+void  ffd_thread(void* p){
+#endif
 
-  printf("Entered WorkerThreadProc with tid %lu\n", workerID);
+  CosimulationData *cosim = (CosimulationData *) p;
+  int cosimulation = 1;
+
+#ifdef _MSC_VER //Windows
   sprintf(msg, "Start Fast Fluid Dynamics Simulation with Thread ID %lu", workerID);
+#else //Linux
+  sprintf(msg, "Start Fast Fluid Dynamics Simulation with Thread");
+#endif
+
+  printf("%s\n", msg);
   ffd_log(msg, FFD_NEW);
 
   sprintf(msg, "fileName=\"%s\"", cosim->para->fileName);
@@ -276,7 +288,7 @@ DWORD WINAPI ffd_thread(void *p){
   para.cosim = (CosimulationData *) malloc(sizeof(CosimulationData)); 
   para.cosim = cosim;
 
-  if(ffd()!=0)
+  if(ffd(cosimulation)!=0)
     cosim->para->ffdError = 1;
 
   ffd_log("Successfully exit FFD.", FFD_NORMAL);
@@ -286,9 +298,11 @@ DWORD WINAPI ffd_thread(void *p){
 ///////////////////////////////////////////////////////////////////////////////
 /// Main routine of FFD
 ///
+///\para cosimulation Integer to identify the simulation type
+///
 ///\return 0 if no error occurred
 ///////////////////////////////////////////////////////////////////////////////
-int ffd() {
+int ffd(int cosimulation) {
   // Initialize the parameters
   para.geom = &geom;
   para.inpu = &inpu;
@@ -298,7 +312,18 @@ int ffd() {
   para.bc     = &bc;
   para.solv   = &solv;
   para.sens   = &sens;
-  
+  para.init   = &init;
+  // Stand alone simulation: 0; Cosimulaiton: 1
+  para.solv->cosimulation = cosimulation; 
+
+#ifndef _MSC_VER //Linux
+  //Initialize glut library
+  char fakeParam[] = "fake";
+  char *fakeargv[] = { fakeParam, NULL };
+  int fakeargc = 1;
+  glutInit( &fakeargc, fakeargv );
+#endif
+
   if(initialize(&para)!=0) {
     ffd_log("ffd(): Could not initialize simulation parameters.", FFD_ERROR);
     return 1;
