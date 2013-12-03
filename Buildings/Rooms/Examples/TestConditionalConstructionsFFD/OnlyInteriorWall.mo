@@ -14,7 +14,7 @@ model OnlyInteriorWall
             Buildings.HeatTransfer.Types.Tilt.Floor,Buildings.HeatTransfer.Types.Tilt.Ceiling},
         T_a_start={313.15,283.15,283.15,283.15,283.15,283.15},
         T_b_start={313.15,283.15,283.15,283.15,283.15,283.15},
-        steadyStateInitial={false,false,true,true,true,true},
+        steadyStateInitial={false,false,false,false,false,false},
         boundaryCondition={Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,
             Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,
             Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,
