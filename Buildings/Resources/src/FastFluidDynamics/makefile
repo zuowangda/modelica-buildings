@@ -30,19 +30,20 @@ OBJS = advection.o boundary.o chen_zero_equ_model.o cosimulation.o cosimulation_
        interpolation.o parameter_reader.o projection.o sci_reader.o solver.o solver_gs.o \
        solver_tdma.o timing.o utility.o visualization.o
 
-PRG = FFD-DLL.so
+LIB = FFD-DLL.so
 LIBS = -lpthread -lglut -lGLU
 
 # Note that -fPIC is recommended on Linux according to the Modelica specification
 
 all: clean
 	$(CC) $(CC_FLAGS_32) -fPIC -c $(SRCS)
-	$(CC) -m32 -shared -fPIC -Wl,-soname,$(PRG) -o $(PRG) $(OBJS) $(LIBS) -lc
-	mv $(PRG) $(BINDIR)
+	$(CC) -m32 -shared -fPIC -Wl,-soname,$(LIB) -o $(LIB) $(OBJS) $(LIBS) -lc
+	mv $(LIB) $(BINDIR)
 	@echo "==== library generated in $(BINDIR)"
 
 clean:
-	rm -f $(OBJS) $(PRG) main.o main
+	rm -f $(OBJS) $(LIB)
 
+# To enable RootMakefile, add fellow empty targets
 doc:
 cleandoc:
