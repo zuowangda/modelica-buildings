@@ -356,12 +356,14 @@ int write_cosim_data(PARA_DATA *para, REAL **var) {
   for(i=0; i<para->bc->nb_wall; i++) {
     id = para->bc->wallId[i];
 
+    // Set the B.C. Temperature
     if(para->cosim->para->bouCon[id]==2) {
       para->cosim->ffd->temHea[id] = para->bc->temHeaMean[i] 
                                    / para->bc->AWall[i] + 273.15;
       sprintf(msg, "\t\t%s: %f[K]",
               para->cosim->para->name[id], para->cosim->ffd->temHea[id]);
     }
+    // Set the heat flux
     else {
       para->cosim->ffd->temHea[id] = para->bc->temHeaMean[i];
       sprintf(msg, "\t\t%s: %f[W]",
@@ -615,7 +617,6 @@ int assign_thermal_bc(PARA_DATA *para, REAL **var, int **BINDEX) {
       if(var[FLAGP][IX(i,j,k)]==SOLID) 
         switch(para->cosim->para->bouCon[modelicaId]) {
           case 1: 
-            // Need to convert the T from K to degC
             var[TEMPBC][IX(i,j,k)] = temHea[id];
             BINDEX[3][it] = 1; // Specified temperature
             break;
@@ -816,13 +817,12 @@ int surface_integrate(PARA_DATA *para, REAL **var, int **BINDEX) {
         // FFD uses heat flux as BC to compute temperature
         // Then send Modelica the tempearture
         case 0: 
-          para->bc->temHeaAve[bcid] += var[TEMP][IX(i,j,k)] * A_tmp 
-                                     / para->bc->AWall[i];
+          para->bc->temHeaAve[bcid] += var[TEMP][IX(i,j,k)] * A_tmp;
           break;
         // FFD uses temperature as BC to compute heat flux
         // Then send Modelica the heat flux
         case 1: 
-          para->bc->temHeaAve[bcid] += var[QFLUX][IX(i,j,k)]*A_tmp;
+          para->bc->temHeaAve[bcid] += var[QFLUX][IX(i,j,k)] * A_tmp;
           //sprintf(msg, "Cell(%d,%d,%d):\tQFLUX=%f,\tA=%f", i,j,k,var[QFLUX][IX(i,j,k)], A_tmp);
           //ffd_log(msg, FFD_NORMAL);
           break;
@@ -846,11 +846,6 @@ int surface_integrate(PARA_DATA *para, REAL **var, int **BINDEX) {
         */
     }
   } // End of for(it=0; it<para->geom->index; it++)
-
-//  for(i=0; i<para->bc->nb_wall; i++) {
-//    sprintf(msg, "%s: para->bc->temHeaAve = %f", para->bc->wallName[i], para->bc->temHeaAve[i]);
-//    ffd_log(msg, FFD_NORMAL);
-//  }
   
   return 0;
 } // End of surface_integrate()
