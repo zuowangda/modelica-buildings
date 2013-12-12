@@ -18,12 +18,10 @@ model OnlyInteriorWall
         boundaryCondition={Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,
             Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,
             Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,
-            Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate})));
-
-  //Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,
-  //Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,
-  //Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,
-  //Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate
+            Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate}),
+            air(cfd(flaWri={0,0,1,1,1,1,1,0,0})),
+      linearizeRadiation=false,
+      samplePeriod=60));
 
   Buildings.HeatTransfer.Sources.FixedTemperature TWesWal(each T=283.15)
     "Boundary condition for the west wall" annotation (Placement(transformation(
@@ -70,8 +68,10 @@ East wall: Fixed temperature at 40 degC,
 West wall: Fixed temperature at 10 degC,
 </li>
 <li>
-North & South wall, Ceiling, Floor: Fixed heat flux at 0 W/m2.
+North & South wall, Ceiling, Floor: Fixed heat flux at 0 W/m2. 
 </li>
+<li>
+To ensure that correct initial condition was sent to FFD, heat flux should be integrated over the smapling time by setting roo.air.cfd.flaWr[i]=1, i=[3,4,5,6].
 </p>
 </html>", revisions="<html>
 <ul>
