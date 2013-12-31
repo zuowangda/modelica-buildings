@@ -3,46 +3,23 @@ model OnlyInteriorWall
   "Buoyancy force driven natural convection in a room with only interior walls"
   extends Modelica.Icons.Example;
   extends
-    Buildings.Rooms.Examples.TestConditionalConstructionsFFD.BaseClasses.PartialOnlyInteriorWall(
-      roo(datConBou(
-        name={"East Wall","West Wall","North Wall","South Wall","Floor",
-            "Ceiling"},
-        layers={matLayRoo,matLayRoo,matLayRoo,matLayRoo,matLayRoo,matLayRoo},
-        each A=1*1,
-        til={Buildings.HeatTransfer.Types.Tilt.Wall,Buildings.HeatTransfer.Types.Tilt.Wall,
-            Buildings.HeatTransfer.Types.Tilt.Wall,Buildings.HeatTransfer.Types.Tilt.Wall,
-            Buildings.HeatTransfer.Types.Tilt.Floor,Buildings.HeatTransfer.Types.Tilt.Ceiling},
-        T_a_start={313.15,283.15,283.15,283.15,283.15,283.15},
-        T_b_start={313.15,283.15,283.15,283.15,283.15,283.15},
-        steadyStateInitial={false,false,false,false,false,false},
-        boundaryCondition={Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,
-            Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,
-            Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,
-            Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate}),
-            air(cfd(flaWri={0,0,1,1,1,1,1,0,0})),
-      linearizeRadiation=false,
-      samplePeriod=60));
+    Buildings.Rooms.Examples.TestConditionalConstructionsFFD.BaseClasses.PartialOnlyInteriorWall;
 
-  Buildings.HeatTransfer.Sources.FixedTemperature TWesWal(each T=283.15)
-    "Boundary condition for the west wall" annotation (Placement(transformation(
+  Buildings.HeatTransfer.Sources.FixedTemperature TWalRes[nConBou - 1](each T=
+        283.15) "Boundary condition for the rest of walls" annotation (
+      Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=0,
         origin={110,-30})));
 
-  HeatTransfer.Sources.FixedHeatFlow fixedHeatFlow[nConBou - 2](each Q_flow=0)
-    annotation (Placement(transformation(extent={{6,-24},{26,-4}})));
 equation
-  for i in 1:nConBou - 2 loop
-    connect(fixedHeatFlow[i].port, roo.surf_conBou[i + 2]) annotation (Line(
-        points={{26,-14},{72,-14},{72,24}},
+  for i in 1:nConBou - 1 loop
+    connect(TWalRes[i].port, roo.surf_conBou[i + 1]) annotation (Line(
+        points={{100,-30},{72,-30},{72,24}},
         color={191,0,0},
         smooth=Smooth.None));
-  end for;
 
-  connect(TWesWal.port, roo.surf_conBou[2]) annotation (Line(
-      points={{100,-30},{72,-30},{72,24}},
-      color={191,0,0},
-      smooth=Smooth.None));
+  end for;
 
   annotation (
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
@@ -58,20 +35,10 @@ Buildings.Rooms.FFD</a>
 with the FFD program by simulating the natural convection in a room with only interior walls.
 </p>
 <p>
-The difference between this model and the <a href=\"modelica://Buildings.Rooms.Examples.TestConditionalConstructionsFFD.OnlyInteriorWallOnlyTemperature\">
-Buildings.Rooms.Examples.TestConditionalConstructionsFFD.OnlyInteriorWallOnlyTemperature</a> is the boundary conditions.
-The boundary conditions in this model are:
-<li>
-East wall: Fixed temperature at 40 degC, 
-</li>
-<li>
-West wall: Fixed temperature at 10 degC,
-</li>
-<li>
-North & South wall, Ceiling, Floor: Fixed heat flux at 0 W/m2. 
-</li>
-<li>
-To ensure that correct initial condition was sent to FFD, heat flux should be integrated over the smapling time by setting roo.air.cfd.flaWr[i]=1, i=[3,4,5,6].
+The dimensions of the room are 1m x 1m x 1m.
+The temperature of the east wall is set to 40 degC and the rest walls are 10 degC.
+The initial temperature of room air is 10 degC and it will increase due to the warm wall on the east.
+Two sensors are placed in the room center (0.5m, 0.5m, 0.5m) that measure the temperature and the velocity.
 </p>
 </html>", revisions="<html>
 <ul>
