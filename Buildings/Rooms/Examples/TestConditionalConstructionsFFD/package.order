@@ -1,4 +1,4 @@
 BaseClasses
 RayleighNumber
 OnlyInteriorWall
-OnlyInteriorWallOnlyTemperature
+OnlySurfaceBoundary
