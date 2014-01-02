@@ -274,6 +274,9 @@ int coef_diff(PARA_DATA *para, REAL **var, REAL *psi, REAL *psi0,
         Dy = gy[IX(i,j,k)] - gy[IX(i,j-1,k)];
         Dz = gz[IX(i,j,k)] - gz[IX(i,j,k-1)];
  
+        if(para->prob->tur_model==CHEN)
+          kapa = nu_t_chen_zero_equ(para, var, i, j, k);
+
         aw[IX(i,j,k)] = kapa*Dy*Dz/dxw;
         ae[IX(i,j,k)] = kapa*Dy*Dz/dxe;
         an[IX(i,j,k)] = kapa*Dx*Dz/dyn;
