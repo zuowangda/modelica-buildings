@@ -358,14 +358,21 @@ int write_cosim_data(PARA_DATA *para, REAL **var) {
 
     // Set the B.C. Temperature
     if(para->cosim->para->bouCon[id]==2) {
-      para->cosim->ffd->temHea[id] = para->bc->temHeaMean[i] 
+      if(para->mytime->t==0) // Use initial T for Modelica
+        para->cosim->ffd->temHea[id] = para->init->T + 273.15;
+      else {
+        para->cosim->ffd->temHea[id] = para->bc->temHeaMean[i] 
                                    / para->bc->AWall[i] + 273.15;
+      }
       sprintf(msg, "\t\t%s: %f[K]",
               para->cosim->para->name[id], para->cosim->ffd->temHea[id]);
     }
     // Set the heat flux
     else {
-      para->cosim->ffd->temHea[id] = para->bc->temHeaMean[i];
+      if(para->mytime->t==0)
+        para->cosim->ffd->temHea[id] = 0;
+      else
+        para->cosim->ffd->temHea[id] = para->bc->temHeaMean[i];
       sprintf(msg, "\t\t%s: %f[W]",
               para->cosim->para->name[id], para->cosim->ffd->temHea[id]);
     }

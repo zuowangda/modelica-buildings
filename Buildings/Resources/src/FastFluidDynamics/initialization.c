@@ -144,8 +144,8 @@ int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX) {
     var[VYS][i]    = 0.0;
     var[VZS][i]    = 0.0;
     var[TEMP][i]   = para->init->T;
-    var[TEMPM][i]  = 0.0;
-    var[TEMPS][i]  = 0.0;
+    var[TEMPM][i]  = para->init->T;
+    var[TEMPS][i]  = para->init->T;
     var[IP][i]     = 0.0;
     var[AP][i]     = 0.0;
     var[AW][i]     = 0.0;
