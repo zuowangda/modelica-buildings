@@ -298,7 +298,6 @@ int coef_diff(PARA_DATA *para, REAL **var, REAL *psi, REAL *psi0,
       sprintf(msg, "coe_diff(): No function for variable type %d", var_type);
       ffd_log(msg, FFD_ERROR);
       return 1;
-      break;
   }
 
   return 0;
