@@ -74,7 +74,6 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
   int IWWALL,IEWALL,ISWALL,INWALL,IBWALL,ITWALL;
   int SI,SJ,SK,EI,EJ,EK,FLTMP;
   REAL TMP,MASS,U,V,W;
-  //REAL trefmax;
   char name[100];
   int imax = para->geom->imax;
   int jmax = para->geom->jmax;
@@ -85,7 +84,6 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
   REAL *delx, *dely, *delz;
   REAL *flagp = var[FLAGP];
   int bcnameid = -1;
-  char **outletName, **inletName;
 
   // Open the parameter file
   if((file_params=fopen(para->inpu->parameter_file_name,"r")) == NULL ) { 
@@ -204,32 +202,43 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
 
   index=0;
   // Set inlet boundary
-  if(para->bc->nb_inlet != 0) {
-    inletName = (char**) malloc(para->bc->nb_inlet*sizeof(char*));
-    if(inletName==NULL)
-      ffd_log("read_sci_input(): Could not allocate memory for inletName.",
-      FFD_ERROR);
-
-    bcnameid = -1;
+  if(para->bc->nb_inlet!=0) {
     /*-------------------------------------------------------------------------
-    | Loop for rwad each inlet boundary
+    | Allocate the memory for bc name
+    -------------------------------------------------------------------------*/
+    para->bc->inletName = (char**) malloc(para->bc->nb_inlet*sizeof(char*));
+    if(para->bc->inletName==NULL) {
+      ffd_log("read_sci_input(): Could not allocate memory for "
+              "para->bc->inletName.", FFD_ERROR);
+      return 1;
+    }
+
+    /*-------------------------------------------------------------------------
+    | Loop for each inlet boundary
     --------------------------------------------------------------------------*/
     for(i=0; i<para->bc->nb_inlet; i++) {
       /*.......................................................................
       | Get the names of boundary
       .......................................................................*/
       fgets(string, 400, file_params);
-      // Ge the length of name (The name may contain white space)
+      // Get the length of name (The name may contain white space)
       for(j=0; string[j] != '\n'; j++) {
         continue;
       }
-      bcnameid++;
-      inletName[i] = (char*)malloc((j+1)*sizeof(char));
-      strncpy(inletName[i], (const char*)string, j);
+
+      para->bc->inletName[i] = (char*)malloc((j+1)*sizeof(char));
+      if(para->bc->inletName[i]==NULL) {
+        sprintf(msg, "read_sci_input(): Could not allocate memory for "
+                "para->bc->inletName[%d].", i);
+        ffd_log(msg, FFD_ERROR);
+        return 1;
+      }
+
+      strncpy(para->bc->inletName[i], (const char*)string, j);
       // Add an ending
-      inletName[i] = '\0';
-      sprintf(msg, "read_sci_input(): inletName[%d]=%s",
-              bcnameid, inletName[i]);
+      para->bc->inletName[i][j] = '\0';
+      sprintf(msg, "read_sci_input(): para->bc->inletName[%d]=%s",
+              i, para->bc->inletName[i]);
       ffd_log(msg, FFD_NORMAL);
       /*.......................................................................
       | Get the boundary conditions
@@ -268,7 +277,7 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
             BINDEX[0][index] = ii;
             BINDEX[1][index] = ij;
             BINDEX[2][index] = ik;
-            BINDEX[4][index] = bcnameid;
+            BINDEX[4][index] = i;
             index++;
             
             var[TEMPBC][IX(ii,ij,ik)] = TMP;
@@ -290,10 +299,10 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
   ffd_log(msg, FFD_NORMAL);
    
   if(para->bc->nb_outlet!=0) {
-    outletName = (char**) malloc(para->bc->nb_outlet*sizeof(char*));
-    if(outletName==NULL) {
-      ffd_log("read_sci_input(): Could not allocate memory for outletName.",
-      FFD_ERROR);
+    para->bc->outletName = (char**) malloc(para->bc->nb_outlet*sizeof(char*));
+    if(para->bc->outletName==NULL) {
+      ffd_log("read_sci_input(): Could not allocate memory for "
+              "para->bc->outletName.", FFD_ERROR);
       return 1;
     }
 
@@ -302,24 +311,26 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
       | Get the names of boundary
       .......................................................................*/
       fgets(string, 400, file_params);
-      // Ge the length of name (The name may contain white space)
+      // Get the length of name (The name may contain white space)
       for(j=0; string[j] != '\n'; j++) {
         continue;
       }
-      bcnameid++;
-      outletName[i] = (char*)malloc((j+1)*sizeof(char));
-      if(outletName[i]==NULL) {
+
+      para->bc->outletName[i] = (char*)malloc((j+1)*sizeof(char));
+      if(para->bc->outletName[i]==NULL) {
         sprintf(msg, "read_sci_input(): Could not allocate memory "
-          "for outletName[%d].", i);
+          "for para->bc->outletName[%d].", i);
         ffd_log(msg, FFD_ERROR);
         return 1;
       }
-      strncpy(outletName[i], (const char*)string, j);
+
+      strncpy(para->bc->outletName[i], (const char*)string, j);
       // Add an ending
-      outletName[i] = '\0';
-      sprintf(msg, "read_sci_input(): outletName[%d]=%s",
-              bcnameid, outletName[i]);
+      para->bc->outletName[i] = '\0';
+      sprintf(msg, "read_sci_input(): para->bc->outletName[%d]=%s",
+              bcnameid, para->bc->outletName[i]);
       ffd_log(msg, FFD_NORMAL);
+
       /*.......................................................................
       | Get the boundary conditions
       .......................................................................*/
@@ -359,7 +370,7 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
             BINDEX[0][index] = ii;
             BINDEX[1][index] = ij;
             BINDEX[2][index] = ik;
-            BINDEX[4][index] = bcnameid;
+            BINDEX[4][index] = i;
             index++;
 
             // Fixme: Why assign TMP, U, V, W for oulet B.C?
@@ -390,31 +401,32 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
     }
     // Copy the inlet names
     for(i=0; i<para->bc->nb_inlet; i++) {
-      para->bc->portName[i] = (char*) malloc(sizeof(char)*(sizeof(inletName[i])+1));
+      para->bc->portName[i] = (char*) malloc(sizeof(char)*(sizeof(para->bc->inletName[i])+1));
       if(para->bc->portName[i]==NULL) {
         ffd_log("read_sci_input():"
                 "Could not allocate memory for para->bc->portName.",
         FFD_ERROR);
         return 1;
       }
-      else
-        strcpy(para->bc->portName[i], inletName[i]);
+      else {
+        strcpy(para->bc->portName[i], para->bc->inletName[i]);
         sprintf(msg, "read_sci_input(): Port[%d]:%s", 
                 i, para->bc->portName[i]);
         ffd_log(msg, FFD_NORMAL);
+      }
     }
 
     j = para->bc->nb_inlet;
     // Copy the outlet names
     for(i=0; i<para->bc->nb_outlet; i++) {      
-      para->bc->portName[i+j] = (char*) malloc(sizeof(char)*(sizeof(outletName[i])+1));
+      para->bc->portName[i+j] = (char*) malloc(sizeof(char)*(sizeof(para->bc->outletName[i])+1));
       if(para->bc->portName[i+j]==NULL) {
         ffd_log("read_sci_input(): Could not allocate memory for para->bc->portName.",
         FFD_ERROR);
         return 1;
       }
       else {
-        strcpy(para->bc->portName[i+j], outletName[i]);
+        strcpy(para->bc->portName[i+j], para->bc->outletName[i]);
         sprintf(msg, "read_sci_input(): Port[%d]:%s", 
                 i+j, para->bc->portName[i+j]);
         ffd_log(msg, FFD_NORMAL);
@@ -487,15 +499,16 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
   sscanf(string, "%d", &para->bc->nb_block); 
   sprintf(msg, "read_sci_input(): para->bc->nb_block=%d", para->bc->nb_block);
   ffd_log(msg, FFD_NORMAL);
-  bcnameid = -1;
 
   if(para->bc->nb_block!=0) {
     para->bc->blockName = (char**) malloc(para->bc->nb_block*sizeof(char*));
-    if(para->bc->blockName==NULL)
+    if(para->bc->blockName==NULL) {
       ffd_log("read_sci_input(): Could not allocate memory for para->bc->blockName.",
       FFD_ERROR);
+      return 1;
+    }
 
-    for(i=1; i<=para->bc->nb_block; i++) {
+    for(i=0; i<para->bc->nb_block; i++) {
       /*.......................................................................
       | Get the names of boundary
       .......................................................................*/
@@ -504,14 +517,22 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
       for(j=0; string[j] != '\n'; j++) {
         continue;
       }
-      bcnameid++;
-      para->bc->blockName[bcnameid] = (char*)malloc((j+1)*sizeof(char));
-      strncpy(para->bc->blockName[bcnameid], (const char*)string, j);
+
+      para->bc->blockName[i] = (char*)malloc((j+1)*sizeof(char));
+      if(para->bc->blockName[i]==NULL) {
+        sprintf(msg,"read_sci_input(): Could not allocate memory for "
+          "para->bc->blockName[%d].", i);
+        ffd_log(msg, FFD_ERROR);
+        return 1;
+      }
+
+      strncpy(para->bc->blockName[i], (const char*)string, j);
       // Add an ending
-      para->bc->blockName[bcnameid][j] = '\0';
+      para->bc->blockName[i][j] = '\0';
       sprintf(msg, "read_sci_input(): para->bc->blockName[%d]=%s",
-              bcnameid, para->bc->blockName[bcnameid]);
+              i, para->bc->blockName[i]);
       ffd_log(msg, FFD_NORMAL);
+
       /*.......................................................................
       | Get the boundary conditions
       .......................................................................*/
@@ -556,7 +577,7 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
             BINDEX[1][index] = ij;
             BINDEX[2][index] = ik;
             BINDEX[3][index] = FLTMP;
-            BINDEX[4][index] = bcnameid;
+            BINDEX[4][index] = i;
             index++;
 
             switch(FLTMP) {
@@ -592,29 +613,49 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
     | Allocate the memory for bc name and id
     -------------------------------------------------------------------------*/
     para->bc->wallName = (char**)malloc(para->bc->nb_wall*sizeof(char*));
+    if(para->bc->wallName==NULL) {
+      ffd_log("read_sci_input(): Could not allocate memory for "
+      "para->bc->wallName.", FFD_ERROR);
+      return 1;
+    }
+
     para->bc->wallId = (int *)malloc(sizeof(int)*para->bc->nb_wall);
+    if(para->bc->wallId==NULL) {
+      ffd_log("read_sci_input(): Could not allocate memory for "
+      "para->bc->wallId.", FFD_ERROR);
+      return 1;
+    }
+
     for(i=0; i<para->bc->nb_wall; i++)
       para->bc->wallId[i] = -1;
 
     para->bc->AWall = (REAL*) malloc(para->bc->nb_wall*sizeof(REAL));
-    if(para->bc->AWall==NULL)
+    if(para->bc->AWall==NULL) {
       ffd_log("read_sci_input(): Could not allocate memory for "
       "para->bc->AWall.", FFD_ERROR);
+      return 1;
+    }
 
     para->bc->temHea = (REAL*) malloc(para->bc->nb_wall*sizeof(REAL));
-    if(para->bc->temHea==NULL)
+    if(para->bc->temHea==NULL) {
       ffd_log("read_sci_input(): Could not allocate memory for "
       "para->bc->heaTem.", FFD_ERROR);
+      return 1;
+    }
 
     para->bc->temHeaAve = (REAL*) malloc(para->bc->nb_wall*sizeof(REAL));
-    if(para->bc->temHeaAve==NULL)
+    if(para->bc->temHeaAve==NULL) {
       ffd_log("read_sci_input(): Could not allocate memory for "
       "para->bc->temHeaAve.", FFD_ERROR);
-    
+    return 1;
+    }
+
     para->bc->temHeaMean = (REAL*) malloc(para->bc->nb_wall*sizeof(REAL));
-    if(para->bc->temHeaMean==NULL)
+    if(para->bc->temHeaMean==NULL) {
       ffd_log("read_sci_input(): Could not allocate memory for "
       "para->bc->temHeaMean.", FFD_ERROR);
+      return 1;
+    }
 
     /*-------------------------------------------------------------------------
     | Read wall conditions for each wall
@@ -624,12 +665,19 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
       | Get the names of boundary
       .......................................................................*/
       fgets(string, 400, file_params);
-      // Ge the length of name (The name may contain white space)
+      // Get the length of name (The name may contain white space)
       for(j=0; string[j] != '\n'; j++) {
         continue;
       }
 
       para->bc->wallName[i] = (char*)malloc((j+1)*sizeof(char));
+      if(para->bc->wallName[i]==NULL) {
+        sprintf(msg, "read_sci_input(): Could not allocate memory for "
+                "para->bc->wallName[%d].", i);
+        ffd_log(msg, FFD_ERROR);
+        return 1;
+      }
+
       strncpy(para->bc->wallName[i], (const char*)string, j);
       // Add an ending
       para->bc->wallName[i][j] = '\0';
@@ -702,7 +750,6 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
   sscanf(string,"%d", &para->bc->nb_source); 
   sprintf(msg, "read_sci_input(): para->bc->nb_source=%d", para->bc->nb_source);
   ffd_log(msg, FFD_NORMAL);
-
   
   if(para->bc->nb_source!=0) {
     sscanf(string,"%s%d%d%d%d%d%d%f", 

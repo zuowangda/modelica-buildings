@@ -279,6 +279,7 @@ typedef struct {
   int sha; // 1: have shade ; 0: no shade 
   char **wallName; // *wallName[nb_wall]: Name of solid boundary (Wall, Window)
   char **inletName; // *inletName[nb_inlet]: Name of inlet boundary
+  char **outletName; // *inletName[nb_outlet]: Name of outlet boundary
   char **portName; // *portName[nb_port]: Name of ports
   char **blockName; // *blockName[nb_block]: Name of internal block
   char **sourceName; // *sourceName[nb_source]: Name of the source
