@@ -10,7 +10,7 @@ model OnlySurfaceBoundary
       surBou(
         name={"East Wall","West Wall","North Wall","South Wall","Floor",
             "Ceiling"},
-        each A=1,
+        each A=1*1,
          til={Buildings.HeatTransfer.Types.Tilt.Wall,Buildings.HeatTransfer.Types.Tilt.Wall,
             Buildings.HeatTransfer.Types.Tilt.Wall,Buildings.HeatTransfer.Types.Tilt.Wall,
             Buildings.HeatTransfer.Types.Tilt.Floor,Buildings.HeatTransfer.Types.Tilt.Ceiling},
