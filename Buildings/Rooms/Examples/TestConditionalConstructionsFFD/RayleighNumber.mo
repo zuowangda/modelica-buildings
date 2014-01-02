@@ -1,5 +1,6 @@
 within Buildings.Rooms.Examples.TestConditionalConstructionsFFD;
-model RayleighNumber "An ideal flow with Rayleigh number of 10E4"
+model RayleighNumber
+  "An ideal natural convection flow with Rayleigh number of 1E5"
   extends
     Buildings.Rooms.Examples.TestConditionalConstructionsFFD.OnlySurfaceBoundary(
     TEasWal(T=273.15),
@@ -23,18 +24,30 @@ Buildings.Rooms.FFD</a>
 with the FFD program by simulating the natural convection in a room with only surface boundaries.
 </p>
 <p>
-To get a Rayleigh number of 1E4, the flow properties are mannually set.
+The Rayleigh number is a dimensionless number associated with natural convection, defined as 
+<p align=\"center\" style=\"font-style:italic;\">
+  R<sub>a</sub> = g &beta; (T<sub>w</sub>-T<sub>e</sub>)L<sup>3</sup> &frasl; (&nu; &alpha;)
+</p>
 
-The boundary conditions in this model are:
+To get a Rayleigh number of 1E5, the flow properties are mannually set as
+acceleration due to gravity <i>g<sub>z</sub>=-0.01</i> m/s2, 
+thermal expansion coefficient <i>&beta;=3e-3</i> 1/K, 
+kinematic viscosity <i>&nu;=1.5e-5</i> m2/s, 
+thermal diffusivity <i>&alpha;=2e-5</i> m2/s,
+characteristic length <i>L=1</i> m. 
+
+The boundary conditions are:
+<ul>
 <li>
-East wall: Fixed temperature at 0 degC, 
+East wall: Fixed temperature at <i>T<sub>e</sub>=0</i> degC, 
 </li>
 <li>
-West wall: Fixed temperature at 1 degC,
+West wall: Fixed temperature at <i>T<sub>w</sub>=1</i> degC,
 </li>
 <li>
 North & South wall, Ceiling, Floor: Fixed heat flux at 0 W/m2.
 </li>
+</ul>
 <p>
 More details of the case description can be found in 
 <a href=\"#ZUOEtAl2011\">Zuo et al. (2011)</a>.

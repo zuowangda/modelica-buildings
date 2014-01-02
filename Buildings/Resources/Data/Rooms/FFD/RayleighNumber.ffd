@@ -40,7 +40,7 @@ prob.nu 1.5e-5 // Kinematic viscosity
 prob.rho 1 // Density
 prob.gravx 0 // Gravity in x direction
 prob.gravy 0 // Gravity in y direction
-prob.gravz -0.001 // Gravity in z direction
+prob.gravz -0.01 // Gravity in z direction
 prob.cond 0.02 // Conductivity
 prob.Cp 1000.0 // Specific heat capacity
 prob.beta 3e-3 // Thermal expansion coefficient
