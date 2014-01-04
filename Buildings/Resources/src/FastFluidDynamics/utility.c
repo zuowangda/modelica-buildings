@@ -58,7 +58,7 @@ REAL check_residual(PARA_DATA *para, REAL **var, REAL *x) {
 ///////////////////////////////////////////////////////////////////////////////
 void ffd_log(char *message, FFD_MSG_TYPE msg_type) {
   if(msg_type==FFD_NEW) {
-    if((file_log=fopen("log.ffd","w"))==NULL) {
+    if((file_log=fopen("log.ffd","w+"))==NULL) {
         fprintf(stderr, "Error:can not open error file!\n");
         exit(1);
     }

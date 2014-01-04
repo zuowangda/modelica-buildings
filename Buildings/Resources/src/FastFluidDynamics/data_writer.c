@@ -57,7 +57,7 @@ int write_tecplot_data(PARA_DATA *para, REAL **var, char *name) {
   strcat(filename, ".plt");
 
   // Open output file
-  if((datafile=fopen(filename, "w"))==NULL) {
+  if((datafile=fopen(filename, "w+"))==NULL) {
     ffd_log("write_tecplot_data(): Failed to open output file!\n", FFD_ERROR);
     return 1;
   }
