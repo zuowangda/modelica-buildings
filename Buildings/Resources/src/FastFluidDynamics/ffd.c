@@ -1,15 +1,15 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///
-/// \file ffd.c
+/// \file ffd.h
 ///
 /// \brief Main routine of Fast Fluid Dynamics
 ///
-/// \author Mingang Jin, Qingyan Chen
-///         Purdue University
-///         Jin55@purdue.edu, YanChen@purdue.edu
-///         Wangda Zuo
+/// \author Wangda Zuo
 ///         University of Miami
 ///         W.Zuo@miami.edu
+///         Mingang Jin, Qingyan Chen
+///         Purdue University
+///         Jin55@purdue.edu, YanChen@purdue.edu
 ///
 /// \date   8/3/2013
 ///
@@ -256,44 +256,25 @@ static void reshape_func(int width, int height) {
   ffd_reshape_func(&para, width, height);
 } // End of reshape_func()
 
+
 ///////////////////////////////////////////////////////////////////////////////
-/// Lanuch the FFD simulation through a thread
+/// Assign the parameter for cosimulation
 ///
-///\param p Pointer to the cosimulaiton data
+///\para cosim Pointer to the cosimulation parameters
 ///
 ///\return 0 if no error occurred
 ///////////////////////////////////////////////////////////////////////////////
-#ifdef _MSC_VER //Windows
-DWORD WINAPI ffd_thread(void *p){ 
-  ULONG workerID = (ULONG)(ULONG_PTR)p;
-#else //Linux
-void  ffd_thread(void* p){
-#endif
-
-  CosimulationData *cosim = (CosimulationData *) p;
-  int cosimulation = 1;
-
-#ifdef _MSC_VER //Windows
-  sprintf(msg, "Start Fast Fluid Dynamics Simulation with Thread ID %lu", workerID);
-#else //Linux
-  sprintf(msg, "Start Fast Fluid Dynamics Simulation with Thread");
-#endif
-
-  printf("%s\n", msg);
-  ffd_log(msg, FFD_NEW);
-
-  sprintf(msg, "fileName=\"%s\"", cosim->para->fileName);
-  ffd_log(msg, FFD_NORMAL);
-
+int ffd_cosimulation(CosimulationData *cosim) {
   para.cosim = (CosimulationData *) malloc(sizeof(CosimulationData)); 
   para.cosim = cosim;
 
-  if(ffd(cosimulation)!=0)
+  if(ffd(1)!=0) {
     cosim->para->ffdError = 1;
-
-  ffd_log("Successfully exit FFD.", FFD_NORMAL);
-  return 0;
-} // End of ffd_thread()
+    return 1;
+  }
+  else
+    return 0;
+} // End of ffd_cosimulation()
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Main routine of FFD

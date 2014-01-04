@@ -1,4 +1,18 @@
-
+///////////////////////////////////////////////////////////////////////////////
+///
+/// \file   ffd_dll.c
+///
+/// \brief  functions to call ffd code as a dll
+///
+/// \author Wangda Zuo, Dan Li
+///         University of Miami
+///         W.Zuo@miami.edu
+///
+/// \date   8/3/2013
+///
+/// This file provides functions as entry for the cosimulation
+///
+///////////////////////////////////////////////////////////////////////////////
 
 #include "ffd_dll.h"
 /******************************************************************************
@@ -28,3 +42,42 @@ int ffd_dll(CosimulationData *cosim) {
   printf("ffd_dll(): Launched FFD simulation.\n");
   return 0;
 } // End of ffd_dll()
+
+///////////////////////////////////////////////////////////////////////////////
+/// Lanuch the FFD simulation through a thread
+///
+///\param p Pointer to the cosimulaiton data
+///
+///\return 0 if no error occurred
+///////////////////////////////////////////////////////////////////////////////
+#ifdef _MSC_VER //Windows
+DWORD WINAPI ffd_thread(void *p){ 
+  ULONG workerID = (ULONG)(ULONG_PTR)p;
+#else //Linux
+void  ffd_thread(void* p){
+#endif
+
+  CosimulationData *cosim = (CosimulationData *) p;
+  int cosimulation = 1;
+
+#ifdef _MSC_VER //Windows
+  sprintf(msg, "Start Fast Fluid Dynamics Simulation with Thread ID %lu", workerID);
+#else //Linux
+  sprintf(msg, "Start Fast Fluid Dynamics Simulation with Thread");
+#endif
+
+  printf("%s\n", msg);
+  ffd_log(msg, FFD_NEW);
+
+  sprintf(msg, "fileName=\"%s\"", cosim->para->fileName);
+  ffd_log(msg, FFD_NORMAL);
+
+  if(ffd_cosimulation(cosim)!=0) {
+    ffd_log("ffd_thread(): Cosimulation failed", FFD_ERROR);
+    return 1;
+  }
+  else {
+    ffd_log("Successfully exit FFD.", FFD_NORMAL);
+    return 0;
+  }
+} // End of ffd_thread()

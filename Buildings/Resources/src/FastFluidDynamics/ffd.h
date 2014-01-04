@@ -4,12 +4,12 @@
 ///
 /// \brief Main routine of Fast Fluid Dynamics
 ///
-/// \author Mingang Jin, Qingyan Chen
-///         Purdue University
-///         Jin55@purdue.edu, YanChen@purdue.edu
-///         Wangda Zuo
+/// \author Wangda Zuo
 ///         University of Miami
 ///         W.Zuo@miami.edu
+///         Mingang Jin, Qingyan Chen
+///         Purdue University
+///         Jin55@purdue.edu, YanChen@purdue.edu
 ///
 /// \date   8/3/2013
 ///
@@ -59,17 +59,13 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Lanuch the FFD simulation through a thread
+/// Assign the parameter for cosimulation
 ///
-///\param p Pointer to the cosimulaiton data
+///\para cosim Pointer to the cosimulation parameters
 ///
 ///\return 0 if no error occurred
 ///////////////////////////////////////////////////////////////////////////////
-#ifdef _MSC_VER //Windows
-DWORD WINAPI ffd_thread(void *p);
-#else //Linux
-void ffd_thread(void *p);
-#endif
+int ffd_cosimulation(CosimulationData *cosim);
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Main routine of FFD
