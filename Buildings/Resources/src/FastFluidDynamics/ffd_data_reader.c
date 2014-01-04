@@ -34,9 +34,9 @@ int read_ffd_data(PARA_DATA *para, REAL **var) {
   char string[400];
 
   if((file_old_ffd=fopen(para->inpu->old_ffd_file_name,"r"))==NULL) {
-    sprintf(msg, "ffd_data_reader.c: Can not open %s.", 
+    sprintf(msg, "ffd_data_reader.c: Can not open file \"%s\".", 
             para->inpu->old_ffd_file_name);
-    ffd_log("ffd_data_reader.c: Can not open %s.", FFD_ERROR);
+    ffd_log(msg, FFD_ERROR);
     return 1;
   }
  
