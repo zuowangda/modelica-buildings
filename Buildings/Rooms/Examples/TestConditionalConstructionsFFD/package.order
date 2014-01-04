@@ -1,4 +1,6 @@
 BaseClasses
-RayleighNumber
-OnlyInteriorWall
+OnlyConstructionBoundary
+OnlyExteriorWallNoWindow
+OnlyExteriorWallWithWindow
 OnlySurfaceBoundary
+RayleighNumber
