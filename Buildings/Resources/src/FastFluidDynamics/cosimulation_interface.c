@@ -46,10 +46,10 @@ int read_cosim_parameter(PARA_DATA *para, REAL **var, int **BINDEX) {
   else {
     sprintf(msg, 
             "read_cosim_parameter(): Modelica(%d) and FFD(%d) "
-            "have different number of solid surfaces.", 
+            "have different numbers of solid surfaces.", 
             para->cosim->para->nSur, para->bc->nb_wall);
     ffd_log(msg, FFD_ERROR);
-    ffd_log("\tModleica Surfaces are:", FFD_NORMAL); 
+    ffd_log("\tModelica Surfaces are:", FFD_NORMAL); 
     for(i=0; i<para->cosim->para->nSur; i++) {
       sprintf(msg, "\t\t%s", para->cosim->para->name[i]);
       ffd_log(msg, FFD_NORMAL);
