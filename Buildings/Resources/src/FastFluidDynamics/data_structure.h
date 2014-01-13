@@ -238,6 +238,7 @@ typedef struct{
 typedef struct{
   FILE_FORMAT parameter_file_format; // Foramt of extra parameter file
   char parameter_file_name[50]; // Name of extra parameter file
+  char block_file_name[50]; // Name of file stores block information
   int read_old_ffd_file; // 1: Read previous FFD file; 0: False
   char old_ffd_file_name[50]; // Name of previous FFD simulation data file
 } INPU_DATA;

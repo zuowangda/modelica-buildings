@@ -167,6 +167,11 @@ int assign_parameter(PARA_DATA *para, char *string) {
     sprintf(msg, "assign_parameter(): %s=%s", tmp, para->inpu->parameter_file_name);
     ffd_log(msg, FFD_NORMAL);
   }
+  else if(!strcmp(tmp, "inpu.block_file_name")) {
+    sscanf(string, "%s%s", tmp, para->inpu->block_file_name);
+    sprintf(msg, "assign_parameter(): %s=%s", tmp, para->inpu->block_file_name);
+    ffd_log(msg, FFD_NORMAL);
+  }
   else if(!strcmp(tmp, "inpu.read_old_ffd_file")) {
     sscanf(string, "%s%d", tmp, &para->inpu->read_old_ffd_file);
     sprintf(msg, "assign_parameter(): %s=%d", tmp, para->inpu->read_old_ffd_file);

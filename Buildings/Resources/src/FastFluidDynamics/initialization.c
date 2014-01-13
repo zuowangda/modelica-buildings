@@ -4,12 +4,12 @@
 ///
 /// \brief  Set the initial values
 ///
-/// \author Mingang Jin, Qingyan Chen
-///         Purdue University
-///         Jin55@purdue.edu, YanChen@purdue.edu
-///         Wangda Zuo
+/// \author Wangda Zuo
 ///         University of Miami
 ///         W.Zuo@miami.edu
+///         Mingang Jin, Qingyan Chen
+///         Purdue University
+///         Jin55@purdue.edu, YanChen@purdue.edu
 ///
 /// \date   8/3/2013
 ///
@@ -185,7 +185,8 @@ int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX) {
     }
     flag = read_sci_zeroone(para, var, BINDEX);
     if(flag != 0) {
-      ffd_log("set_inital_data(): Could not read zeroone file", FFD_ERROR);
+      ffd_log("set_inital_data(): Could not read block information file", 
+               FFD_ERROR);
       return flag; 
     }
     mark_cell(para, var);

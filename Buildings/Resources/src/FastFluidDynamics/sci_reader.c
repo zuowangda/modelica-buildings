@@ -53,7 +53,7 @@ int read_sci_max(PARA_DATA *para, REAL **var) {
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Read other information from input.cfd
+/// Read other information from sci input file
 ///
 ///\param para Pointer to FFD parameters
 ///\param var Pointer to FFD simulation variables
@@ -863,7 +863,10 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Read the zoneone.dat file to indentify the block cells
+/// Read the file to indentify the block cells in space
+///
+/// The default name used by SCi is zeroone.dat. The user can change the file 
+/// name and give the new name in the FFD input file *.ffd.
 ///
 ///\param para Pointer to FFD parameters
 ///\param var Pointer to FFD simulation variables
@@ -882,13 +885,15 @@ int read_sci_zeroone(PARA_DATA *para, REAL **var, int **BINDEX) {
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2); 
   REAL *flagp = var[FLAGP];
 
-  if( (file_params=fopen("zeroone.dat","r")) == NULL )
-  {
-    ffd_log("read_sci_input():Could not open file zeroone.dat!\n", FFD_ERROR);
+  if( (file_params=fopen(para->inpu->block_file_name,"r")) == NULL ) {
+    sprintf(msg, "read_sci_input():Could not open file \"%s\"!\n", 
+            para->inpu->block_file_name);
+    ffd_log(msg, FFD_ERROR);
     return 1;
   }
 
-  sprintf(msg, "read_sci_input(): start to read zeroone.dat.");
+  sprintf(msg, "read_sci_input(): start to read block information from \"%s\".", 
+          para->inpu->block_file_name);
   ffd_log(msg, FFD_NORMAL);
 
   for(k=1;k<=kmax;k++)

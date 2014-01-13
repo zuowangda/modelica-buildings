@@ -62,7 +62,7 @@ int read_sci_max(PARA_DATA *para, REAL **var);
 int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX);
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Read the zoneone.dat file to indentify the block cells
+/// Read the file to indentify the block cells in space
 ///
 ///\param para Pointer to FFD parameters
 ///\param var Pointer to FFD simulation variables
