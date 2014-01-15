@@ -334,7 +334,7 @@ int write_cosim_data(PARA_DATA *para, REAL **var) {
     // Get the corresponding ID in modelica
     id = para->bc->portId[i];
     // Assign the temperature
-    para->cosim->ffd->TPor[id] = para->bc->TPortMean[i]/para->bc->velPortMean[i] 
+    para->cosim->ffd->TPor[id] = para->bc->TPortMean[i]/para->bc->APort[id] 
                                + 273.15;
     sprintf(msg, "\t\t%s: %f[K]",
             para->cosim->para->portName[id], para->cosim->ffd->TPor[id]);
@@ -475,16 +475,14 @@ int compare_boundary_names(PARA_DATA *para) {
     | Assume we do not find the name
     -------------------------------------------------------------------------*/
     flag = 1;
-    sprintf(msg, "name3[%d]=%s", i, name3[i]);
+    sprintf(msg, "\tModelica: port[%d]=%s", i, name3[i]);
     ffd_log(msg, FFD_NORMAL);
     /*-------------------------------------------------------------------------
     | Check the FFD inlet and outlet names
     -------------------------------------------------------------------------*/
     for(j=0; j<para->bc->nb_port&&flag!=0; j++) {
       flag = strcmp(name3[i], name4[j]);
-      sprintf(msg, "name4[%d]=%s", j, name4[j]);
-      ffd_log(msg, FFD_NORMAL);
-      sprintf(msg, "portId[%d]=%d", j, para->bc->portId[j]);
+      sprintf(msg, "\tFFD: port[%d]=%s", j, name4[j]);
       ffd_log(msg, FFD_NORMAL);
       // If found the name
       if(flag==0) {
