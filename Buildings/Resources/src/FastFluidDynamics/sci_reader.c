@@ -328,7 +328,7 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
       // Add an ending
       para->bc->outletName[i][j] = '\0';
       sprintf(msg, "read_sci_input(): para->bc->outletName[%d]=%s",
-              bcnameid, para->bc->outletName[i]);
+              i, para->bc->outletName[i]);
       ffd_log(msg, FFD_NORMAL);
 
       /*.......................................................................
