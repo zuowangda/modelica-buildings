@@ -172,6 +172,9 @@ int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX) {
     var[QFLUX][i]  = 0.0;
   }
 
+  // Calculate the thermal diffusivity
+  para->prob->alpha = para->prob->cond / (para->prob->rho*para->prob->Cp);
+
   /****************************************************************************
   | Read the configurations defined by SCI 
   ****************************************************************************/

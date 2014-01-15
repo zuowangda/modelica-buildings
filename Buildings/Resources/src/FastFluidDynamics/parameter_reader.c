@@ -202,11 +202,6 @@ int assign_parameter(PARA_DATA *para, char *string) {
     sprintf(msg, "assign_parameter(): %s=%f", tmp, para->prob->diff);
     ffd_log(msg, FFD_NORMAL);
   }
-  else if(!strcmp(tmp, "prob.alpha")) {
-    sscanf(string, "%s%f", tmp, &para->prob->alpha);
-    sprintf(msg, "assign_parameter(): %s=%f", tmp, para->prob->alpha);
-    ffd_log(msg, FFD_NORMAL);
-  }
   else if(!strcmp(tmp, "prob.coeff_h")) {
     sscanf(string, "%s%f", tmp, &para->prob->coeff_h);
     sprintf(msg, "assign_parameter(): %s=%f", tmp, para->prob->coeff_h);
