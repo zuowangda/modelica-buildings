@@ -4,3 +4,4 @@ OnlyExteriorWallNoWindow
 OnlyExteriorWallWithWindow
 OnlySurfaceBoundary
 RayleighNumber
+FlowPorts
