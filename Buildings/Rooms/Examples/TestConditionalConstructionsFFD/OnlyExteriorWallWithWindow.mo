@@ -27,8 +27,8 @@ model OnlyExteriorWallWithWindow
                      each A=1,
                      glaSys={glaSys, glaSys},
                      each wWin=1,
-                     each hWin=0.3,
-                     each fFra=0,
+                     each hWin=0.5,
+                     each fFra=0.2,
                      til={Buildings.HeatTransfer.Types.Tilt.Wall,
                           Buildings.HeatTransfer.Types.Tilt.Wall},
                      azi={Buildings.HeatTransfer.Types.Azimuth.E,
@@ -49,7 +49,7 @@ model OnlyExteriorWallWithWindow
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
             200,200}}), graphics),
     __Dymola_Commands(file=
-          "modelica://Buildings/Resources/Scripts/Dymola/Rooms/Examples/TestConditionalConstructionsFFD/OnlyExteriorWallNoWindow.mos"
+          "modelica://Buildings/Resources/Scripts/Dymola/Rooms/Examples/TestConditionalConstructionsFFD/OnlyExteriorWallWithWindow.mos"
         "Simulate and plot"),
     Documentation(info="<html>
 <p>
