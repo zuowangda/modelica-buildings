@@ -1,37 +1,40 @@
 within Buildings.Rooms.Examples.TestConditionalConstructionsFFD.BaseClasses;
 partial model PartialRoom "Partial model for a room"
-  package MediumA = Buildings.Media.GasesConstantDensity.MoistAirUnsaturated (T_default = 283.15)
-    "Medium model";
+  package MediumA = Buildings.Media.GasesConstantDensity.MoistAirUnsaturated (
+        T_default=283.15) "Medium model";
 
   inner Modelica.Fluid.System system(T_ambient=283.15)
     annotation (Placement(transformation(extent={{-80,-40},{-60,-20}})));
 
-  parameter Buildings.HeatTransfer.Data.OpaqueConstructions.Generic matLayRoo(final
-      nLay=1, material={HeatTransfer.Data.Solids.Concrete(x=0.0001)})
+  parameter Buildings.HeatTransfer.Data.OpaqueConstructions.Generic matLayRoo(
+      final nLay=1, material={HeatTransfer.Data.Solids.Concrete(x=0.0001)})
     "Construction material for roof"
     annotation (Placement(transformation(extent={{20,140},{40,160}})));
 
   parameter Integer nConExtWin=0 "Number of constructions with a window";
   parameter Integer nConBou=0
     "Number of surface that are connected to constructions that are modeled inside the room";
-  parameter Integer nSurBou= 0
+  parameter Integer nSurBou=0
     "Number of surface that are connected to the room air volume";
+  parameter Integer nConExt=0
+    "Number of exterior constructions withour a window";
+  parameter Integer nConPar=0 "Number of partition constructions";
 
   Buildings.Rooms.FFD roo(
     redeclare package Medium = MediumA,
     nConBou=nConBou,
     nSurBou=nSurBou,
+    nConExt=nConExt,
     sensorName={"Occupied zone air temperature","Velocity"},
     useFFD=true,
     startTime=0,
-    nConPar=0,
-    nConExtWin=0,
+    nConPar=nConPar,
+    nConExtWin=nConExtWin,
     AFlo=1*1,
     hRoo=1,
-    nConExt=0,
     linearizeRadiation=true,
     samplePeriod=60,
-    cfdFilNam="Resources/Data/Rooms/FFD/OnlyInteriorWall.ffd",
+    cfdFilNam="Resources/Data/Rooms/FFD/OnlyWall.ffd",
     lat=0.00022318989969804) "Room model"
     annotation (Placement(transformation(extent={{46,20},{86,60}})));
 
@@ -74,16 +77,16 @@ equation
       thickness=0.5,
       smooth=Smooth.None));
 
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-100,
-            -100},{200,160}}),
-                      graphics),
-    Icon(coordinateSystem(preserveAspectRatio=true, extent={{-100,-100},{200,160}})),
+  annotation (
+    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
+            200,160}}), graphics),
+    Icon(coordinateSystem(preserveAspectRatio=true, extent={{-100,-100},{200,
+            160}})),
     Documentation(info="<html>
 <p>
 The partial model describes a room with only interior walls.
 </p>
-</html>",
-revisions="<html>
+</html>", revisions="<html>
 <ul>
 <li>
 August 13, 2013, by Wangda Zuo:<br/>
