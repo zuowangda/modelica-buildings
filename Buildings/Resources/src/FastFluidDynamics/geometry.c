@@ -171,7 +171,6 @@ int bounary_area(PARA_DATA *para, REAL **var, int **BINDEX) {
   if(para->bc->nb_port>0)
     for(id=0; id<para->bc->nb_port; id++) APort[id] = 0;
 
-  //id0 = -1;
   for(it=0; it<index; it++) {
     i = BINDEX[0][it];
     j = BINDEX[1][it];
@@ -214,7 +213,7 @@ int bounary_area(PARA_DATA *para, REAL **var, int **BINDEX) {
     } // End of Wall boudary
 
     //-------------------------------------------------------------------------
-    // Calcuate inlets
+    // Calcuate inlets and outlets
     //-------------------------------------------------------------------------
     if(flagp[IX(i,j,k)]==INLET||flagp[IX(i,j,k)]==OUTLET) {
       // West or East Boundary

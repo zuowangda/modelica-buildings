@@ -4,12 +4,12 @@
 ///
 /// \brief  Read mesh and simulation data defined by SCI
 ///
-/// \author Mingang Jin, Qingyan Chen
-///         Purdue University
-///         Jin55@purdue.edu, YanChen@purdue.edu
-///         Wangda Zuo
+/// \author Wangda Zuo
 ///         University of Miami
 ///         W.Zuo@miami.edu
+///         Mingang Jin, Qingyan Chen
+///         Purdue University
+///         Jin55@purdue.edu, YanChen@purdue.edu
 ///
 /// \date   8/3/2013
 ///
@@ -370,7 +370,7 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
             BINDEX[0][index] = ii;
             BINDEX[1][index] = ij;
             BINDEX[2][index] = ik;
-            BINDEX[4][index] = i;
+            BINDEX[4][index] = para->bc->nb_inlet + i;
             index++;
 
             // Fixme: Why assign TMP, U, V, W for oulet B.C?
