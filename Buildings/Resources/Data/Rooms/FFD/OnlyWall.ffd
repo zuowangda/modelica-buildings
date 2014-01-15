@@ -45,7 +45,6 @@ prob.cond 0.026240 // Conductivity
 prob.Cp 1005.0 // Specific heat capacity
 prob.beta 0.0036 // Thermal expansion coefficient
 prob.diff 0.00001 // Diffusivity for contaminants
-prob.alpha 1.96e-5 // Thermal diffusivity
 prob.coeff_h 0.0004 // Convective heat transfer coefficient near the wall
 prob.force 1.0 // Force to be added in demo window when left-click on mouse
 prob.source 1.0 // Source to be added in demo window for contaminants when right click on mouse 
