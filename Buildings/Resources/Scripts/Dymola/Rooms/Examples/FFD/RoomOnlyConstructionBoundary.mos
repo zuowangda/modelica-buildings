@@ -1,4 +1,4 @@
-simulateModel("Buildings.Rooms.Examples.TestConditionalConstructionsFFD.FlowPorts", stopTime=1800, method="radau", tolerance=1e-06, resultFile="FlowPorts");
+simulateModel("Buildings.Rooms.Examples.FFD.RoomOnlyConstructionBoundary", stopTime=1800, method="radau", tolerance=1e-06, resultFile="RoomOnlyConstructionBoundary");
 removePlots();
 Advanced.FullPlotTooltip = true;
 createPlot(id = 1,
@@ -12,7 +12,7 @@ createPlot(id = 1,
  grid = true,
  color = true,
  online = false,
- filename = "FlowPorts.mat",
+ filename = "RoomOnlyConstructionBoundary.mat",
  leftTitleType = 1,
  bottomTitleType = 1,
  colors = {{0,0,255}});
@@ -33,8 +33,8 @@ createPlot(id = 1,
  colors = {{0,0,255}});
 createPlot(id = 1,
  position = {0, 0, 2019, 266},
- y = {"roo.surf_surBou[1].Q_flow", "roo.surf_surBou[2].Q_flow", "roo.surf_surBou[3].Q_flow",
- "roo.surf_surBou[4].Q_flow", "roo.surf_surBou[5].Q_flow", "roo.surf_surBou[6].Q_flow"},
+ y = {"roo.air.conBou[1].Q_flow", "roo.air.conBou[2].Q_flow", "roo.air.conBou[3].Q_flow",
+ "roo.air.conBou[4].Q_flow", "roo.air.conBou[5].Q_flow", "roo.air.conBou[6].Q_flow"},
  range = {0.0, 1000.0, -5.0, 1.0},
  autoscale = true,
  autoerase = true,
@@ -51,8 +51,8 @@ createPlot(id = 1,
 MarkerStyle.Cross, MarkerStyle.None});
 createPlot(id = 1,
  position = {0, 0, 2019, 266},
- y = {"roo.surf_surBou[1].T", "roo.surf_surBou[2].T", "roo.surf_surBou[3].T", 
-"roo.surf_surBou[4].T", "roo.surf_surBou[5].T", "roo.surf_surBou[6].T"},
+ y = {"roo.air.conBou[1].T", "roo.air.conBou[2].T", "roo.air.conBou[3].T", 
+"roo.air.conBou[4].T", "roo.air.conBou[5].T", "roo.air.conBou[6].T"},
  range = {0.0, 1000.0, 8.0, 22.0},
  autoscale = true,
  autoerase = true,
