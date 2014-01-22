@@ -1,4 +1,4 @@
-within Buildings.Rooms.Examples.TestConditionalConstructionsFFD.BaseClasses;
+within Buildings.Rooms.Examples.FFD.BaseClasses;
 partial model PartialRoom "Partial model for a room"
   package MediumA = Buildings.Media.GasesConstantDensity.MoistAirUnsaturated (
         T_default=283.15) "Medium model";

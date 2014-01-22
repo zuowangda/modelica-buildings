@@ -1,11 +1,17 @@
 within Buildings.Rooms.Examples;
-package TestConditionalConstructionsFFD "Package that tests if constructions can be conditionally removed"
+package FFD "Package that tests the models for cosimulation with CFD"
   extends Modelica.Icons.ExamplesPackage;
+
+
+
+
+
+
 
 
 annotation (Documentation(info="<html>
 The thermal zone model 
-<a href=\"Buildings.Rooms.MixedAir\">Buildings.Rooms.MixedAir</a>
+<a href=\"Buildings.Rooms.FFD\">Buildings.Rooms.FFD</a>
 allows the conditional declaration of constructions for
 exterior walls without windows, for exterior walls with windows,
 for partition walls, for interior surfaces,
@@ -17,9 +23,9 @@ are rather designed to test the thermal zone model.
 </html>", revisions="<html>
 <ul>
 <li>
-July 22, 2013, by Michael Wetter:<br/>
+January 21, 2014, by Wangda Zuo:<br/>
 First implementation.
 </li>
 </ul>
 </html>"));
-end TestConditionalConstructionsFFD;
+end FFD;

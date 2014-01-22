@@ -1,24 +1,22 @@
-within Buildings.Rooms.Examples.TestConditionalConstructionsFFD;
+within Buildings.Rooms.Examples.FFD;
 model OnlySurfaceBoundary
   "Buoyancy force driven natural convection in a room with only surface boundary"
   extends Modelica.Icons.Example;
-  extends
-    Buildings.Rooms.Examples.TestConditionalConstructionsFFD.BaseClasses.PartialRoom(
-      roo(
+  extends Buildings.Rooms.Examples.FFD.BaseClasses.PartialRoom(roo(
       linearizeRadiation=false,
       samplePeriod=60,
       surBou(
-        name={"East Wall","West Wall","North Wall","South Wall","Floor",
-            "Ceiling"},
+        name={"East Wall","West Wall","North Wall","South Wall","Floor","Ceiling"},
         each A=1*1,
-         til={Buildings.HeatTransfer.Types.Tilt.Wall,Buildings.HeatTransfer.Types.Tilt.Wall,
+        til={Buildings.HeatTransfer.Types.Tilt.Wall,Buildings.HeatTransfer.Types.Tilt.Wall,
             Buildings.HeatTransfer.Types.Tilt.Wall,Buildings.HeatTransfer.Types.Tilt.Wall,
             Buildings.HeatTransfer.Types.Tilt.Floor,Buildings.HeatTransfer.Types.Tilt.Ceiling},
         each absIR=1e-5,
         each absSol=1e-5,
-                boundaryCondition={Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,
+        boundaryCondition={Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,
             Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,
-            Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,
+            Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,
+            Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,
             Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate})),
       nSurBou=6);
 

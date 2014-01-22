@@ -1,15 +1,12 @@
-within Buildings.Rooms.Examples.TestConditionalConstructionsFFD;
+within Buildings.Rooms.Examples.FFD;
 model FlowPorts "Mixed convection with inlet and outlet"
   extends Modelica.Icons.Example;
-  extends
-    Buildings.Rooms.Examples.TestConditionalConstructionsFFD.BaseClasses.PartialRoom(
-      roo(
+  extends Buildings.Rooms.Examples.FFD.BaseClasses.PartialRoom(roo(
       linearizeRadiation=false,
       samplePeriod=60,
       surBou(
-        name={"East Wall","West Wall","North Wall","South Wall","Floor",
-            "Ceiling"},
-        A={0.9, 0.9, 1, 1, 1, 1},
+        name={"East Wall","West Wall","North Wall","South Wall","Floor","Ceiling"},
+        A={0.9,0.9,1,1,1,1},
         til={Buildings.HeatTransfer.Types.Tilt.Wall,Buildings.HeatTransfer.Types.Tilt.Wall,
             Buildings.HeatTransfer.Types.Tilt.Wall,Buildings.HeatTransfer.Types.Tilt.Wall,
             Buildings.HeatTransfer.Types.Tilt.Floor,Buildings.HeatTransfer.Types.Tilt.Ceiling},
@@ -17,12 +14,13 @@ model FlowPorts "Mixed convection with inlet and outlet"
         each absSol=1e-5,
         boundaryCondition={Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,
             Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,
-            Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,
+            Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,
+            Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate,
             Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate}),
       nPorts=2,
       portName={"Inlet","Outlet"},
       cfdFilNam="C:/Users/Wangda/Documents/FFD-Modelica/modelica/modelica-buildings/Buildings/Resources/Data/Rooms/FFD/FlowPorts.ffd"),
-                 nSurBou=6);
+      nSurBou=6);
 
   Buildings.HeatTransfer.Sources.FixedTemperature TWesWal(each T=303.15)
     "Boundary condition for the west wall" annotation (Placement(transformation(

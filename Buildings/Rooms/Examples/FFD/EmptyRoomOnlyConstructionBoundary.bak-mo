@@ -1,21 +1,19 @@
-within Buildings.Rooms.Examples.TestConditionalConstructionsFFD;
-model OnlyConstructionBoundary
-  "Buoyancy force driven natural convection in a room with only construction boundary"
+within Buildings.Rooms.Examples.FFD;
+model EmptyRoomOnlyConstructionBoundary
+  "Natural convection in an empty room with only construction boundary"
   extends Modelica.Icons.Example;
-  extends
-    Buildings.Rooms.Examples.TestConditionalConstructionsFFD.BaseClasses.PartialRoom(
-     roo(datConBou(
+  extends Buildings.Rooms.Examples.FFD.BaseClasses.PartialRoom(roo(datConBou(
         name={"East Wall","West Wall","North Wall","South Wall","Floor","Ceiling"},
         layers={matLayRoo,matLayRoo,matLayRoo,matLayRoo,matLayRoo,matLayRoo},
         each A=1*1,
         til={Buildings.HeatTransfer.Types.Tilt.Wall,Buildings.HeatTransfer.Types.Tilt.Wall,
             Buildings.HeatTransfer.Types.Tilt.Wall,Buildings.HeatTransfer.Types.Tilt.Wall,
             Buildings.HeatTransfer.Types.Tilt.Floor,Buildings.HeatTransfer.Types.Tilt.Ceiling},
-            boundaryCondition={Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,
+        boundaryCondition={Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,
             Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,
             Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,
             Buildings.Rooms.Types.CFDBoundaryConditions.Temperature})),
-            nConBou=6);
+      nConBou=6);
 
   Buildings.HeatTransfer.Sources.FixedTemperature TWalRes[nConBou - 1](each T=
         283.15) "Boundary condition for the rest of walls" annotation (
@@ -46,7 +44,7 @@ equation
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{200,
             200}}),     graphics),
     __Dymola_Commands(file=
-          "modelica://Buildings/Resources/Scripts/Dymola/Rooms/Examples/TestConditionalConstructionsFFD/OnlyConstructionBoundary.mos"
+          "modelica://Buildings/Resources/Scripts/Dymola/Rooms/Examples/CFD/SingleRoomOnlyConstructionBoundary.mos"
         "Simulate and plot"),
     Documentation(info="<html>
 <p>
@@ -69,4 +67,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-end OnlyConstructionBoundary;
+end EmptyRoomOnlyConstructionBoundary;

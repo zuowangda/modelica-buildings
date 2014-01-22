@@ -1,27 +1,24 @@
-within Buildings.Rooms.Examples.TestConditionalConstructionsFFD;
+within Buildings.Rooms.Examples.FFD;
 model RayleighNumber
   "An ideal natural convection flow with Rayleigh number of 1E5"
-  extends
-    Buildings.Rooms.Examples.TestConditionalConstructionsFFD.OnlySurfaceBoundary(
+  extends Buildings.Rooms.Examples.FFD.RoomOnlySurfaceBoundary(
     TEasWal(T=273.15),
     TWesWal(T=274.15),
-    roo(
-      cfdFilNam="Resources/Data/Rooms/FFD/RayleighNumber.ffd",
-      T_start=273.15),
+    roo(cfdFilNam="Resources/Data/Rooms/FFD/RayleighNumber.ffd", T_start=273.15),
     system(T_ambient=273.15));
 
   annotation (
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
             200,200}}), graphics),
     __Dymola_Commands(file=
-          "modelica://Buildings/Resources/Scripts/Dymola/Rooms/Examples/TestConditionalConstructionsFFD/RayleighNumber.mos"
+          "modelica://Buildings/Resources/Scripts/Dymola/Rooms/Examples/FFD/RayleighNumber.mos"
         "Simulate and plot"),
     Documentation(info="<html>
 <p>
 This model tests the cosimulation of 
 <a href=\"modelica://Buildings.Rooms.FFD\">
 Buildings.Rooms.FFD</a>
-with the FFD program by simulating the natural convection in a room with only surface boundaries.
+with the FFD program by simulating the natural convection in an empty room with only surface boundaries.
 </p>
 <p>
 The Rayleigh number is a dimensionless number associated with natural convection, defined as 

@@ -1,7 +1,0 @@
-BaseClasses
-OnlyConstructionBoundary
-OnlyExteriorWallNoWindow
-OnlyExteriorWallWithWindow
-OnlySurfaceBoundary
-RayleighNumber
-FlowPorts
