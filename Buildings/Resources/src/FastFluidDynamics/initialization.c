@@ -217,11 +217,12 @@ int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX) {
   | Allocate memory for Species
   ****************************************************************************/
   if(para->bc->nb_port>0&&para->bc->nb_Xi>0) {
-    para->bc->XiPort = (REAL **) malloc(sizeof(REAL *)*para->bc->nb_port);
-    para->bc->XiPortAve = (REAL **) malloc(sizeof(REAL *)*para->bc->nb_port);
-    para->bc->XiPortMean = (REAL **) malloc(sizeof(REAL *)*para->bc->nb_port);
-    if(para->bc->XiPort==NULL || para->bc->XiPortAve==NULL 
-       || para->bc->XiPortMean) {
+    para->bc->XiPort = (REAL **) malloc(sizeof(REAL*)*para->bc->nb_port);
+    para->bc->XiPortAve = (REAL **) malloc(sizeof(REAL*)*para->bc->nb_port);
+    para->bc->XiPortMean = (REAL **) malloc(sizeof(REAL*)*para->bc->nb_port);
+    if(para->bc->XiPort==NULL || 
+       para->bc->XiPortAve==NULL ||
+       para->bc->XiPortMean==NULL) {
       ffd_log("set_initial_data(): Could not allocate memory for XiPort.",
               FFD_ERROR);
       return 1;
@@ -231,10 +232,12 @@ int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX) {
       para->bc->XiPort[i] = (REAL *) malloc(sizeof(REAL)*para->bc->nb_Xi);
       para->bc->XiPortAve[i] = (REAL *) malloc(sizeof(REAL)*para->bc->nb_Xi);
       para->bc->XiPortMean[i] = (REAL *) malloc(sizeof(REAL)*para->bc->nb_Xi);
-      if(para->bc->XiPort[i]==NULL || para->bc->XiPortAve[i]==NULL 
-         || para->bc->XiPortMean[i]) {
-        ffd_log("set_initial_data(): Could not allocate memory for XiPort[i].",
-                FFD_ERROR);
+      if(para->bc->XiPort[i]==NULL || 
+         para->bc->XiPortAve[i]==NULL || 
+         para->bc->XiPortMean[i]==NULL) {
+        sprintf(msg, "set_initial_data(): Could not allocate memory for "
+                "XiPort[%d].", i);
+        ffd_log(msg, FFD_ERROR);
         return 1;
       }
     }
@@ -295,7 +298,7 @@ int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX) {
     ------------------------------------------------------------------------*/
     flag = read_cosim_parameter(para, var, BINDEX);
     if(flag != 0) {
-      ffd_log("set_initial_data(): Could not read cosimulaiton parameters.",
+      ffd_log("set_initial_data(): Could not read cosimulation parameters.",
               FFD_ERROR);
       return 1;
     }

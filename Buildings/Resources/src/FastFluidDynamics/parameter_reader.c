@@ -365,6 +365,19 @@ int assign_parameter(PARA_DATA *para, char *string) {
     ffd_log(msg, FFD_NORMAL);
   }
   /****************************************************************************
+  | get the boundary conditions
+  ****************************************************************************/
+  else if(!strcmp(tmp, "bc.nb_Xi")) {
+    sscanf(string, "%s%d", tmp, &para->bc->nb_Xi);
+    sprintf(msg, "assign_parameter(): %s=%d", tmp, para->bc->nb_Xi);
+    ffd_log(msg, FFD_NORMAL);
+  }
+  else if(!strcmp(tmp, "bc.nb_C")) {
+    sscanf(string, "%s%d", tmp, &para->bc->nb_C);
+    sprintf(msg, "assign_parameter(): %s=%d", tmp, para->bc->nb_C);
+    ffd_log(msg, FFD_NORMAL);
+  }
+  /****************************************************************************
   | get the number of sensor
   ****************************************************************************/
   else if(!strcmp(tmp, "sensor.nb_sensor")) {

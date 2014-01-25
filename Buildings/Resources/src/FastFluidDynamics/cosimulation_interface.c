@@ -120,7 +120,7 @@ int read_cosim_parameter(PARA_DATA *para, REAL **var, int **BINDEX) {
   else {
     sprintf(msg, 
             "read_cosim_parameter(): Modelica(%d) and FFD(%d) "
-            "have different number of species.", 
+            "have different number of substances.", 
             para->cosim->para->nC, para->bc->nb_C);
     ffd_log(msg, FFD_ERROR);
     return 1;
@@ -281,7 +281,7 @@ int write_cosim_data(PARA_DATA *para, REAL **var) {
   
   ffd_log("-------------------------------------------------------------------",
           FFD_NORMAL);
-  ffd_log("writed_cosim_parameter(): "
+  ffd_log("write_cosim_parameter(): "
           "Start to write the following cosimulation data:",
            FFD_NORMAL);
 
@@ -334,7 +334,7 @@ int write_cosim_data(PARA_DATA *para, REAL **var) {
     // Get the corresponding ID in modelica
     id = para->bc->portId[i];
     // Assign the temperature
-    para->cosim->ffd->TPor[id] = para->bc->TPortMean[i]/para->bc->APort[id] 
+    para->cosim->ffd->TPor[id] = para->bc->TPortMean[i]/para->bc->APort[i] 
                                + 273.15;
     sprintf(msg, "\t\t%s: %f[K]",
             para->cosim->para->portName[id], para->cosim->ffd->TPor[id]);
@@ -397,7 +397,7 @@ int write_cosim_data(PARA_DATA *para, REAL **var) {
   }
 
   /****************************************************************************
-  | Inform Modelica the data is updated
+  | Inform Modelica that the FFD data is updated
   ****************************************************************************/
   para->cosim->ffd->flag = 1;
 
@@ -840,7 +840,7 @@ int surface_integrate(PARA_DATA *para, REAL **var, int **BINDEX) {
       }
     }
     else if(var[FLAGP][IX(i,j,k)]==INLET||var[FLAGP][IX(i,j,k)]==OUTLET) {
-      para->bc->TPortAve[bcid] += var[TEMP][IX(i,j,k)] * A_tmp * vel_tmp;
+      para->bc->TPortAve[bcid] += var[TEMP][IX(i,j,k)] * A_tmp;
       para->bc->velPortAve[bcid] += vel_tmp * A_tmp;
       // To be implemented
       /*
