@@ -41,7 +41,9 @@ model CFDFluidInterface
     unit="Pa") "Room-averaged total pressure"
     annotation (Placement(transformation(extent={{100,70},{120,90}})));
 
-  Modelica.Blocks.Interfaces.RealOutput m_flow[nPorts] "Mass flow rates"
+  Modelica.Blocks.Interfaces.RealOutput m_flow[nPorts](
+  each quantity="MassFlowRate",
+  each unit="kg/s") "Mass flow rates"
     annotation (Placement(transformation(extent={{100,30},{120,50}})));
 
   Modelica.Blocks.Interfaces.RealOutput T_inflow[nPorts](
@@ -199,6 +201,10 @@ the block that communicates with the fast fluid flow dynamic program.
 </p>
 </html>", revisions="<html>
 <ul>
+<li>
+January 25, 2014, by Wangda Zuo:<br/>
+Added unit for mass flow rate.
+</li>
 <li>
 July 20, 2013, by Michael Wetter:<br/>
 First implementation.
