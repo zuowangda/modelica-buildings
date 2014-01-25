@@ -8,7 +8,10 @@ block CFDExchange
   parameter Boolean activateInterface=true
     "Set to false to deactivate interface and use instead yFixed as output"
     annotation (Evaluate=true);
-
+  parameter Integer nX(min=1)
+    "Number of species concentration of the inflowing medium";
+  parameter Integer nC(min=1)
+    "Number of trace substances of the inflowing medium";
   parameter Integer nWri(min=0)
     "Number of values to write to the FFD simulation";
   parameter Integer nRea(min=0)
@@ -19,7 +22,6 @@ block CFDExchange
     "Initial input signal, used during first data transfer with FFD simulation";
   parameter Real yFixed[nRea] "Fixed output, used if activateInterface=false"
     annotation (Evaluate=true, Dialog(enable=not activateInterface));
-
   parameter Integer nSur(min=1) "Number of surfaces";
   parameter CFDSurfaceIdentifier surIde[nSur] "Surface identifiers";
   parameter Boolean haveShade
@@ -83,6 +85,9 @@ protected
     input Integer nSen(min=0)
       "Number of sensors that are connected to CFD output";
     input Boolean verbose "Set to true for verbose output";
+    input Integer nX "Number of species concentration of the inflowing medium";
+    input Integer nC "Number of trace substances of the inflowing medium";
+
   protected
     Integer nConExtWin=0;
     Integer coSimFlag=0;
@@ -110,8 +115,8 @@ protected
         nSur,
         nSen,
         nConExtWin,
-        0,
-        0);
+        nX,
+        nC);
     assert(coSimFlag < 0.5, "Could not start the cosimulation.");
 
   end sendParameters;
@@ -319,6 +324,8 @@ initial equation
     nSur=nSur,
     nSen=nSen,
     nPorts=nPorts,
+    nX=nX,
+    nC=nC,
     verbose=verbose);
 
 initial algorithm
@@ -432,6 +439,10 @@ Buildings.Rooms.UsersGuide.FFD</a>.
 </p>
 </html>", revisions="<html>
 <ul>
+<li>
+January 24, 2014, by Wangda Zuo:<br/>
+Enabled the transfer of Xi and X to CFD.
+</li>
 <li>
 July 19, 2013, by Michael Wetter:<br/>
 First implementation.

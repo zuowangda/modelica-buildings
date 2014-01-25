@@ -29,8 +29,9 @@ model CFDAirHeatMassBalance
     final startTime=startTime,
     final activateInterface=useFFD,
     final samplePeriod=if useFFD then samplePeriod else Modelica.Constants.inf,
-
     final uStart=uStart,
+    final nX = Medium.nX,
+    final nC = Medium.nC,
     final nWri=kFluIntC_inflow + Medium.nC*nPorts,
     final nRea=kSen + nSen,
     final nSur=nSur,
@@ -439,8 +440,7 @@ equation
   // Data exchange with FFD block
   if haveConExt then
     for i in 1:nConExt loop
-      if datConExt[i].boundaryCondition == Buildings.Rooms.Types.CFDBoundaryConditions.Temperature
-           then
+      if datConExt[i].boundaryCondition == Buildings.Rooms.Types.CFDBoundaryConditions.Temperature then
         connect(cfd.u[kConExt + i], cfdConExt[i].T_out) annotation (Line(
             points={{-42,190},{-60,190},{-60,224},{179,224}},
             color={0,0,127},
@@ -464,11 +464,9 @@ equation
 
   if haveConExtWin then
     for i in 1:nConExtWin loop
-      if datConExtWin[i].boundaryCondition == Buildings.Rooms.Types.CFDBoundaryConditions.Temperature
-           then
+      if datConExtWin[i].boundaryCondition == Buildings.Rooms.Types.CFDBoundaryConditions.Temperature then
         connect(cfd.u[kConExtWin + i], cfdConExtWin[i].T_out) annotation (Line(
             points={{-42,190},{-60,190},{-60,172},{60,172},{60,184},{179,184}},
-
             color={0,0,127},
             smooth=Smooth.None));
 
@@ -485,8 +483,8 @@ equation
             points={{-19,190},{60,190},{60,128},{178,128}},
             color={0,0,127},
             smooth=Smooth.None));
-        connect(cfd.u[kConExtWinFra + i], cfdConExtWinFra[i].T_out) annotation
-          (Line(
+        connect(cfd.u[kConExtWinFra + i], cfdConExtWinFra[i].T_out) annotation (
+           Line(
             points={{-42,190},{-60,190},{-60,4},{179,4}},
             color={0,0,127},
             smooth=Smooth.None));
@@ -529,8 +527,7 @@ equation
 
   if haveShade then
     for i in 1:nConExtWin loop
-      if datConExtWin[i].boundaryCondition == Buildings.Rooms.Types.CFDBoundaryConditions.Temperature
-           then
+      if datConExtWin[i].boundaryCondition == Buildings.Rooms.Types.CFDBoundaryConditions.Temperature then
         connect(cfd.u[kGlaSha + i], cfdGlaSha[i].T_out) annotation (Line(
             points={{-42,190},{-60,190},{-60,84},{179,84}},
             color={0,0,127},
@@ -554,8 +551,7 @@ equation
 
   if haveConPar then
     for i in 1:nConPar loop
-      if datConPar[i].boundaryCondition == Buildings.Rooms.Types.CFDBoundaryConditions.Temperature
-           then
+      if datConPar[i].boundaryCondition == Buildings.Rooms.Types.CFDBoundaryConditions.Temperature then
         connect(cfd.u[kConPar_a + i], cfdConPar_a[i].T_out) annotation (Line(
             points={{-42,190},{-60,190},{-60,-56},{179,-56}},
             color={0,0,127},
@@ -599,8 +595,7 @@ equation
 
   if haveConBou then
     for i in 1:nConBou loop
-      if datConBou[i].boundaryCondition == Buildings.Rooms.Types.CFDBoundaryConditions.Temperature
-           then
+      if datConBou[i].boundaryCondition == Buildings.Rooms.Types.CFDBoundaryConditions.Temperature then
         connect(cfd.u[kConBou + i], cfdConBou[i].T_out) annotation (Line(
             points={{-42,190},{-60,190},{-60,-156},{179,-156}},
             color={0,0,127},
@@ -624,8 +619,7 @@ equation
 
   if haveSurBou then
     for i in 1:nSurBou loop
-      if surBou[i].boundaryCondition == Buildings.Rooms.Types.CFDBoundaryConditions.Temperature
-           then
+      if surBou[i].boundaryCondition == Buildings.Rooms.Types.CFDBoundaryConditions.Temperature then
         connect(cfd.u[kSurBou + i], cfdSurBou[i].T_out) annotation (Line(
             points={{-42,190},{-60,190},{-60,-216},{179,-216}},
             color={0,0,127},
@@ -835,6 +829,7 @@ Buildings.Rooms.UsersGuide.FFD</a>.
 December 31, 2013, by Wangda Zuo:<br/>
 - Corrected the connections. cfd.u should always be connected to Q_flow_out and cfd.y to T_in.
 - Added unit [W] for total convective sensible heat before it is input into component cfd.  
+- Enabled transfer of C and X information
 <li>
 July 17, 2013, by Michael Wetter:<br/>
 First implementation.
