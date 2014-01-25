@@ -40,7 +40,7 @@
 int cfdStartCosimulation(char *cfdFilNam, char **name, double *A, double *til, 
                 int *bouCon, int nPorts, char** portName, int haveSensor,
                 char **sensorName, int haveShade, int nSur, int nSen,
-                int nConExtWin, int nC, int nXi) {
+                int nConExtWin, int nX, int nC) {
   int i, nBou;
   /****************************************************************************
   | For call FFD-DLL
@@ -74,7 +74,7 @@ int cfdStartCosimulation(char *cfdFilNam, char **name, double *A, double *til,
   cosim->para->nPorts = nPorts;
   cosim->para->sha = haveShade;
   cosim->para->nC = nC;
-  cosim->para->nXi = nXi;
+  cosim->para->nXi = nX;
 
   nBou = nSur + nPorts;
 
