@@ -121,34 +121,30 @@ int cfdExchangeData(double t0, double dt, double *u, int nU, int nY,
   // Get the averaged room temperature
   y[i] = cosim->ffd->TRoo;
   i++;
-  // Get the temperature of shading device if there is a shading device
-  if(cosim->para->sha==1)
-    for(j=0; j<cosim->para->nConExtWin; j++)
-      y[i+j] = cosim->ffd->TSha[j];
 
-  i = i + cosim->para->nConExtWin;
+  // Get the temperature of shading device if there is a shading device
+  if(cosim->para->sha==1) {
+    for(j=0; j<cosim->para->nConExtWin; i++, j++)
+      y[i] = cosim->ffd->TSha[j];
+  }
 
   // Get the temperature fluid at the fluid ports
-  for(j=0; j<cosim->para->nPorts; j++)
-    y[j+i] = cosim->ffd->TPor[j];
-
-  i = i + cosim->para->nPorts;
+  for(j=0; j<cosim->para->nPorts; i++, j++)
+    y[i] = cosim->ffd->TPor[j];
 
   // Get the mass fraction at fluid ports
   for(j=0; j<cosim->para->nPorts; j++)
-    for(k=0; k<cosim->para->nXi; k++)
-       y[i+j*cosim->para->nXi+k] = cosim->ffd->XiPor[j][k];
-  i = i + cosim->para->nPorts*cosim->para->nXi;  
+    for(k=0; k<cosim->para->nXi; k++, i++)
+       y[i] = cosim->ffd->XiPor[j][k];
 
   // Get the trace substance at fluid ports
   for(j=0; j<cosim->para->nPorts; j++)
-    for(k=0; k<cosim->para->nC; k++)
-       y[i+j*cosim->para->nC+k] = cosim->ffd->CPor[j][k];
-  i = i + cosim->para->nPorts*cosim->para->nC;
+    for(k=0; k<cosim->para->nC; k++, i++)
+       y[i] = cosim->ffd->CPor[j][k];
 
   // Get the sensor data
-  for(j=0; j<=cosim->para->nSen; j++)
-    y[i+j] = cosim->ffd->senVal[j];
+  for(j=0; j<cosim->para->nSen; j++, i++)
+    y[i] = cosim->ffd->senVal[j];
 
   printf("\n FFD: \t\ttime=%f, status=%d\n", cosim->ffd->t, cosim->ffd->flag);
   printf("Modelica: \ttime=%f, status=%d\n", cosim->modelica->t, cosim->modelica->flag);
@@ -157,8 +153,6 @@ int cfdExchangeData(double t0, double dt, double *u, int nU, int nY,
   cosim->ffd->flag = 0;
 
   *t1 = cosim->ffd->t;
-
-
 
   return 0;
 } // End of cfdExchangeData()
