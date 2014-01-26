@@ -58,7 +58,6 @@ void  ffd_thread(void* p){
 #endif
 
   CosimulationData *cosim = (CosimulationData *) p;
-  int cosimulation = 1;
 
 #ifdef _MSC_VER //Windows
   sprintf(msg, "Start Fast Fluid Dynamics Simulation with Thread ID %lu", workerID);
@@ -74,10 +73,14 @@ void  ffd_thread(void* p){
 
   if(ffd_cosimulation(cosim)!=0) {
     ffd_log("ffd_thread(): Cosimulation failed", FFD_ERROR);
+#ifdef _MSC_VER    
     return 1;
+#endif
   }
   else {
     ffd_log("Successfully exit FFD.", FFD_NORMAL);
+#ifdef _MSC_VER
     return 0;
+#endif
   }
 } // End of ffd_thread()

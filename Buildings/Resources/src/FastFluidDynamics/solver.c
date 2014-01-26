@@ -27,8 +27,6 @@
 ///\return 0 if no error occurred
 ///////////////////////////////////////////////////////////////////////////////
 int FFD_solver(PARA_DATA *para, REAL **var, int **BINDEX) {
-  int imax = para->geom->imax, jmax = para->geom->jmax;
-  int kmax = para->geom->kmax;
   int step_total = para->mytime->step_total;
   REAL t_steady = para->mytime->t_steady;
   int cal_mean = para->outp->cal_mean;

@@ -4,12 +4,13 @@
 ///
 /// \brief  Solver for advection step
 ///
-/// \author Mingang Jin, Qingyan Chen
-///         Purdue University
-///         Jin55@purdue.edu, YanChen@purdue.edu
-///         Wangda Zuo
+/// \author Wangda Zuo
 ///         University of Miami
 ///         W.Zuo@miami.edu
+///         Mingang Jin, Qingyan Chen
+///         Purdue University
+///         Jin55@purdue.edu, YanChen@purdue.edu
+///
 ///
 /// \date   8/3/2013
 ///
@@ -587,7 +588,6 @@ void set_x_location(PARA_DATA *para, REAL **var, REAL *flag, REAL *x, REAL u0,
                     REAL *OL, int *OC, int *LOC, int *COOD) {
   int imax = para->geom->imax, jmax = para->geom->jmax;
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
-  REAL *u = var[VX];
       
   /****************************************************************************
   | If the previous location is equal to current position

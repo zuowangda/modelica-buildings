@@ -591,7 +591,7 @@ int set_bnd_trace(PARA_DATA *para, REAL **var, int trace_index, REAL *psi,
   int kmax = para->geom->kmax;
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
   REAL *aw = var[AW], *ae = var[AE], *as = var[AS], *an = var[AN];
-  REAL *af = var[AF], *ab = var[AB], *b=var[B];
+  REAL *af = var[AF], *ab = var[AB];
   REAL *flagp = var[FLAGP];
 
   /****************************************************************************
@@ -622,7 +622,7 @@ int set_bnd_trace(PARA_DATA *para, REAL **var, int trace_index, REAL *psi,
           psi[IX(i,j,k)] = psi[IX(i+1,j,k)];
       } 
       // Western neighbor is fluid
-      if(i=!0 && flagp[IX(i-1,j,k)]==FLUID) { 
+      if((i=!0) && (flagp[IX(i-1,j,k)]==FLUID)) { 
           ae[IX(i-1,j,k)] = 0;
           psi[IX(i,j,k)] = psi[IX(i-1,j,k)];
       } 
