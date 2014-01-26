@@ -331,7 +331,6 @@ void draw_xy_temperature(PARA_DATA *para, REAL **var, int k) {
   REAL *x = var[X], *y = var[Y], *z = var[Z], *temp = var[TEMP];
   int mycolor;
   int imax = para->geom->imax, jmax = para->geom->jmax;
-  int kmax = para->geom->kmax;
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
 
   glBegin(GL_QUADS);

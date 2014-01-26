@@ -35,7 +35,6 @@ int write_tecplot_data(PARA_DATA *para, REAL **var, char *name) {
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
   REAL *x = var[X], *y = var[Y], *z =var[Z];
   REAL *u = var[VX], *v = var[VY], *w = var[VZ], *p = var[IP];
-  REAL *d = var[TRACE];
   REAL *T = var[TEMP];
   REAL *flagp = var[FLAGP];
   char *filename;
@@ -136,7 +135,7 @@ int write_tecplot_all_data(PARA_DATA *para, REAL **var, char *name) {
   fprintf(dataFile, "TITLE = ");
 
   // Print simulation, diemension and mesh information
-  fprintf(dataFile, "\"dt=%fs, t=%fs, nu=%f, Lx=%d, Ly=%d, Lz%d, ",
+  fprintf(dataFile, "\"dt=%fs, t=%fs, nu=%f, Lx=%f, Ly=%f, Lz%f, ",
           para->mytime->dt, para->mytime->t, para->prob->nu, 
           para->geom->Lx, para->geom->Ly, para->geom->Lz);
   fprintf(dataFile, "Nx=%d, Ny=%d, Nz=%d \"\n", imax+2, jmax+2, kmax+2);
@@ -377,12 +376,10 @@ int write_SCI(PARA_DATA *para, REAL **var, char *name) {
   int imax=para->geom->imax, jmax=para->geom->jmax;
   int kmax = para->geom->kmax;
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
-  int n = para->mytime->step_current;
   REAL *x = var[X], *y = var[Y], *z =var[Z];
   REAL *u = var[VX], *v = var[VY], *w = var[VZ], *p = var[IP];
-  REAL *um = var[VXM], *vm = var[VYM], *wm = var[VZM], *d = var[TRACE];
-  REAL *T = var[TEMP], *Tm = var[TEMPM];
-  REAL *tmp1 = var[TMP1], *tmp2 = var[TMP2], *tmp3 = var[TMP3];
+  REAL *um = var[VXM], *vm = var[VYM], *wm = var[VZM];
+  REAL *T = var[TEMP];
   char *filename;
   FILE *dataFile;
 

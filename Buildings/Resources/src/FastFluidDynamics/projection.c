@@ -38,7 +38,6 @@ int project(PARA_DATA *para, REAL **var, int **BINDEX) {
   REAL *p = var[IP], *b = var[B], *ap = var[AP], *ab = var[AB], *af = var[AF];
   REAL *ae = var[AE], *aw =var[AW], *an = var[AN], *as = var[AS];
   REAL dxe,dxw, dyn,dys,dzf,dzb,Dx,Dy,Dz;
-  REAL residual = 1.0;  
   REAL *flagu = var[FLAGU],*flagv = var[FLAGV],*flagw = var[FLAGW];
   
   /****************************************************************************

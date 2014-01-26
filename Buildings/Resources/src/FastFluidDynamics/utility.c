@@ -411,7 +411,6 @@ int add_time_averaged_data(PARA_DATA *para, REAL **var) {
   int i, j;
   int imax = para->geom->imax, jmax = para->geom->jmax;
   int kmax = para->geom->kmax;
-  int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
   int size = (imax+2) * (jmax+2) * (kmax+2);
 
   // All the cells
