@@ -49,7 +49,7 @@ int allocate_memory (PARA_DATA *para) {
   /****************************************************************************
   | Allocate memory for variables
   ****************************************************************************/
-  nb_var = 46 + para->bc->nb_Xi + para->bc->nb_C;
+  nb_var = C4+1;
   var       = (REAL **) malloc ( nb_var*sizeof(REAL*) );
   if(var==NULL) {
     ffd_log("allocate_memory(): Could not allocate memory for var.",
@@ -352,8 +352,7 @@ int ffd(int cosimulation) {
   // Calculate mean value
   if(para.outp->cal_mean == 1)
     average_time(&para, var);
-  
-  // Fixme: Simulaiton stops here
+
   if(write_unsteady(&para, var, "unsteady")!=0) {
     ffd_log("FFD_solver(): Could not write the file unsteady.plt.", FFD_ERROR);
     return 1;
@@ -363,7 +362,6 @@ int ffd(int cosimulation) {
     ffd_log("FFD_solver(): Could not write the file result.plt.", FFD_ERROR);
     return 1;
   }
-
 
   if(para.outp->version == DEBUG)
     write_tecplot_all_data(&para, var, "result_all");

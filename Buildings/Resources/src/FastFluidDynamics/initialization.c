@@ -131,45 +131,53 @@ int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX) {
   | Set inital value for FFD variables
   ****************************************************************************/
   for(i=0; i<size; i++) {
-    var[GX][i]     = 0.0;
-    var[GY][i]     = 0.0;
-    var[GZ][i]     = 0.0;
-    var[VX][i]     = para->init->u;
-    var[VY][i]     = para->init->v;
-    var[VZ][i]     = para->init->w;
-    var[VXM][i]    = 0.0;
-    var[VYM][i]    = 0.0;
-    var[VZM][i]    = 0.0;
-    var[VXS][i]    = 0.0;
-    var[VYS][i]    = 0.0;
-    var[VZS][i]    = 0.0;
-    var[TEMP][i]   = para->init->T;
-    var[TEMPM][i]  = para->init->T;
-    var[TEMPS][i]  = para->init->T;
-    var[IP][i]     = 0.0;
-    var[AP][i]     = 0.0;
-    var[AW][i]     = 0.0;
-    var[AE][i]     = 0.0;
-    var[AS][i]     = 0.0;
-    var[AN][i]     = 0.0;
-    var[AB][i]     = 0.0;
-    var[AF][i]     = 0.0;
-    var[B][i]      = 0.0;
-    var[AP0][i]    = 0.0;
-    var[TMP1][i]   = 0.0;
-    var[TMP2][i]   = 0.0;
-    var[TMP3][i]   = 0.0;
-    var[PP][i]     = 0.0;
-    var[FLAGP][i]  = -1.0;
-    var[FLAGU][i]  = -1.0;
-    var[FLAGV][i]  = -1.0;
-    var[FLAGW][i]  = -1.0;
-    var[VXBC][i]   = 0.0;
-    var[VYBC][i]   = 0.0;
-    var[VZBC][i]   = 0.0;
-    var[TEMPBC][i] = 0.0;
-    var[QFLUXBC][i]= 0.0;
-    var[QFLUX][i]  = 0.0;
+    var[GX][i]      = 0.0;
+    var[GY][i]      = 0.0;
+    var[GZ][i]      = 0.0;
+    var[VX][i]      = para->init->u;
+    var[VY][i]      = para->init->v;
+    var[VZ][i]      = para->init->w;
+    var[VXM][i]     = 0.0;
+    var[VYM][i]     = 0.0;
+    var[VZM][i]     = 0.0;
+    var[VXS][i]     = 0.0;
+    var[VYS][i]     = 0.0;
+    var[VZS][i]     = 0.0;
+    var[TEMP][i]    = para->init->T;
+    var[TEMPM][i]   = para->init->T;
+    var[TEMPS][i]   = para->init->T;
+    var[IP][i]      = 0.0;
+    var[AP][i]      = 0.0;
+    var[AW][i]      = 0.0;
+    var[AE][i]      = 0.0;
+    var[AS][i]      = 0.0;
+    var[AN][i]      = 0.0;
+    var[AB][i]      = 0.0;
+    var[AF][i]      = 0.0;
+    var[B][i]       = 0.0;
+    var[AP0][i]     = 0.0;
+    var[TMP1][i]    = 0.0;
+    var[TMP2][i]    = 0.0;
+    var[TMP3][i]    = 0.0;
+    var[PP][i]      = 0.0;
+    var[FLAGP][i]   = -1.0;
+    var[FLAGU][i]   = -1.0;
+    var[FLAGV][i]   = -1.0;
+    var[FLAGW][i]   = -1.0;
+    var[VXBC][i]    = 0.0;
+    var[VYBC][i]    = 0.0;
+    var[VZBC][i]    = 0.0;
+    var[TEMPBC][i]  = 0.0;
+    var[QFLUXBC][i] = 0.0;
+    var[QFLUX][i]   = 0.0;
+    var[Xi1][i]     = 0.0;
+    var[Xi2][i]     = 0.0;
+    var[Xi3][i]     = 0.0;
+    var[Xi4][i]     = 0.0;
+    var[C1][i]      = 0.0;
+    var[C2][i]      = 0.0;
+    var[C3][i]      = 0.0;
+    var[C4][i]      = 0.0;
   }
 
   // Calculate the thermal diffusivity
@@ -236,11 +244,17 @@ int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX) {
          para->bc->XiPortAve[i]==NULL || 
          para->bc->XiPortMean[i]==NULL) {
         sprintf(msg, "set_initial_data(): Could not allocate memory for "
-                "XiPort[%d].", i);
+                "Xi at Port[%d].", i);
         ffd_log(msg, FFD_ERROR);
         return 1;
       }
     }
+    if(para->outp->version==DEBUG) {
+      ffd_log("Allocated memory for Xi", FFD_NORMAL);
+    }
+  }
+  else  if(para->outp->version==DEBUG) {
+      ffd_log("No Xi in the simulation", FFD_NORMAL);
   }
 
   /****************************************************************************
@@ -263,11 +277,18 @@ int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX) {
       para->bc->CPortMean[i] = (REAL *) malloc(sizeof(REAL)*para->bc->nb_C);
       if(para->bc->CPort[i]==NULL || para->bc->CPortAve[i]==NULL 
          || para->bc->CPortMean[i]) {
-        ffd_log("set_initial_data(): Could not allocate memory for CPort[i].",
+        ffd_log("set_initial_data(): "
+                "Could not allocate memory for C at Port[i].",
                 FFD_ERROR);
         return 1;
       }
     }
+    if(para->outp->version==DEBUG) {
+      ffd_log("Allocated memory for C", FFD_NORMAL);
+    }
+  }
+  else if(para->outp->version==DEBUG) {
+      ffd_log("No C in the simulation", FFD_NORMAL);
   }
 
   /****************************************************************************

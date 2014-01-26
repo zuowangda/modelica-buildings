@@ -65,6 +65,7 @@ int set_bnd(PARA_DATA *para, REAL **var, int var_type, int index, REAL *psi,
         ffd_log("set_bnd(): Could not set boundary condition for temperature.",
                 FFD_ERROR);
       break;
+    case SPECIE:
     case TRACE:
       flag = set_bnd_trace(para, var, index, psi, BINDEX); 
       if(flag!=0)

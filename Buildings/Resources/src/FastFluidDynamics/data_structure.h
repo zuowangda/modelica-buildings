@@ -115,12 +115,23 @@ Place the stdlib.h line above the glut.h line in the code.
 #define VYBC 41
 #define VZBC 42
 #define TEMPBC 43
-
-#define TRACE 44
+#define SPECIE 44
+#define Xi1 44
+#define Xi2 45
+#define Xi3 46
+#define Xi4 47
+#define TRACE 48
+#define C1  48
+#define C2  49
+#define C3  50
+#define C4  51
 
 typedef enum{NOSLIP, SLIP, INFLOW, OUTFLOW, PERIODIC, SYMMETRY} BCTYPE;
 
-typedef enum{SOLID=1, INLET=0, OUTLET=2, FLUID=-1} CELLTYPE;
+#define SOLID 1
+#define INLET 0
+#define OUTLET 2
+#define FLUID -1
 
 typedef enum{TCONST, QCONST, ADIBATIC} BCTTYPE;
 

@@ -48,7 +48,10 @@ int diffusion(PARA_DATA *para, REAL **var, int var_type, int index,
   }
 
   // Solve the equations
-  equ_solver(para, var, var_type, psi);
+  if(equ_solver(para, var, var_type, psi)!=0) {
+    ffd_log("diffusion(): failed to solve the equation", FFD_ERROR);
+    return 1;
+  }
 
   // Define B.C.
   set_bnd(para, var, var_type, index, psi, BINDEX);
@@ -81,6 +84,10 @@ int diffusion(PARA_DATA *para, REAL **var, int var_type, int index,
                 index, check_residual(para, var, psi));
         ffd_log(msg, FFD_NORMAL);
         break;
+      case SPECIE:
+        sprintf(msg, "diffusion(): Residual of Specie %d is %f",
+                index, check_residual(para, var, psi));
+        ffd_log(msg, FFD_NORMAL);
       default:
         sprintf(msg, "diffusion(): No sovler for varibale type %d", 
                 var_type);
@@ -258,6 +265,7 @@ int coef_diff(PARA_DATA *para, REAL **var, REAL *psi, REAL *psi0,
     -------------------------------------------------------------------------*/
     case TEMP:
     case TRACE:
+    case SPECIE:
       if(para->prob->tur_model == LAM)   
         kapa = para->prob->alpha; 
       else if(para->prob->tur_model == CONSTANT) 
@@ -334,8 +342,11 @@ int source_diff(PARA_DATA *para, REAL **var, int var_type, int index) {
       case TEMP: 
         b[IX(i,j,k)] += var[TEMPS][IX(i,j,k)];
         break;
-      case TRACE:  
-        b[IX(i,j,k)] += var[TRACE+para->bc->nb_Xi+index][IX(i,j,k)];
+      case SPECIE:
+        b[IX(i,j,k)] += var[SPECIE+index][IX(i,j,k)];
+        break;
+      case TRACE:
+        b[IX(i,j,k)] += var[TRACE+index][IX(i,j,k)];
         break;
     }
   END_FOR

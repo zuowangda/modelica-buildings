@@ -51,18 +51,24 @@ int FFD_solver(PARA_DATA *para, REAL **var, int **BINDEX) {
       ffd_log("FFD_solver(): Could not solve velocity.", FFD_ERROR);
       return flag;
     }
+    else if(para->outp->version==DEBUG)
+      ffd_log("FFD_solver(): solved velocity step.", FFD_NORMAL);
 
     flag = temp_step(para, var, BINDEX);
     if(flag != 0) {
       ffd_log("FFD_solver(): Could not solve temperature.", FFD_ERROR);
       return flag;
     }
-    
+    else if(para->outp->version==DEBUG)
+      ffd_log("FFD_solver(): solved temperature step.", FFD_NORMAL);
+
     flag = den_step(para, var, BINDEX);
     if(flag != 0) {
       ffd_log("FFD_solver(): Could not solve trace substance.", FFD_ERROR);
       return flag;
     }
+    else if(para->outp->version==DEBUG)
+      ffd_log("FFD_solver(): solved density step.", FFD_NORMAL);
 
     timing(para);
 
@@ -75,6 +81,10 @@ int FFD_solver(PARA_DATA *para, REAL **var, int **BINDEX) {
       | Action:     Do data exchange
       .......................................................................*/
       if(fabs(para->mytime->t - t_cosim)<SMALL) {
+        if(para->outp->version==DEBUG)
+          ffd_log("FFD_solver(): Cosimulation, reached synchronization point", 
+                  FFD_NORMAL);
+
         // Average the FFD simulation data
         flag = average_time(para, var);
         if(flag != 0) {
@@ -149,6 +159,10 @@ int FFD_solver(PARA_DATA *para, REAL **var, int **BINDEX) {
       | Action:     Do FFD internal simulation and add data for future average
       .......................................................................*/
       else {
+        if(para->outp->version==DEBUG)
+          ffd_log("FFD_solver(): Cosimulation, prepare next step for FFD", 
+                  FFD_NORMAL);
+
         // Integrate the data on the boundary surface
         flag = surface_integrate(para, var, BINDEX);
         if(flag != 0) {
@@ -157,6 +171,10 @@ int FFD_solver(PARA_DATA *para, REAL **var, int **BINDEX) {
             FFD_ERROR);
           return flag;
         }
+        else if (para->outp->version==DEBUG)
+          ffd_log("FFD_solver(): completed surface integration", 
+                  FFD_NORMAL);
+
         flag = add_time_averaged_data(para, var);
         if(flag != 0) {
           ffd_log("FFD_solver(): "
@@ -164,12 +182,20 @@ int FFD_solver(PARA_DATA *para, REAL **var, int **BINDEX) {
             FFD_ERROR);
           return flag;
         }
+        else if (para->outp->version==DEBUG)
+          ffd_log("FFD_solver(): completed time average", 
+                  FFD_NORMAL);
+
       } // End of Condition 3
     } // End of cosimulation
     //-------------------------------------------------------------------------
     // Process for single simulation
     //-------------------------------------------------------------------------
     else {
+      if(para->outp->version==DEBUG)
+        ffd_log("FFD_solver(): Single Simulation, prepare for next time step", 
+                FFD_NORMAL);
+
       // Start to record data for calculating mean velocity if needed
       if(para->mytime->t>t_steady && cal_mean==0) {
         cal_mean = 1;
@@ -240,18 +266,49 @@ int den_step(PARA_DATA *para, REAL **var, int **BINDEX) {
   REAL *den, *den0 = var[TMP1];
   int i, flag = 0;
 
+  /****************************************************************************
+  | Solve the species
+  ****************************************************************************/
   for(i=0; i<para->bc->nb_Xi; i++) {
-    den = var[TRACE+i];
+    if(para->outp->version==DEBUG) {
+      sprintf(msg, "den_step(): start to solve Xi%d", i+1);
+      ffd_log(msg, FFD_NORMAL);
+    }
+    den = var[Xi1+i];
+    flag = advect(para, var, SPECIE, i, den0, den, BINDEX);
+    if(flag!=0) {
+      sprintf(msg, "den_step(): Could not advect species %d", i+1);
+      ffd_log(msg, FFD_ERROR);
+      return flag;
+    }
+
+    flag = diffusion(para, var, SPECIE, i, den, den0, BINDEX);
+    if(flag!=0) {
+      sprintf(msg, "den_step(): Could not diffuse species %d", i+1);
+      ffd_log(msg, FFD_ERROR);
+      return flag;
+    }
+  }
+
+  /****************************************************************************
+  | Solve the trace substances
+  ****************************************************************************/
+  for(i=0; i<para->bc->nb_C; i++) {
+    if(para->outp->version==DEBUG) {
+      sprintf(msg, "den_step(): start to solve C%d", i+1);
+      ffd_log(msg, FFD_NORMAL);
+    }
+    den = var[C1+i];
     flag = advect(para, var, TRACE, i, den0, den, BINDEX);
     if(flag!=0) {
-      sprintf(msg, "den_step(): Could not advect for trace substance %d", i);
+      sprintf(msg, "den_step(): Could not advect trace substance %d", i+1);
       ffd_log(msg, FFD_ERROR);
       return flag;
     }
 
     flag = diffusion(para, var, TRACE, i, den, den0, BINDEX);
     if(flag!=0) {
-      sprintf(msg, "den_step(): Could not diffuse trace substance %d", i);
+      sprintf(msg, "den_step(): Could not diffuse trace substance %d", i+1);
       ffd_log(msg, FFD_ERROR);
       return flag;
     }
@@ -354,6 +411,7 @@ int equ_solver(PARA_DATA *para, REAL **var, int var_type, REAL *psi) {
     case TEMP:
     case IP:
     case TRACE:
+    case SPECIE:
       Gauss_Seidel(para, var, flagp, psi);
       break;
     default:

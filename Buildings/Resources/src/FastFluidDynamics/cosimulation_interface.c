@@ -95,7 +95,7 @@ int read_cosim_parameter(PARA_DATA *para, REAL **var, int **BINDEX) {
   }
 
   /****************************************************************************
-  | Compare the number of trace species
+  | Compare the number of species
   ****************************************************************************/
   if(para->cosim->para->nXi==para->bc->nb_Xi) {
     sprintf(msg, "\tnXi=%d", para->cosim->para->nXi);
@@ -111,7 +111,7 @@ int read_cosim_parameter(PARA_DATA *para, REAL **var, int **BINDEX) {
   }
 
   /****************************************************************************
-  | Compare the number of substances
+  | Compare the number of trace substances
   ****************************************************************************/
   if(para->cosim->para->nC==para->bc->nb_C) {
     sprintf(msg, "\tnC=%d", para->cosim->para->nC);
@@ -210,7 +210,12 @@ int read_cosim_data(PARA_DATA *para, REAL **var, int **BINDEX) {
             para->cosim->modelica->flag);
     ffd_log(msg, FFD_NORMAL);
     Sleep(1000);
+    if(para->outp->version==DEBUG)
+      ffd_log("read_cosim_data(): Sleep for 1000.", FFD_NORMAL);
   }
+
+  if(para->outp->version==DEBUG)
+    ffd_log("read_cosim_data(): Modelica data is ready.", FFD_NORMAL);
 
   sprintf(msg, 
           "read_cosim_data(): Received the following data at t=%f[s]", 
@@ -669,7 +674,7 @@ int assign_thermal_bc(PARA_DATA *para, REAL **var, int **BINDEX) {
 ///\return 0 if no error occurred
 ///////////////////////////////////////////////////////////////////////////////
 int assign_port_bc(PARA_DATA *para, REAL **var, int **BINDEX) {
-  int i, j, k, it, id;
+  int i, j, k;
   int imax = para->geom->imax, jmax = para->geom->jmax;
   int kmax = para->geom->kmax;
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
@@ -693,7 +698,7 @@ int assign_port_bc(PARA_DATA *para, REAL **var, int **BINDEX) {
           para->bc->TPort[j]);
     ffd_log(msg, FFD_NORMAL);
     /*-------------------------------------------------------------------------
-    | Convert nXi types of trace substance
+    | Convert nXi types of species
     -------------------------------------------------------------------------*/
     for(k=0; k<para->cosim->para->nXi; k++) {
       para->bc->XiPort[j][k] = para->cosim->modelica->XiPor[i][k];
@@ -701,7 +706,7 @@ int assign_port_bc(PARA_DATA *para, REAL **var, int **BINDEX) {
       ffd_log(msg, FFD_NORMAL);
     }
     /*-------------------------------------------------------------------------
-    | Convert nC types of species
+    | Convert nC types of trace substances
     -------------------------------------------------------------------------*/
     for(k=0; k<para->cosim->para->nC; k++) {
       para->bc->CPort[j][k] = para->cosim->modelica->CPor[i][k];
@@ -713,6 +718,7 @@ int assign_port_bc(PARA_DATA *para, REAL **var, int **BINDEX) {
   /****************************************************************************
   | Assign the BC
   ****************************************************************************/
+  /*
   for(it=0; it<para->geom->index; it++) {    
     i = BINDEX[0][it];
     j = BINDEX[1][it];
@@ -720,8 +726,8 @@ int assign_port_bc(PARA_DATA *para, REAL **var, int **BINDEX) {
     id = BINDEX[4][it];
 
     if(var[FLAGP][IX(i,j,k)]==INLET || var[FLAGP][IX(i,j,k)]==OUTLET) {
-      if(para->bc->velPort[id]>=0) {
-        var[FLAGP][IX(i,j,k)] = INLET;
+      if(para->bc->velPort[id]>0) { //Fixme: This conditon is not correct
+        var[FLAGP][IX(i,j,k)] = INLET; 
         var[TEMPBC][IX(i,j,k)] = para->bc->TPort[id];
         if(i==0)
           var[VXBC][IX(i,j,k)] = para->bc->velPort[id];
@@ -743,7 +749,7 @@ int assign_port_bc(PARA_DATA *para, REAL **var, int **BINDEX) {
         var[FLAGP][IX(i,j,k)] = OUTLET;
     }
   }
-   
+   */
   return 0;
 } // End of assign_inlet_outlet_bc()
 
@@ -775,6 +781,10 @@ int surface_integrate(PARA_DATA *para, REAL **var, int **BINDEX) {
   /****************************************************************************
   | Set the variable to 0
   ****************************************************************************/
+  if(para->outp->version==DEBUG)
+    ffd_log("surface_integrate(): Start to set the variable to 0", 
+            FFD_NORMAL);
+
   for(i=0; i<para->bc->nb_wall; i++)
     para->bc->temHeaAve[i] = 0;
 
@@ -782,14 +792,17 @@ int surface_integrate(PARA_DATA *para, REAL **var, int **BINDEX) {
     para->bc->TPortAve[i] = 0;
     para->bc->velPortAve[i] = 0;
     for(j=0; j<para->bc->nb_Xi; j++)
-      para->bc->XiPortAve[i] = 0;
+      para->bc->XiPortAve[i][j] = 0;
     for(j=0; j<para->bc->nb_C; j++)
-      para->bc->CPortAve[i] = 0;
+      para->bc->CPortAve[i][j] = 0;
   }
 
   /****************************************************************************
   | Go through all the boundary cells
   ****************************************************************************/
+  if(para->outp->version==DEBUG)
+    ffd_log("surface_integrate(): Start to sum all the cells", FFD_NORMAL);
+
   for(it=0; it<para->geom->index; it++) {
     i = BINDEX[0][it];
     j = BINDEX[1][it];
@@ -817,6 +830,9 @@ int surface_integrate(PARA_DATA *para, REAL **var, int **BINDEX) {
     | Here is to give the Modelica the missing data (For instance, if Modelica 
     | send FFD Temperature, FFD should then send Modelica Heat Flux).
     -------------------------------------------------------------------------*/
+    /*-------------------------------------------------------------------------
+    | Solid Wall
+    --------------------------------------------------------------------------*/
     if(var[FLAGP][IX(i,j,k)]==SOLID) {
       switch(BINDEX[3][it]) {
         // FFD uses heat flux as BC to compute temperature
@@ -839,17 +855,46 @@ int surface_integrate(PARA_DATA *para, REAL **var, int **BINDEX) {
           return 1;
       }
     }
-    else if(var[FLAGP][IX(i,j,k)]==INLET||var[FLAGP][IX(i,j,k)]==OUTLET) {
+    /*-------------------------------------------------------------------------
+    | Outlet
+    -------------------------------------------------------------------------*/
+    /*
+    else if(var[FLAGP][IX(i,j,k)]==OUTLET) {
+      if(para->outp->version==DEBUG) {
+        sprintf(msg, "surface_integrate(): Set the outlet[%d, %d, %d]", 
+                i, j, k);
+        ffd_log(msg, FFD_NORMAL);
+      }
+
       para->bc->TPortAve[bcid] += var[TEMP][IX(i,j,k)] * A_tmp;
       para->bc->velPortAve[bcid] += vel_tmp * A_tmp;
-      // To be implemented
-      /*
       for(j=0; j<para->bc->nb_Xi; j++)
-        para->bc->XiPortAve[bcid][j] += xi[j][IX(i,j,k)] * A_tmp * vel_tmp;
-      for(j=0, j<para->bc->nb_C; j++)
-        para->bc->CPortAve[bcid][j] = c[j][IX(i,j,k)] * A_tmp * vel_tmp;
-        */
-    }
+        para->bc->XiPortAve[bcid][j] += var[Xi1+j][IX(i,j,k)] * A_tmp;
+
+      for(j=0; j<para->bc->nb_C; j++)
+        para->bc->CPortAve[bcid][j] += var[C1+j][IX(i,j,k)] * A_tmp;
+        
+    } */
+    /*-------------------------------------------------------------------------
+    | Inlet
+    -------------------------------------------------------------------------*/
+    /*
+    else if(var[FLAGP][IX(i,j,k)]==INLET) {  
+      if(para->outp->version==DEBUG) {
+        sprintf(msg, "surface_integrate(): Set 0 for inlet [%d,%d,%d].", 
+                i, j, k);
+        ffd_log(msg, FFD_NORMAL);
+      }
+      
+      para->bc->TPortAve[bcid] = 0; 
+      para->bc->velPortAve[bcid] = 0;
+      for(j=0; j<para->bc->nb_Xi; j++)
+        para->bc->XiPortAve[bcid][j] = 0;
+
+      for(j=0; j<para->bc->nb_C; j++)
+        para->bc->CPortAve[bcid][j] = 0;
+    } */
+    
   } // End of for(it=0; it<para->geom->index; it++)
   
   return 0;
