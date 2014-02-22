@@ -19,7 +19,7 @@ model ForcedConvection "Ventilation with forced convection in an empty room"
         each boundaryCondition= Buildings.Rooms.Types.CFDBoundaryConditions.Temperature),
       nPorts=2,
       portName={"Inlet","Outlet"},
-      cfdFilNam="Resources/Data/Rooms/FFD/FlowPorts.ffd"),
+      cfdFilNam="Resources/Data/Rooms/FFD/ForcedConvection.ffd"),
       nSurBou=6);
 
   HeatTransfer.Sources.FixedTemperature TWal[nSurBou](each T=283.15)
@@ -64,7 +64,7 @@ This model tests the co-simulation of
 <a href=\"modelica://Buildings.Rooms.FFD\">
 Buildings.Rooms.FFD</a>
 with the FFD program by simulating the ventilation with forced convection in an empty room.
-The following figure shows streamlines and contour of  horizontal velocity U simulated by the FFD. 
+The following figure shows streamlines and contour of horizontal velocity U simulated by the FFD. 
 </p>
 <p align=\"center\">
 <img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/ForcedConvection.png\" border=\"1\"/>
