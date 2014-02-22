@@ -62,7 +62,7 @@ First implementation.
 <p>
 <a NAME=\"ZuoEtAl2011\"/> 
 Wangda Zuo, Mingang Jin, Qingyan Chen<br/>
-<a href=\"modelica://Buildings/Resources/Images/Rooms/Examples/TestConditionalConstructionFFD/2011-Zuo-EACFD.pdf\">
+<a href=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/2011-Zuo-EACFD.pdf\">
 Reduction of numerical viscosity in FFD model.</a><br/>
 Journal of Engineering Applications of Computational Fluid Mechanics, 6(2), p. 234-247. 
 </p>
