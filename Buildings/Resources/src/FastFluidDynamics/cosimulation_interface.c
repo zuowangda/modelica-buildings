@@ -287,7 +287,7 @@ int write_cosim_data(PARA_DATA *para, REAL **var) {
   ffd_log("-------------------------------------------------------------------",
           FFD_NORMAL);
   ffd_log("write_cosim_parameter(): "
-          "Start to write the following cosimulation data:",
+          "Start to write the following cosimulation data to Modelica:",
            FFD_NORMAL);
 
   /****************************************************************************
@@ -304,7 +304,8 @@ int write_cosim_data(PARA_DATA *para, REAL **var) {
   ****************************************************************************/
   para->cosim->ffd->t = para->mytime->t;
 
-  sprintf(msg, "write_cosim_data(): Start to update FFD data at t=%f[s]", 
+  sprintf(msg, "write_cosim_data(): Start to write FFD data to Modelica "
+               "at t=%f[s]", 
           para->cosim->ffd->t);
   ffd_log(msg, FFD_NORMAL);
   
@@ -336,22 +337,51 @@ int write_cosim_data(PARA_DATA *para, REAL **var) {
   ****************************************************************************/
   ffd_log("\tFlow information at the ports:", FFD_NORMAL);
   for(i=0; i<para->bc->nb_port; i++) {
-    // Get the corresponding ID in modelica
+    // Get the corresponding ID in Modelica
     id = para->bc->portId[i];
-    // Assign the temperature
-    para->cosim->ffd->TPor[id] = para->bc->TPortMean[i]/para->bc->APort[i] 
-                               + 273.15;
+    /*-------------------------------------------------------------------------
+    | Assign the temperature
+    -------------------------------------------------------------------------*/
+    if(para->mytime->t==0) // Use initial T for Modelica
+      para->cosim->ffd->TPor[id] = para->init->T + 273.15;
+    else
+      para->cosim->ffd->TPor[id] = para->bc->TPortMean[i]/para->bc->APort[i] 
+                                 + 273.15;
     sprintf(msg, "\t\t%s: %f[K]",
             para->cosim->para->portName[id], para->cosim->ffd->TPor[id]);
     ffd_log(msg, FFD_NORMAL);
-    // Assign the Xi
-    for(j=0; j<para->bc->nb_Xi; j++)
-      para->cosim->ffd->XiPor[id][j] = para->bc->XiPortMean[i][j] 
-                                     / para->bc->velPortMean[i];
-    // Assign the C
-    for(j=0; j<para->bc->nb_C; j++)
-      para->cosim->ffd->CPor[id][j] = para->bc->CPortMean[i][j]
-                                    / para->bc->velPortMean[i]; 
+    /*-------------------------------------------------------------------------
+    | Assign the Xi
+    -------------------------------------------------------------------------*/
+    for(j=0; j<para->bc->nb_Xi; j++) {
+      if(para->mytime->t==0) // Use inital Xi for Modelica
+        para->cosim->ffd->XiPor[id][j] = 0.0;
+      else {
+        para->bc->velPortMean[i] = abs(para->bc->velPortMean[i]) + SMALL;
+        para->cosim->ffd->XiPor[id][j] = para->bc->XiPortMean[i][j] 
+                                       / para->bc->velPortMean[i];
+      }
+      sprintf(msg, "\t\t%s: Xi[%d]=%f",
+              para->cosim->para->portName[id], j, 
+              para->cosim->ffd->XiPor[id][j]);
+      ffd_log(msg, FFD_NORMAL);
+    }
+    /*-------------------------------------------------------------------------
+    | Assign the C
+    -------------------------------------------------------------------------*/
+    for(j=0; j<para->bc->nb_C; j++) {
+      if(para->mytime->t==0) // Use inital Xi for Modelica
+        para->cosim->ffd->CPor[id][j] = 0.0;
+      else {
+        para->bc->velPortMean[i] = abs(para->bc->velPortMean[i]) + SMALL;
+        para->cosim->ffd->CPor[id][j] = para->bc->CPortMean[i][j]
+                                      / para->bc->velPortMean[i]; 
+      }
+      sprintf(msg, "\t\t%s: C[%d]=%f",
+              para->cosim->para->portName[id], j, 
+              para->cosim->ffd->CPor[id][j]);
+      ffd_log(msg, FFD_NORMAL);
+    }
   }
 
   /****************************************************************************
