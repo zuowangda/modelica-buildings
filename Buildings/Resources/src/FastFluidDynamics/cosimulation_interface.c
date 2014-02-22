@@ -704,7 +704,7 @@ int assign_thermal_bc(PARA_DATA *para, REAL **var, int **BINDEX) {
 ///\return 0 if no error occurred
 ///////////////////////////////////////////////////////////////////////////////
 int assign_port_bc(PARA_DATA *para, REAL **var, int **BINDEX) {
-  int i, j, k;
+  int i, j, k, id, it;
   int imax = para->geom->imax, jmax = para->geom->jmax;
   int kmax = para->geom->kmax;
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
@@ -748,7 +748,6 @@ int assign_port_bc(PARA_DATA *para, REAL **var, int **BINDEX) {
   /****************************************************************************
   | Assign the BC
   ****************************************************************************/
-  /*
   for(it=0; it<para->geom->index; it++) {    
     i = BINDEX[0][it];
     j = BINDEX[1][it];
@@ -779,7 +778,6 @@ int assign_port_bc(PARA_DATA *para, REAL **var, int **BINDEX) {
         var[FLAGP][IX(i,j,k)] = OUTLET;
     }
   }
-   */
   return 0;
 } // End of assign_inlet_outlet_bc()
 
