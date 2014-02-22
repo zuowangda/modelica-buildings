@@ -4,5 +4,5 @@ RoomOnlyExteriorWallNoWindow
 RoomExteriorWallWithWindow
 RoomOnlySurfaceBoundary
 RayleighNumber
-RoomFlowPorts
 ForcedConvection
+MixedConvection
