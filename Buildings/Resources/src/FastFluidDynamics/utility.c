@@ -365,11 +365,12 @@ int reset_time_averaged_data (PARA_DATA *para, REAL **var) {
   int kmax = para->geom->kmax;
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
 
+
   FOR_ALL_CELL
     var[VXM][IX(i,j,k)] = 0;
     var[VYM][IX(i,j,k)] = 0;
     var[VZM][IX(i,j,k)] = 0;
-    var[TEMPM][IX(i,j,k)] = para->init->T;
+    var[TEMPM][IX(i,j,k)] = 0;
   END_FOR
   
   // Wall surfaces
@@ -385,13 +386,13 @@ int reset_time_averaged_data (PARA_DATA *para, REAL **var) {
       para->bc->XiPortMean[i][j] = 0;
     for(j=0; j<para->bc->nb_C; j++) 
       para->bc->CPortMean[i][j] = 0;
-    
   }
 
   // Sensor data
   para->sens->TRooMean = 0;
   for(i=0; i<para->sens->nb_sensor; i++) 
     para->sens->senValMean[i] = 0;
+
 
   //Reset the time step to 0
   para->mytime->step_mean = 0;
