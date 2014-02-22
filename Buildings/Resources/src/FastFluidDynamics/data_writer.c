@@ -71,7 +71,7 @@ int write_tecplot_data(PARA_DATA *para, REAL **var, char *name) {
            imax+2, jmax+2, kmax+2);
 
   fprintf( datafile, 
-           "VARIABLES =X, Y, Z, I, J, K, U, V, W, T, fu, fv \n");
+           "VARIABLES =X, Y, Z, I, J, K, U, V, W, T, FlagP, P \n");
   fprintf( datafile, "ZONE F=POINT, I=%d, J=%d, K=%d\n", imax+2, jmax+2, kmax+2 );
  
   FOR_ALL_CELL
