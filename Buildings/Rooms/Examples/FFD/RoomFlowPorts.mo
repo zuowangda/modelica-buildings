@@ -1,7 +1,8 @@
 within Buildings.Rooms.Examples.FFD;
 model RoomFlowPorts "Mixed convection in an empty room with inlet and outlet"
   extends Modelica.Icons.Example;
-  extends Buildings.Rooms.Examples.FFD.BaseClasses.PartialRoom(roo(
+  extends Buildings.Rooms.Examples.FFD.BaseClasses.PartialRoom(
+    roo(
       linearizeRadiation=false,
       samplePeriod=60,
       surBou(
@@ -19,7 +20,7 @@ model RoomFlowPorts "Mixed convection in an empty room with inlet and outlet"
             Buildings.Rooms.Types.CFDBoundaryConditions.HeatFlowRate}),
       nPorts=2,
       portName={"Inlet","Outlet"},
-      cfdFilNam="C:/Users/Wangda/Documents/FFD-Modelica/modelica/modelica-buildings/Buildings/Resources/Data/Rooms/FFD/FlowPorts.ffd"),
+      cfdFilNam="Resources/Data/Rooms/FFD/FlowPorts.ffd"),
       nSurBou=6);
 
   Buildings.HeatTransfer.Sources.FixedTemperature TWesWal(each T=303.15)
