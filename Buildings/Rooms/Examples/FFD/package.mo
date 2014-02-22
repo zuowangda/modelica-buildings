@@ -3,12 +3,6 @@ package FFD "Package that tests the models for cosimulation with CFD"
   extends Modelica.Icons.ExamplesPackage;
 
 
-
-
-
-
-
-
 annotation (Documentation(info="<html>
 The thermal zone model 
 <a href=\"Buildings.Rooms.FFD\">Buildings.Rooms.FFD</a>
