@@ -8,10 +8,9 @@ block CFDExchange
   parameter Boolean activateInterface=true
     "Set to false to deactivate interface and use instead yFixed as output"
     annotation (Evaluate=true);
-  parameter Integer nX(min=1)
+  parameter Integer nX
     "Number of species concentration of the inflowing medium";
-  parameter Integer nC(min=1)
-    "Number of trace substances of the inflowing medium";
+  parameter Integer nC "Number of trace substances of the inflowing medium";
   parameter Integer nWri(min=0)
     "Number of values to write to the FFD simulation";
   parameter Integer nRea(min=0)
