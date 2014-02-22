@@ -30,8 +30,6 @@ model CFDAirHeatMassBalance
     final activateInterface=useFFD,
     final samplePeriod=if useFFD then samplePeriod else Modelica.Constants.inf,
     final uStart=uStart,
-    final nX = Medium.nX,
-    final nC = Medium.nC,
     final nWri=kFluIntC_inflow + Medium.nC*nPorts,
     final nRea=kSen + nSen,
     final nSur=nSur,
@@ -40,7 +38,10 @@ model CFDAirHeatMassBalance
     final haveSensor=haveSensor,
     final sensorName=sensorName,
     final portName=portName,
-    final yFixed=yFixed) "Block that exchanges data with the FFD simulation"
+    final yFixed=yFixed,
+    final nX=min(1,nPorts)*Medium.nX,
+    final nC=min(1,nPorts)*Medium.nC)
+    "Block that exchanges data with the FFD simulation"
     annotation (Placement(transformation(extent={{-40,180},{-20,200}})));
 
   Modelica.Blocks.Interfaces.RealOutput yCFD[nSen] if haveSensor
