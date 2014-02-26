@@ -4,7 +4,6 @@ model MixedConvection "Ventilation with mixed convection in an empty room"
   extends Buildings.Rooms.Examples.FFD.BaseClasses.PartialRoom(
     roo(
       linearizeRadiation=false,
-      samplePeriod=60,
       surBou(
         name={"East Wall","West Wall","North Wall","South Wall","Ceiling","Floor"},
         A={0.9,0.9,1,1,1,1},
@@ -19,7 +18,8 @@ model MixedConvection "Ventilation with mixed convection in an empty room"
         each boundaryCondition= Buildings.Rooms.Types.CFDBoundaryConditions.Temperature),
       nPorts=2,
       portName={"Inlet","Outlet"},
-      cfdFilNam="Resources/Data/Rooms/FFD/MixedConvection.ffd"),
+      cfdFilNam="Resources/Data/Rooms/FFD/MixedConvection.ffd",
+      samplePeriod=6),
       nSurBou=6);
 
   HeatTransfer.Sources.FixedTemperature TOthWal[5](each T=283.15)
