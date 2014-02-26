@@ -45,17 +45,20 @@ int cfdExchangeData(double t0, double dt, double *u, int nU, int nY,
       return -1;
     }
     else {
-      printf("exchangeData(): Waiting for the FFD to read my data.\n");
+      printf("cfdExchangeData(): Waiting for the FFD to read my data.\n");
       Sleep(1000);
     }
   }
 
-  printf("exchangeData(): Start to write data");
+  printf("cfdExchangeData(): Start to write data");
   cosim->modelica->t = (float) t0;
   cosim->modelica->dt = (float) dt;
 
-  printf("exchangeData():: wrtie data at %f with dt=%f\n", 
+  printf("cfdExchangeData(): wrtie data at %f with dt=%f\n", 
          cosim->modelica->t, cosim->modelica->dt);
+
+  printf("cfdExchangeData(): number of input variables nU=%d\n", nU);
+  printf("cfdExchangeData(): number of output variables nY=%d\n", nY);
 
   // Copy the modelica data to shared memory
   for(i=0; i<cosim->para->nSur; i++) {
@@ -115,36 +118,49 @@ int cfdExchangeData(double t0, double dt, double *u, int nU, int nY,
   }
 
   // Get the temperature/heat flux for solid surface
-  for(i=0; i<cosim->para->nSur; i++) 
+  for(i=0; i<cosim->para->nSur; i++) {
     y[i] = cosim->ffd->temHea[i];
+    printf("y[%d]=%f\n", i, y[i]);
+  }
 
   // Get the averaged room temperature
   y[i] = cosim->ffd->TRoo;
+  printf("y[%d]=%f\n", i, y[i]);
   i++;
 
   // Get the temperature of shading device if there is a shading device
   if(cosim->para->sha==1) {
-    for(j=0; j<cosim->para->nConExtWin; i++, j++)
+    for(j=0; j<cosim->para->nConExtWin; i++, j++) {
       y[i] = cosim->ffd->TSha[j];
+      printf("y[%d]=%f\n", i, y[i]);
+    }
   }
 
   // Get the temperature fluid at the fluid ports
-  for(j=0; j<cosim->para->nPorts; i++, j++)
+  for(j=0; j<cosim->para->nPorts; i++, j++) {
     y[i] = cosim->ffd->TPor[j];
+    printf("y[%d]=%f\n", i, y[i]);
+  }
 
   // Get the mass fraction at fluid ports
   for(j=0; j<cosim->para->nPorts; j++)
-    for(k=0; k<cosim->para->nXi; k++, i++)
+    for(k=0; k<cosim->para->nXi; k++, i++) {
        y[i] = cosim->ffd->XiPor[j][k];
-
+       printf("y[%d]=%f\n", i, y[i]);
+    }
   // Get the trace substance at fluid ports
   for(j=0; j<cosim->para->nPorts; j++)
-    for(k=0; k<cosim->para->nC; k++, i++)
+    for(k=0; k<cosim->para->nC; k++, i++) {
        y[i] = cosim->ffd->CPor[j][k];
+       printf("y[%d]=%f\n", i, y[i]);
+    }
 
   // Get the sensor data
-  for(j=0; j<cosim->para->nSen; j++, i++)
+  for(j=0; j<cosim->para->nSen; j++, i++) {
     y[i] = cosim->ffd->senVal[j];
+    printf("y[%d]=%f\n", i, y[i]);
+  }
+  //getchar();
 
   printf("\n FFD: \t\ttime=%f, status=%d\n", cosim->ffd->t, cosim->ffd->flag);
   printf("Modelica: \ttime=%f, status=%d\n", cosim->modelica->t, cosim->modelica->flag);
