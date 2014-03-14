@@ -8,8 +8,8 @@ block CFDExchange
   parameter Boolean activateInterface=true
     "Set to false to deactivate interface and use instead yFixed as output"
     annotation (Evaluate=true);
-  parameter Integer nX
-    "Number of species concentration of the inflowing medium";
+  parameter Integer nXi
+    "Number of independent species concentration of the inflowing medium";
   parameter Integer nC "Number of trace substances of the inflowing medium";
   parameter Integer nWri(min=0)
     "Number of values to write to the FFD simulation";
@@ -84,7 +84,8 @@ protected
     input Integer nSen(min=0)
       "Number of sensors that are connected to CFD output";
     input Boolean verbose "Set to true for verbose output";
-    input Integer nX "Number of species concentration of the inflowing medium";
+    input Integer nXi
+      "Number of independent species concentration of the inflowing medium";
     input Integer nC "Number of trace substances of the inflowing medium";
 
   protected
@@ -114,7 +115,7 @@ protected
         nSur,
         nSen,
         nConExtWin,
-        nX,
+        nXi=nXi,
         nC);
     assert(coSimFlag < 0.5, "Could not start the cosimulation.");
 
@@ -323,7 +324,7 @@ initial equation
     nSur=nSur,
     nSen=nSen,
     nPorts=nPorts,
-    nX=nX,
+    nXi=nXi,
     nC=nC,
     verbose=verbose);
 
