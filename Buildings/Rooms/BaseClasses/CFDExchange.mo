@@ -15,7 +15,7 @@ block CFDExchange
     "Number of values to write to the FFD simulation";
   parameter Integer nRea(min=0)
     "Number of double values to be read from the FFD simulation";
-  parameter Integer flaWri[nWri]=zeros(nWri)
+  parameter Integer flaWri[nWri]=ones(nWri)
     "Flag for double values (0: use current value, 1: use average over interval, 2: use integral over interval)";
   parameter Real uStart[nWri]
     "Initial input signal, used during first data transfer with FFD simulation";
