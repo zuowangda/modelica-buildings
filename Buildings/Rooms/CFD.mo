@@ -1,10 +1,10 @@
 within Buildings.Rooms;
-model FFD
-  "Model of a room in which the air is computed using fast fluid flow dynamics"
+model CFD
+  "Model of a room in which the air is computed using computational fluid dynamics"
   extends Buildings.Rooms.BaseClasses.RoomHeatMassBalance(
   redeclare BaseClasses.CFDAirHeatMassBalance air(
     final cfdFilNam = cfdFilNam,
-    final useFFD=useFFD,
+    final useCFD=useCFD,
     final samplePeriod=samplePeriod,
     final startTime=startTime,
     final haveSensor=haveSensor,
@@ -14,8 +14,8 @@ model FFD
     final energyDynamics = Modelica.Fluid.Types.Dynamics.FixedInitial,
     massDynamics = Modelica.Fluid.Types.Dynamics.FixedInitial);
 
-  parameter Boolean useFFD = true
-    "Set to false to deactivate the FFD computation and use instead yFixed as output"
+  parameter Boolean useCFD = true
+    "Set to false to deactivate the CFD computation and use instead yFixed as output"
     annotation(Evaluate = true);
 
   parameter Modelica.SIunits.Time samplePeriod(min=100*Modelica.Constants.eps)
@@ -103,4 +103,4 @@ as the latent heat gains are treated differently in the mixed air and in the CFD
 </html>"),
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-260,-220},{460,
             200}}), graphics));
-end FFD;
+end CFD;
