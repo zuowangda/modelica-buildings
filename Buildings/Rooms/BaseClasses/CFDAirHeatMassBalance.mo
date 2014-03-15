@@ -39,9 +39,8 @@ model CFDAirHeatMassBalance
     final sensorName=sensorName,
     final portName=portName,
     final yFixed=yFixed,
-    final nX=min(1,nPorts)*Medium.nX,
-    final nC=min(1,nPorts)*Medium.nC)
-    "Block that exchanges data with the FFD simulation"
+    final nXi=Medium.nXi,
+    final nC=Medium.nC) "Block that exchanges data with the FFD simulation"
     annotation (Placement(transformation(extent={{-40,180},{-20,200}})));
 
   Modelica.Blocks.Interfaces.RealOutput yCFD[nSen] if haveSensor
@@ -708,8 +707,7 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   connect(QLat_flow, cfd.u[kQLatGai_flow + 1]) annotation (Line(
-      points={{-260,-160},{-190,-160},{-190,-72},{-60,-72},{-60,190},{-42,190},
-          {-42,190}},
+      points={{-260,-160},{-190,-160},{-190,-72},{-60,-72},{-60,190},{-42,190}},
       color={0,0,127},
       smooth=Smooth.None));
 
