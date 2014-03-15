@@ -1,6 +1,5 @@
 within Buildings.Rooms.BaseClasses;
-block CFDExchange
-  "Block that exchanges data with the Fast Fluid Flow Dynamics code"
+block CFDExchange "Block that exchanges data with the CFD code"
   extends Modelica.Blocks.Interfaces.DiscreteBlock;
   parameter String cfdFilNam "CFD input file name" annotation (Dialog(
         __Dymola_loadSelector(caption=
@@ -12,13 +11,13 @@ block CFDExchange
     "Number of independent species concentration of the inflowing medium";
   parameter Integer nC "Number of trace substances of the inflowing medium";
   parameter Integer nWri(min=0)
-    "Number of values to write to the FFD simulation";
+    "Number of values to write to the CFD simulation";
   parameter Integer nRea(min=0)
-    "Number of double values to be read from the FFD simulation";
+    "Number of double values to be read from the CFD simulation";
   parameter Integer flaWri[nWri]=ones(nWri)
     "Flag for double values (0: use current value, 1: use average over interval, 2: use integral over interval)";
   parameter Real uStart[nWri]
-    "Initial input signal, used during first data transfer with FFD simulation";
+    "Initial input signal, used during first data transfer with CFD simulation";
   parameter Real yFixed[nRea] "Fixed output, used if activateInterface=false"
     annotation (Evaluate=true, Dialog(enable=not activateInterface));
   parameter Integer nSur(min=1) "Number of surfaces";
@@ -33,15 +32,15 @@ block CFDExchange
     "Names of fluid ports as declared in the CFD input file";
   parameter Boolean verbose=false "Set to true for verbose output";
 
-  Modelica.Blocks.Interfaces.RealInput u[nWri] "Inputs to FFD"
+  Modelica.Blocks.Interfaces.RealInput u[nWri] "Inputs to CFD"
     annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
   Modelica.Blocks.Interfaces.RealOutput y[nRea](start=yFixed)
-    "Outputs received from FFD"
+    "Outputs received from CFD"
     annotation (Placement(transformation(extent={{100,-10},{120,10}})));
 
   output Real uInt[nWri] "Value of integral";
   output Real uIntPre[nWri] "Value of integral at previous sampling instance";
-  output Real uWri[nWri] "Value to be sent to the FFD interface";
+  output Real uWri[nWri] "Value to be sent to the CFD interface";
 
 protected
   final parameter Integer nSen(min=0) = size(sensorName, 1)
@@ -50,11 +49,11 @@ protected
     "Number of fluid ports for the HVAC inlet and outlets";
   final parameter Real _uStart[nWri]={if (flaWri[i] <= 1) then uStart[i] else
       uStart[i]*samplePeriod for i in 1:nWri}
-    "Initial input signal, used during first data transfer with FFD";
+    "Initial input signal, used during first data transfer with CFD";
   output Modelica.SIunits.Time simTimRea
-    "Current simulation time received from FFD";
+    "Current simulation time received from CFD";
 
-  output Integer retVal "Return value from FFD";
+  output Integer retVal "Return value from CFD";
 
   parameter Boolean ideSurNam[max(0, nSur - 1)](fixed=false)
     "Flag, used to tag identical surface names";
@@ -125,18 +124,18 @@ protected
   // Function that exchanges data during the time stepping between
   // Modelica and CFD.
   function exchange
-    input Integer flag "Communication flag to write to FFD";
+    input Integer flag "Communication flag to write to CFD";
     input Modelica.SIunits.Time t "Current simulation time in seconds to write";
     input Modelica.SIunits.Time dt(min=100*Modelica.Constants.eps)
       "Requested time step length";
-    input Real[nU] u "Input for FFD";
-    input Integer nU "Number of inputs for FFD";
+    input Real[nU] u "Input for CFD";
+    input Integer nU "Number of inputs for CFD";
     input Real[nY] yFixed "Fixed values (used for debugging only)";
-    input Integer nY "Number of outputs from FFD";
+    input Integer nY "Number of outputs from CFD";
     output Modelica.SIunits.Time simTimRea
-      "Current simulation time in seconds read from FFD";
+      "Current simulation time in seconds read from CFD";
     input Boolean verbose "Set to true for verbose output";
-    output Real[nY] y "Output computed by FFD";
+    output Real[nY] y "Output computed by CFD";
     output Integer retVal
       "The exit value, which is negative if an error occured";
   algorithm
@@ -349,7 +348,7 @@ equation
   end for;
 algorithm
   when sampleTrigger then
-    // Compute value that will be sent to the FFD interface
+    // Compute value that will be sent to the CFD interface
     for i in 1:nWri loop
       if (flaWri[i] == 0) then
         uWri[i] := pre(u[i]);
@@ -382,8 +381,8 @@ algorithm
 
     // Check for valid return flags
     assert(retVal >= 0,
-      "Obtained negative return value during data transfer with FFD.\n" +
-      "   Aborting simulation. Check file 'ffd.log'.\n" +
+      "Obtained negative return value during data transfer with CFD.\n" +
+      "   Aborting simulation. Check CFD log file.\n" +
       "   Received: retVal = " + String(retVal));
 
     // Store current value of integral
@@ -400,7 +399,7 @@ algorithm
       Modelica.Utilities.Streams.print("CFDExchange:terminate at t=" + String(
         time));
     end if;
-    // Send the stopping singal to FFD
+    // Send the stopping singal to CFD
     cfdSendStopCommand();
 
     // Last exchange of data
@@ -434,14 +433,14 @@ code.
 </p>
 <p>
 For a documentation of the exchange parameters and variables, see
-<a href=\"modelica://Buildings.Rooms.UsersGuide.FFD\">
-Buildings.Rooms.UsersGuide.FFD</a>.
+<a href=\"modelica://Buildings.Rooms.UsersGuide.CFD\">
+Buildings.Rooms.UsersGuide.CFD</a>.
 </p>
 </html>", revisions="<html>
 <ul>
 <li>
 January 24, 2014, by Wangda Zuo:<br/>
-Enabled the transfer of Xi and X to CFD.
+Enabled the transfer of Xi and X to CFD. 
 </li>
 <li>
 July 19, 2013, by Michael Wetter:<br/>
