@@ -1,7 +1,7 @@
 within Buildings.Rooms.BaseClasses;
 model CFDFluidInterface
  extends Buildings.BaseClasses.BaseIcon;
- // fixme: check if C_start and similar variables are used in FFD
+ // fixme: check if C_start and similar variables are used in CFD
  extends Buildings.Fluid.Interfaces.LumpedVolumeDeclarations(
    final energyDynamics = Modelica.Fluid.Types.Dynamics.FixedInitial,
    massDynamics = Modelica.Fluid.Types.Dynamics.DynamicFreeInitial);
@@ -104,7 +104,7 @@ protected
 
 initial equation
   // Fixme: Disable it for shoebox model test
-  //assert(nPorts >= 2, "The FFD model requires at least two fluid connections.");
+  //assert(nPorts >= 2, "The CFD model requires at least two fluid connections.");
 
   if massDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial then
     if initialize_p then
