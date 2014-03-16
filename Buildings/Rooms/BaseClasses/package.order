@@ -31,3 +31,4 @@ cfdExchangeData
 cfdReceiveFeedback
 cfdSendStopCommand
 cfdStartCosimulation
+to_W
