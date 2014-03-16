@@ -28,9 +28,10 @@
 int cfdExchangeData(double t0, double dt, double *u, int nU, int nY,
                  double *t1, double *y) {
   int i, j, k, imax = 10000;
-  
+  int verbose = 0;
   printf("---------------------------------------------------\n");
   printf("exchangeData(): start to exchagne data at t=%f\n", t0);
+
   /*--------------------------------------------------------------------------
   | Write data to FFD
   | Command: 
@@ -63,50 +64,70 @@ int cfdExchangeData(double t0, double dt, double *u, int nU, int nY,
   // Copy the modelica data to shared memory
   for(i=0; i<cosim->para->nSur; i++) {
     cosim->modelica->temHea[i] = (float) u[i];
-    printf("temHea[%d] = %f\n", i, cosim->modelica->temHea[i]); 
+    if(verbose==1)
+      printf("temHea[%d] = %f\n", i, cosim->modelica->temHea[i]); 
   }
 
   if(cosim->para->sha==1)
     for(j=0; j<cosim->para->nConExtWin; j++) {
       cosim->modelica->shaConSig[j] = (float) u[i+j];
       cosim->modelica->shaAbsRad[j] = (float) u[i+j+cosim->para->nConExtWin];
-      printf("shaConSig[%d] = %f, shaAbsRad[%d] = %f\n", 
-             cosim->modelica->shaConSig[j],
-             cosim->modelica->shaAbsRad[j]);
+      if(verbose==1)
+        printf("shaConSig[%d] = %f, shaAbsRad[%d] = %f\n", 
+               cosim->modelica->shaConSig[j],
+               cosim->modelica->shaAbsRad[j]);
     }
   i = i + 2*cosim->para->nConExtWin;
   
   cosim->modelica->heaConvec = (float) u[i]; 
-  printf("heaConvec = %f\n", cosim->modelica->heaConvec);
+  if(verbose==1) printf("heaConvec = %f\n", cosim->modelica->heaConvec);
   i++;
   
   cosim->modelica->latentHeat = (float) u[i];
+  if(verbose==1) printf("latentHeat = %f\n", cosim->modelica->latentHeat);
   i++;
 
   cosim->modelica->p = (float) u[i];
+  if(verbose==1) printf("p = %f\n", cosim->modelica->p);
   i++;
  
   for(j=0; j<cosim->para->nPorts; j++) {
-    cosim->modelica->mFloRatPor[j] = (float) u[i+j];    
+    cosim->modelica->mFloRatPor[j] = (float) u[i+j];
+    if(verbose==1) 
+      printf("mFloRatPor[%d] = %f\n", j, cosim->modelica->mFloRatPor[j]);
     cosim->modelica->TPor[j] = (float) u[i+j+cosim->para->nPorts];
+    if(verbose==1) 
+      printf("TPor[%d] = %f\n", j, cosim->modelica->TPor[j]);
   }
 
   i = i + 2*cosim->para->nPorts;
   for(j=0; j<cosim->para->nPorts; j++)
-    for(k=0; k<cosim->para->nXi; k++)
+    for(k=0; k<cosim->para->nXi; k++) {
       cosim->modelica->XiPor[j][k] = (float) u[i+j*cosim->para->nXi+k];
+      if(verbose==1) 
+        printf("XiPor[%d][%d] = %f\n", j, k, cosim->modelica->XiPor[j][k]);
+    }
 
   i = i + cosim->para->nPorts*cosim->para->nXi;
   for(j=0; j<cosim->para->nPorts; j++)
-    for(k=0; k<cosim->para->nC; k++)
-    cosim->modelica->CPor[j][k] = (float) u[i+j*cosim->para->nC+k];
-
+    for(k=0; k<cosim->para->nC; k++) {
+      cosim->modelica->CPor[j][k] = (float) u[i+j*cosim->para->nC+k];
+      if(verbose==1) 
+        printf("CPor[%d][%d] = %f\n", j, k, cosim->modelica->CPor[j][k]);
+    }
+  
   // Set the flag to new data
   cosim->modelica->flag = 1;
-
+  if(verbose==1) {
+    printf("cosim->modelica->flag = %d\n", cosim->modelica->flag);
+  }
   /****************************************************************************
   | Copy data from CFD
   ****************************************************************************/
+  if(verbose==1) {
+    printf("Start to get cosim-ffd->flag.\n");
+  }
+
   // If the data is not ready or not updated, check again
   while(cosim->ffd->flag!=1) {
     if(cosim->para->ffdError==1) {
@@ -117,6 +138,9 @@ int cfdExchangeData(double t0, double dt, double *u, int nU, int nY,
       Sleep(1000);
   }
 
+  if(verbose==1) {
+    printf("Start to get FFD Data: cosim->ffd->flag = %f\n", cosim->ffd->flag);
+  }
   // Get the temperature/heat flux for solid surface
   for(i=0; i<cosim->para->nSur; i++) {
     y[i] = cosim->ffd->temHea[i];
@@ -160,7 +184,6 @@ int cfdExchangeData(double t0, double dt, double *u, int nU, int nY,
     y[i] = cosim->ffd->senVal[j];
     printf("y[%d]=%f\n", i, y[i]);
   }
-  //getchar();
 
   printf("\n FFD: \t\ttime=%f, status=%d\n", cosim->ffd->t, cosim->ffd->flag);
   printf("Modelica: \ttime=%f, status=%d\n", cosim->modelica->t, cosim->modelica->flag);
