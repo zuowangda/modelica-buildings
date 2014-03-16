@@ -20,13 +20,13 @@ partial model PartialRoom "Partial model for a room"
     "Number of exterior constructions withour a window";
   parameter Integer nConPar=0 "Number of partition constructions";
 
-  Buildings.Rooms.FFD roo(
+  Buildings.Rooms.CFD roo(
     redeclare package Medium = MediumA,
     nConBou=nConBou,
     nSurBou=nSurBou,
     nConExt=nConExt,
     sensorName={"Occupied zone air temperature","Velocity"},
-    useFFD=true,
+    useCFD=true,
     startTime=0,
     nConPar=nConPar,
     nConExtWin=nConExtWin,
