@@ -32,15 +32,15 @@
 ///\param nSur Number of surfaces
 ///\param nSen Number of sensors
 ///\param nConExtWin Number of exterior construction with windows
-///\param nC Number of trace substances
 ///\param nXi Number of species
+///\param nC Number of trace substances
 ///
 ///\return 0 if no error occurred
 ///////////////////////////////////////////////////////////////////////////////
 int cfdStartCosimulation(char *cfdFilNam, char **name, double *A, double *til, 
                 int *bouCon, int nPorts, char** portName, int haveSensor,
                 char **sensorName, int haveShade, int nSur, int nSen,
-                int nConExtWin, int nX, int nC) {
+                int nConExtWin, int nXi, int nC) {
   int i, nBou;
   /****************************************************************************
   | For call FFD-DLL
@@ -74,7 +74,7 @@ int cfdStartCosimulation(char *cfdFilNam, char **name, double *A, double *til,
   cosim->para->nPorts = nPorts;
   cosim->para->sha = haveShade;
   cosim->para->nC = nC;
-  cosim->para->nXi = nX;
+  cosim->para->nXi = nXi;
 
   nBou = nSur + nPorts;
 
@@ -132,14 +132,14 @@ int cfdStartCosimulation(char *cfdFilNam, char **name, double *A, double *til,
 
   cosim->modelica->XiPor = (float **) malloc(nPorts*sizeof(float *));
   cosim->ffd->XiPor = (float **) malloc(nPorts*sizeof(float *));
-  for(i=0; i<cosim->para->nXi; i++) {
+  for(i=0; i<nPorts; i++) {
     cosim->modelica->XiPor[i] = (float *) malloc(cosim->para->nXi*sizeof(float));
     cosim->ffd->XiPor[i] = (float *) malloc(cosim->para->nXi*sizeof(float));
   }
 
   cosim->modelica->CPor = (float **) malloc(nPorts*sizeof(float *));
   cosim->ffd->CPor = (float **) malloc(nPorts*sizeof(float *));
-  for(i=0; i<cosim->para->nC; i++) {
+  for(i=0; i<nPorts; i++) {
     cosim->modelica->CPor[i] = (float *) malloc(cosim->para->nC*sizeof(float));
     cosim->ffd->CPor[i] = (float *) malloc(cosim->para->nC*sizeof(float));
   }
