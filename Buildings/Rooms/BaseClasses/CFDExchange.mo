@@ -114,7 +114,7 @@ protected
         nSur,
         nSen,
         nConExtWin,
-        nXi=nXi,
+        nXi,
         nC);
     assert(coSimFlag < 0.5, "Could not start the cosimulation.");
 
