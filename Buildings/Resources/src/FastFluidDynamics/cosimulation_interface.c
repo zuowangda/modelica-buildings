@@ -347,15 +347,28 @@ int write_cosim_data(PARA_DATA *para, REAL **var) {
     else
       para->cosim->ffd->TPor[id] = para->bc->TPortMean[i]/para->bc->APort[i] 
                                  + 273.15;
-    sprintf(msg, "\t\t%s: %f[K]",
-            para->cosim->para->portName[id], para->cosim->ffd->TPor[id]);
+    sprintf(msg, "\t\t%s: TPor[%d]=%f",
+            para->cosim->para->portName[id], i, 
+            para->cosim->ffd->TPor[id]);
     ffd_log(msg, FFD_NORMAL);
     /*-------------------------------------------------------------------------
     | Assign the Xi
     -------------------------------------------------------------------------*/
+    if(para->outp->version==DEBUG) {
+      sprintf(msg, "\t\t\tn_Xi=%d, id=%d", para->bc->nb_Xi, id);
+      ffd_log(msg, FFD_NORMAL);
+    }
+
     for(j=0; j<para->bc->nb_Xi; j++) {
-      if(para->mytime->t==0) // Use inital Xi for Modelica
+      if(para->mytime->t==0) {// Use inital Xi for Modelica
+        if(para->outp->version==DEBUG) {
+          ffd_log("t=0, use default value", FFD_NORMAL);
+        }
         para->cosim->ffd->XiPor[id][j] = 0.0;
+        if(para->outp->version==DEBUG) {
+          ffd_log("\t\t\tAssigned the default value", FFD_NORMAL);
+        }
+      }
       else {
         para->bc->velPortMean[i] = abs(para->bc->velPortMean[i]) + SMALL;
         para->cosim->ffd->XiPor[id][j] = para->bc->XiPortMean[i][j] 
