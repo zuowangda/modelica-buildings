@@ -27,8 +27,8 @@ model CFDAirHeatMassBalance
   CFDExchange cfd(
     final cfdFilNam=cfdFilNam,
     final startTime=startTime,
-    final activateInterface=useFFD,
-    final samplePeriod=if useFFD then samplePeriod else Modelica.Constants.inf,
+    final activateInterface=useCFD,
+    final samplePeriod=if useCFD then samplePeriod else Modelica.Constants.inf,
     final uStart=uStart,
     final nWri=kFluIntC_inflow + Medium.nC*nPorts,
     final nRea=kSen + nSen,
