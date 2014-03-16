@@ -1,8 +1,7 @@
 CFDExchange
-HeatGain
 InfraredRadiationGainDistribution
 InfraredRadiationExchange
 MixedAirHeatMassBalance
 RadiationTemperature
 BaseClasses
-
+MixedAirHeatGain
