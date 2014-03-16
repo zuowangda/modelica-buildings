@@ -56,6 +56,8 @@ prob.Temp_Buoyancy 20.0 // Reference temperature for calucating bouyance force
 
 mytime.t_steady 100.0 //Necessary time for reaching the steady state from initial condition
  
+bc.nb_Xi 1 // Total number of species
+bc.C 0 // Total number of trace substances
 
 solv.solver GS // Solver type: GS, TDMA
 solv.check_residual 0 // 1: check, 0: donot check
