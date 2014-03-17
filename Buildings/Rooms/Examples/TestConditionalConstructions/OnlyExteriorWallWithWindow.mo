@@ -16,7 +16,7 @@ model OnlyExteriorWallWithWindow "Test model for room model"
                  each fFra=0.1,
                  til={Buildings.HeatTransfer.Types.Tilt.Floor, Buildings.HeatTransfer.Types.Tilt.Ceiling},
                  each azi=Buildings.HeatTransfer.Types.Azimuth.W)));
-   annotation(__Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Rooms/Examples/TestConditionalConstructionsMixedAir/OnlyExteriorWallWithWindow.mos"
+   annotation(__Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Rooms/Examples/TestConditionalConstructions/OnlyExteriorWallWithWindow.mos"
         "Simulate and plot"),
    Diagram(coordinateSystem(preserveAspectRatio=true, extent={{-100,-100},{
             200,160}})),

@@ -17,10 +17,10 @@ model OnlyConstructionBoundary "Test model for room model"
         origin={110,-70})));
 equation
   connect(TBou1.port, roo.surf_conBou) annotation (Line(
-      points={{100,-70},{70,-70},{70,-34}},
+      points={{100,-70},{70,-70},{70,-32}},
       color={191,0,0},
       smooth=Smooth.None));
-   annotation(__Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Rooms/Examples/TestConditionalConstructionsMixedAir/OnlyConstructionBoundary.mos"
+   annotation(__Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Rooms/Examples/TestConditionalConstructions/OnlyConstructionBoundary.mos"
         "Simulate and plot"),
       Diagram(coordinateSystem(preserveAspectRatio=true, extent={{-100,-100},{
             200,160}})),
