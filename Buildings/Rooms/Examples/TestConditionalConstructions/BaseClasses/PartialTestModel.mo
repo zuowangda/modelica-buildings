@@ -1,4 +1,4 @@
-within Buildings.Rooms.Examples.TestConditionalConstructionsMixedAir.BaseClasses;
+within Buildings.Rooms.Examples.TestConditionalConstructions.BaseClasses;
 partial model PartialTestModel
   "Partial model that is used to build the test cases"
   package MediumA = Buildings.Media.GasesPTDecoupled.MoistAirUnsaturated

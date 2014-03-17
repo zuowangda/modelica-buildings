@@ -1,6 +1,7 @@
-within Buildings.Rooms.Examples.TestConditionalConstructionsMixedAir;
+within Buildings.Rooms.Examples.TestConditionalConstructions;
 package BaseClasses "Package with base classes for Buildings.Rooms.Examples.TestConditionalConstructionsMixedAir"
   extends Modelica.Icons.BasesPackage;
+
 
 annotation (preferredView="info", Documentation(info="<html>
 <p>

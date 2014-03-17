@@ -1,4 +1,4 @@
-within Buildings.Rooms.Examples.TestConditionalConstructionsMixedAir;
+within Buildings.Rooms.Examples.TestConditionalConstructions;
 model OnlyExteriorWallNoWindow "Test model for room model"
   extends Modelica.Icons.Example;
   extends BaseClasses.PartialTestModel(

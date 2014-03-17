@@ -1,6 +1,7 @@
 within Buildings.Rooms.Examples;
-package TestConditionalConstructionsMixedAir "Package that tests if constructions can be conditionally removed"
+package TestConditionalConstructions "Package that tests if constructions can be conditionally removed"
   extends Modelica.Icons.ExamplesPackage;
+
 
 annotation (Documentation(info="<html>
 The thermal zone model 
@@ -26,4 +27,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-end TestConditionalConstructionsMixedAir;
+end TestConditionalConstructions;
