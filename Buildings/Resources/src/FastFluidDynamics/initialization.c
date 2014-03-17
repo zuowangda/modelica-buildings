@@ -332,6 +332,65 @@ int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX) {
                "cosimulaiton.", FFD_ERROR);
       return flag;
     }
+    
+    /*------------------------------------------------------------------------
+    | Perform the simulation for one step to update the FFD initial condition
+    ------------------------------------------------------------------------*/
+    flag = vel_step(para, var, BINDEX);
+    if(flag != 0) {
+      ffd_log("FFD_solver(): Could not solve velocity.", FFD_ERROR);
+      return flag;
+    }
+    else if(para->outp->version==DEBUG)
+      ffd_log("FFD_solver(): solved velocity step.", FFD_NORMAL);
+
+    flag = temp_step(para, var, BINDEX);
+    if(flag != 0) {
+      ffd_log("FFD_solver(): Could not solve temperature.", FFD_ERROR);
+      return flag;
+    }
+    else if(para->outp->version==DEBUG)
+      ffd_log("FFD_solver(): solved temperature step.", FFD_NORMAL);
+
+    flag = den_step(para, var, BINDEX);
+    if(flag != 0) {
+      ffd_log("FFD_solver(): Could not solve trace substance.", FFD_ERROR);
+      return flag;
+    }
+    else if(para->outp->version==DEBUG)
+      ffd_log("FFD_solver(): solved density step.", FFD_NORMAL);
+    
+    // Integrate the data on the boundary surface
+    flag = surface_integrate(para, var, BINDEX);
+    if(flag != 0) {
+      ffd_log("FFD_solver(): "
+        "Could not average the data on boundary.",
+        FFD_ERROR);
+      return flag;
+    }
+    else if (para->outp->version==DEBUG)
+      ffd_log("FFD_solver(): completed surface integration", 
+              FFD_NORMAL);
+
+    flag = add_time_averaged_data(para, var);
+    if(flag != 0) {
+      ffd_log("FFD_solver(): "
+        "Could not add the averaged data.",
+        FFD_ERROR);
+      return flag;
+    }
+    else if (para->outp->version==DEBUG)
+      ffd_log("FFD_solver(): completed time average", 
+              FFD_NORMAL);
+
+    // Average the FFD simulation data
+    flag = average_time(para, var);
+    if(flag != 0) {
+      ffd_log("FFD_solver(): Could not average the data over time.",
+        FFD_ERROR);
+      return flag;
+    }
+
     /*------------------------------------------------------------------------
     | Write the cosimulation data
     ------------------------------------------------------------------------*/

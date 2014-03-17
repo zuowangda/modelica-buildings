@@ -43,6 +43,11 @@
 #include "utility.h"
 #endif
 
+#ifndef _SOLVER_H
+#define _SOLVER_H
+#include "solver.h"
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 /// Initialize the parameters 
 ///
