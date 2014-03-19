@@ -552,15 +552,15 @@ Proc. of the 12th IBPSA Conference, p. 1096-1103. Sydney, Australia, November 20
 </html>"));
    end MixedAir;
 
-  class FFD
-    "Room model with air heat and mass balance computed using Fast Fluid Dynamics"
+  class CFD
+    "Room model with air heat and mass balance computed using Computational Fluid Dynamics"
     extends Modelica.Icons.Information;
   annotation (preferredView="info",
   Documentation(info="<html>
 <p>
-The model <a href=\"modelica://Buildings.Rooms.FFD\">Buildings.Rooms.FFD</a> is 
+The model <a href=\"modelica://Buildings.Rooms.CFD\">Buildings.Rooms.CFD</a> is 
 a room model in which the room air heat and mass balance is computed
-using the Fast Fluid Dynamics algorithm.
+using the Computational Fluid Dynamics algorithm.
 </p>
 <p>
 The model is identical with 
@@ -570,21 +570,21 @@ for the following points:
 </p>
 <ul>
 <li>
-The heat and mass balance of the air is computed using Fast Fluid Dynamics.
+The heat and mass balance of the air is computed using Computational Fluid Dynamics.
 </li>
 <li>
-To match surfaces and fluid ports between the Modelica model and the Fast Fluid Dynamics model,
+To match surfaces and fluid ports between the Modelica model and the CFD model,
 users must declare a unique name for each surface and for each fluid port.
-The same names must be used in the Fast Fluid Dynamics input file.
+The same names must be used in the Computational Fluid Dynamics input file.
 fixme: The names of the fluid ports are not yet implemented.
 </li>
 <li>
-To get access to properties of the cells of the Fast Fluid Dynamics simulation,
+To get access to properties of the cells of the CFD simulation,
 this model allows declaring a sensor using the parameter 
 <code>sensorName</code>.
 This parameter is an array of strings. The same strings must be used
-in the FFD input file when declaring the sensor in order to send the
-FFD results to the output signal of Modelica.
+in the CFD input file when declaring the sensor in order to send the
+CFD results to the output signal of Modelica.
 </li>
 <li>
 To link the fluid ports in Modelica to the boundary conditions of the CFD,
@@ -592,7 +592,7 @@ this model requires declaring names for the fluid ports
 <code>ports</code> using the parameter 
 <code>portName</code>.
 This parameter is an array of strings. The same strings must be used
-in the FFD input file when declaring the inlet and outlet boundary conditions.
+in the CFD input file when declaring the inlet and outlet boundary conditions.
 </li>
 </ul>
 <-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
@@ -611,7 +611,7 @@ The port <code>heaPorAir</code> contains the average room air temperature, defin
 <p>
 where <i>T<sub>a</sub></i> is the average room air temperature, <i>V</i> is the room air volume
 and <i>T(dV)</i> is the room air temperature in the control volume <i>dV</i>.
-The average room air temperature <i>T<sub>a</sub></i> is computed by the FFD program.
+The average room air temperature <i>T<sub>a</sub></i> is computed by the CFD program.
 </p>
 </li>
 <li>
@@ -621,7 +621,7 @@ proportional to its volume.
 </li>
 <li>
 The flow resistance of the diffusor or exhaust grill must be computed in the 
-Modelica HVAC system that is connected to the room model, because the FFD
+Modelica HVAC system that is connected to the room model, because the CFD
 program assumes the same total pressure at all fluid ports.
 </li>
 </ul>
@@ -636,9 +636,9 @@ we exchange <i>m<sub>e</sub> = 1 &frasl; &Delta; t &int;<sub>&Delta; t</sub> m(s
 <li>
 For the temperature, species concentration and trace substances of the fluid port, we exchange 
 <i>X = 1 &frasl; (m<sub>e</sub> &nbsp; &Delta; t) &int;<sub>&Delta; t</sub> m(s) &nbsp; X(s) dt</i>.
-Note that for the first implementation, FFD does only compute a bulk mass balance for <code>Xi</code>.
+Note that for the first implementation, CFD does only compute a bulk mass balance for <code>Xi</code>.
 It does not do a moisture balance for each cell.
-However, for trace substances <code>C</code>, FFD does a contaminant balance for each cell
+However, for trace substances <code>C</code>, CFD does a contaminant balance for each cell
 and return <code>C_outflow</code> to be the contaminant concentration of that cell.
 </li>
 <li>
@@ -653,18 +653,18 @@ we exchange <i>Q<sub>e</sub> = 1 &frasl; &Delta; t &int;<sub>&Delta; t</sub> Q(s
 <-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 <h4>Implementation</h4>
 <p>
-This section explains how the data exchange between Modelica and FFD is
+This section explains how the data exchange between Modelica and CFD is
 implemented.
 The section is only of interest to developers. Users may skip this section.
 </p>
 <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 <h5>Interface to Modelica models</h5>
 <p>
-Interfacing FFD with the Modelica room air heat and mass balance is done
+Interfacing CFD with the Modelica room air heat and mass balance is done
 in the model
-<a href=\"modelica://Buildings.Rooms.BaseClasses.AirHeatMassBalanceFFD\">
-Buildings.Rooms.BaseClasses.AirHeatMassBalanceFFD</a>
-To interface variables from Modelica and FFD, the following classes and
+<a href=\"modelica://Buildings.Rooms.BaseClasses.AirHeatMassBalanceCFD\">
+Buildings.Rooms.BaseClasses.AirHeatMassBalanceCFD</a>
+To interface variables from Modelica and CFD, the following classes and
 conventions are used in this model.
 </p>
 <ul>
@@ -693,7 +693,7 @@ propagated to the instance <code>cfd</code>, declares what
 type of boundary condition is used.
 </li>
 <li>
-The variables of the connector <code>ports</code> are exchanged with the FFD block
+The variables of the connector <code>ports</code> are exchanged with the CFD block
 through the instance <code>intFlu</code>. 
 This interface is implemented in 
 <a href=\"modelica://Buildings.Rooms.BaseClasses.CFDFluidInterface\">
@@ -714,19 +714,19 @@ For example, for moist air, <code>X_inflow</code> has one element which is equal
 relative to the total air mass and not the dry air.
 </li>
 <li>
-Output from the FFD block is a vector 
+Output from the CFD block is a vector 
 <code>[T_outflow[nPorts], X_outflow[nPorts*Medium.nXi], C_outflow[nPorts*Medium.nC]]</code>.
 The quantities <code>*_outflow</code> are the fluid properties of the cell to which the port is
 connected. 
 </li>
 <li>
 If <code>Medium.nXi=0</code> (e.g., for dry air) or <code>Medium.nC=0</code>, 
-then these signals are not present as input/output signals of the FFD block.
+then these signals are not present as input/output signals of the CFD block.
 </li>
 </ul>
 </ul>
 <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-<h5>Data exchange with FFD</h5>
+<h5>Data exchange with CFD</h5>
 <p>
 The data exchange with the CFD interface is done through the instance
 <code>cfd</code>, and implemented in
@@ -742,7 +742,7 @@ During the initialzation, the following data are sent from Modelica to CFD:
 An array of strings where each element is the name of the surface, 
 as declared by
 the user when instantiating the model
-<a href=\"Buildings.Rooms.FFD\">Buildings.Rooms.FFD</a>.
+<a href=\"Buildings.Rooms.CFD\">Buildings.Rooms.CFD</a>.
 Let us call this array <code>name</code>.
 The orders of elements in this array are as follows:
 <ol>
@@ -789,11 +789,11 @@ heat flow rate is sent from Modelica to CFD.
 <li>
 There is also an array <code>sensorName</code> that contains the names of all sensors,
 in the same order as they are declared when instantiating the model
-<a href=\"modelica://Buildings.Rooms.FFD\">
-Buildings.Rooms.FFD</a>.
+<a href=\"modelica://Buildings.Rooms.CFD\">
+Buildings.Rooms.CFD</a>.
 If no sensors are declared in Modelica, then this array will have zero elements.
 How many sensor are declared in Modelica can be checked through the variable <code>nSen</code>,
-which is sent from Modelica to FFD.
+which is sent from Modelica to CFD.
 </li>
 </ul>
 <p>
@@ -910,7 +910,7 @@ port <i>2</i> etc.
 </li>
 </ol>
 </html>"));
-  end FFD;
+  end CFD;
 
   annotation (preferredView="info",
   Documentation(info="<html>
