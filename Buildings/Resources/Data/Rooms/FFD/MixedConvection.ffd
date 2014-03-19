@@ -52,7 +52,7 @@ prob.movie 0 // Output data for making animation (1:yes, 0:no)
 prob.tur_model LAM // LAM, CHEN, CONSTANT
 prob.chen_a 0.03874 // Coefficeint of Chen's zero euqation turbulence model
 prob.Prt 0.9 // Turbulent Prandl number
-prob.Temp_Buoyancy 10.0 // Reference temperature for calucating bouyance force
+prob.Temp_Buoyancy 10.0 // Reference temperature for calculating bouyance force
 
 mytime.t_steady 100.0 //Necessary time for reaching the steady state from initial condition
  
