@@ -29,7 +29,6 @@
 int FFD_solver(PARA_DATA *para, REAL **var, int **BINDEX) {
   int step_total = para->mytime->step_total;
   REAL t_steady = para->mytime->t_steady;
-  int cal_mean = para->outp->cal_mean;
   double t_cosim;
   int flag, next;
 
@@ -195,8 +194,8 @@ int FFD_solver(PARA_DATA *para, REAL **var, int **BINDEX) {
                 FFD_NORMAL);
 
       // Start to record data for calculating mean velocity if needed
-      if(para->mytime->t>t_steady && cal_mean==0) {
-        cal_mean = 1;
+      if(para->mytime->t>t_steady && para->outp->cal_mean==0) {
+        para->outp->cal_mean = 1;
         flag = reset_time_averaged_data(para, var);
         if(flag != 0) {
           ffd_log("FFD_solver(): Could not reset averaged data.",
@@ -208,7 +207,7 @@ int FFD_solver(PARA_DATA *para, REAL **var, int **BINDEX) {
                    FFD_NORMAL);
       }   
 
-      if(cal_mean==1) {
+      if(para->outp->cal_mean==1) {
         flag = add_time_averaged_data(para, var);
         if(flag != 0) {
           ffd_log("FFD_solver(): Could not add the averaged data.",
