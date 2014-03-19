@@ -33,7 +33,7 @@ createPlot(id = 1,
  colors = {{0,0,255}});
 createPlot(id = 1,
  position = {0, 0, 2019, 266},
- y = {"TOut.T"},
+ y = {"TFlo.port.Q_flow", "TOthWal[1].port.Q_flow", "TOthWal[2].port.Q_flow"},
  range = {0.0, 1000.0, 8.0, 22.0},
  autoscale = true,
  autoerase = true,
@@ -41,11 +41,8 @@ createPlot(id = 1,
  description = false,
  grid = true,
  color = true,
- online = false,
  subPlot = 3,
  leftTitleType = 1,
- bottomTitleType = 1,
- colors = {{0,0,255}},
- markers = {MarkerStyle.None});
+ bottomTitleType = 1);
 
 
