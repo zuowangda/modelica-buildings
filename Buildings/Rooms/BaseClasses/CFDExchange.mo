@@ -14,7 +14,7 @@ block CFDExchange "Block that exchanges data with the CFD code"
     "Number of values to write to the CFD simulation";
   parameter Integer nRea(min=0)
     "Number of double values to be read from the CFD simulation";
-  parameter Integer flaWri[nWri]=ones(nWri)
+  parameter Integer flaWri[nWri] = ones(nWri)
     "Flag for double values (0: use current value, 1: use average over interval, 2: use integral over interval)";
   parameter Real uStart[nWri]
     "Initial input signal, used during first data transfer with CFD simulation";
@@ -341,7 +341,6 @@ initial algorithm
   // However, uWri is only used below in the body of the 'when'
   // block after it has been assigned.
   uWri := fill(0, nWri);
-
 equation
   for i in 1:nWri loop
     der(uInt[i]) = if (flaWri[i] > 0) then u[i] else 0;
@@ -353,8 +352,13 @@ algorithm
       if (flaWri[i] == 0) then
         uWri[i] := pre(u[i]);
       elseif (flaWri[i] == 1) then
-        uWri[i] := (uInt[i] - uIntPre[i])/samplePeriod;
+        if (time<startTime+0.1*samplePeriod) then
+           uWri[i] := pre(u[i]);
+           // Set the correct initial data
+        else
+           uWri[i] := (uInt[i] - uIntPre[i])/samplePeriod;
         // Average value over the sampling interval
+        end if;
       else
         uWri[i] := uInt[i] - uIntPre[i];
         // Integral over the sampling interval
@@ -440,7 +444,8 @@ Buildings.Rooms.UsersGuide.CFD</a>.
 <ul>
 <li>
 January 24, 2014, by Wangda Zuo:<br/>
-Enabled the transfer of Xi and X to CFD. 
+Enabled the transfer of Xi and X to CFD; Fixed the error of initial data exchange. 
+ 
 </li>
 <li>
 July 19, 2013, by Michael Wetter:<br/>
