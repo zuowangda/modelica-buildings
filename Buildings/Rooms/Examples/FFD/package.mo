@@ -1,19 +1,21 @@
 within Buildings.Rooms.Examples;
-package FFD "Package that tests the models for cosimulation with CFD"
+package FFD "Package that tests the models for coupled simulation with Fast Fluid Dynamics"
   extends Modelica.Icons.ExamplesPackage;
 
 
+
+
+
+
+
+
+
 annotation (Documentation(info="<html>
-The thermal zone model 
-<a href=\"Buildings.Rooms.FFD\">Buildings.Rooms.FFD</a>
-allows the conditional declaration of constructions for
-exterior walls without windows, for exterior walls with windows,
-for partition walls, for interior surfaces,
-and for interior surfaces.
-The models in this package test if the model is well-defined
-if such constructions are removed.
+The co-simulation of model
+<a href=\"Buildings.Rooms.CFD\">Buildings.Rooms.CFD</a> with the Fast Fluid Dynamics program is tested in this pacakge.
+Different cases with various boundary conditions are evaluated. 
 The models in this package do not represent realistic buildings, but
-are rather designed to test the thermal zone model.
+are rather designed to test the coupled simulation.
 </html>", revisions="<html>
 <ul>
 <li>

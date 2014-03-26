@@ -45,6 +45,10 @@ West wall: Fixed temperature at <i>T<sub>w</sub>=1</i> degC,
 North & South wall, Ceiling, Floor: Fixed heat flux at 0 W/m2.
 </li>
 </ul>
+<p align=\"center\">
+<img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/RayleighNumber.png\" border=\"1\"/>
+</p>
+<p align=\"left\">
 <p>
 More details of the case description can be found in 
 <a href=\"#ZUOEtAl2011\">Zuo et al. (2011)</a>.

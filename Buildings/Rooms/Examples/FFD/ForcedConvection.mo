@@ -61,8 +61,8 @@ equation
     Documentation(info="<html>
 <p>
 This model tests the co-simulation of 
-<a href=\"modelica://Buildings.Rooms.FFD\">
-Buildings.Rooms.FFD</a>
+<a href=\"modelica://Buildings.Rooms.CFD\">
+Buildings.Rooms.CFD</a>
 with the FFD program by simulating the ventilation with forced convection in an empty room.
 The following figure shows streamlines and contour of horizontal velocity U simulated by the FFD. 
 </p>
