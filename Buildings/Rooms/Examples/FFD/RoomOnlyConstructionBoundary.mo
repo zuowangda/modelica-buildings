@@ -49,9 +49,9 @@ equation
     Documentation(info="<html>
 <p>
 This model tests the cosimulation of 
-<a href=\"modelica://Buildings.Rooms.FFD\">
-Buildings.Rooms.FFD</a>
-with the FFD program by simulating the natural convection in a empty room with only construction boundary.
+<a href=\"modelica://Buildings.Rooms.CFD\">
+Buildings.Rooms.CFD</a>
+with the FFD program by simulating the natural convection in an empty room with only construction boundaries.
 </p>
 <p>
 The dimensions of the room are 1m x 1m x 1m.
