@@ -1,6 +1,6 @@
 within Buildings.Rooms.Examples.FFD;
 model RoomOnlyConstructionBoundary
-  "Natural convection in an empty room with only construction boundary"
+  "test model for natural convection in an empty room with only construction boundary"
   extends Modelica.Icons.Example;
   extends Buildings.Rooms.Examples.FFD.BaseClasses.PartialRoom(roo(datConBou(
         name={"East Wall","West Wall","North Wall","South Wall","Floor","Ceiling"},

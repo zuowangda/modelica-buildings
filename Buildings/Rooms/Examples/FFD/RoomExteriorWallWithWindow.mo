@@ -51,8 +51,8 @@ model RoomExteriorWallWithWindow
     Documentation(info="<html>
 <p>
 This model tests the cosimulation of 
-<a href=\"modelica://Buildings.Rooms.FFD\">
-Buildings.Rooms.FFD</a>
+<a href=\"modelica://Buildings.Rooms.CFD\">
+Buildings.Rooms.CFD</a>
 with the FFD program by simulating the natural convection in a room with only exterior walls and without windows.
 </p>
 </html>", revisions="<html>

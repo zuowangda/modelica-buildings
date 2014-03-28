@@ -1,5 +1,5 @@
 within Buildings.Rooms.Examples;
-package FFD "Package that tests the models for coupled simulation with Fast Fluid Dynamics"
+package FFD "Package that tests the models for coupled simulation between Modelica and the Fast Fluid Dynamics"
   extends Modelica.Icons.ExamplesPackage;
 
 

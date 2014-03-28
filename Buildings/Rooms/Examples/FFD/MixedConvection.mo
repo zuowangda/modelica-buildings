@@ -70,8 +70,8 @@ equation
     Documentation(info="<html>
 <p>
 This model tests the co-simulation of 
-<a href=\"modelica://Buildings.Rooms.FFD\">
-Buildings.Rooms.FFD</a>
+<a href=\"modelica://Buildings.Rooms.CFD\">
+Buildings.Rooms.CFD</a>
 with the FFD program by simulating the ventilation with mixed convection in an empty room.
 The temperature of floor is fixed at 30 degC and the temperature on other walls and ceiling are fixed at 10 degC.
 The supply air temperature is fixed at 10 degC. 
