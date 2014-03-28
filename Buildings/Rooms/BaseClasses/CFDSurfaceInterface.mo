@@ -1,7 +1,7 @@
 within Buildings.Rooms.BaseClasses;
 model CFDSurfaceInterface
  extends Buildings.BaseClasses.BaseIcon;
-  parameter Buildings.Rooms.Types.CFDBoundaryConditions bouCon 
+  parameter Buildings.Rooms.Types.CFDBoundaryConditions bouCon
     "Boundary condition used in the CFD simulation" annotation (Evaluate=true);
 
   Modelica.Blocks.Interfaces.RealInput Q_flow_in if
@@ -55,7 +55,7 @@ equation
     Documentation(info="<html>
 <p>
 This model is used to connect temperatures and heat flow rates between the 
-block that communicates with the fast fluid flow dynamic program
+block that communicates with the CFD program
 and the heat port of the model that encapsulates the air heat and mass balance.
 </p>
 </html>", revisions="<html>

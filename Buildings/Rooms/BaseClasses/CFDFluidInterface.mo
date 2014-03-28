@@ -197,7 +197,7 @@ equation
     Documentation(info="<html>
 <p>
 This model is used to connect the fluid port with
-the block that communicates with the fast fluid flow dynamic program.
+the block that communicates with the CFD program.
 </p>
 </html>", revisions="<html>
 <ul>

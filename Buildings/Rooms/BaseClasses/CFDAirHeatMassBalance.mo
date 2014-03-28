@@ -113,10 +113,10 @@ protected
       ASurBou=surBou.A,
       tilSurBou=surBou.til,
       bouConSurBou=surBou.boundaryCondition)
-    "Names of all surfaces in the order in which their properties are sent to FFD"
+    "Names of all surfaces in the order in which their properties are sent to CFD"
     annotation (Evaluate=true);
 
-  // Interfaces between the FFD block and the heat ports of this model
+  // Interfaces between the CFD block and the heat ports of this model
   // Here, we directly access datConExt instead of surIde. The reason is
   // the Dymola thinks that surIde.bouCon is not fixed at translation time
   // and then refuses to use this parameter to conditionally remove connectors
@@ -182,73 +182,73 @@ protected
     annotation (Placement(transformation(extent={{10,-198},{-10,-178}})));
 
   // The following list declares the first index minus 1
-  // of the input and output signals to the FFD block.
+  // of the input and output signals to the CFD block.
   // These parameters are then used to loop over the connectors, such
   // as
   //    for i in kConExt+1:kConExt+nConExt loop
   //      ...
   //    end for;
   final parameter Integer kConExt=0
-    "Offset used to connect FFD signals to conExt";
+    "Offset used to connect CFD signals to conExt";
   final parameter Integer kConExtWin=kConExt + nConExt
-    "Offset used to connect FFD signals to conExtWin";
+    "Offset used to connect CFD signals to conExtWin";
   final parameter Integer kGlaUns=kConExtWin + nConExtWin
-    "Offset used to connect FFD signals to glaUns";
+    "Offset used to connect CFD signals to glaUns";
   final parameter Integer kGlaSha=kGlaUns + nConExtWin
-    "Offset used to connect FFD signals to glaSha";
+    "Offset used to connect CFD signals to glaSha";
   final parameter Integer kConExtWinFra=if haveShade then kGlaSha + nConExtWin
-       else kGlaSha "Offset used to connect FFD signals to glaSha";
+       else kGlaSha "Offset used to connect CFD signals to glaSha";
   final parameter Integer kConPar_a=kConExtWinFra + nConExtWin
-    "Offset used to connect FFD signals to conPar_a";
+    "Offset used to connect CFD signals to conPar_a";
   final parameter Integer kConPar_b=kConPar_a + nConPar
-    "Offset used to connect FFD signals to conPar_b";
+    "Offset used to connect CFD signals to conPar_b";
   final parameter Integer kConBou=kConPar_b + nConPar
-    "Offset used to connect FFD signals to conBou";
+    "Offset used to connect CFD signals to conBou";
   final parameter Integer kSurBou=kConBou + nConBou
-    "Offset used to connect FFD signals to surBou";
+    "Offset used to connect CFD signals to surBou";
   final parameter Integer kHeaPorAir=kSurBou + nSurBou
-    "Offset used to connect FFD output signal to air heat port (to send average temperature from FFD to Modelica)";
+    "Offset used to connect CFD output signal to air heat port (to send average temperature from CFD to Modelica)";
   //  final parameter Integer kUSha = kHeaPorAir + 1
   final parameter Integer kUSha=kSurBou + nSurBou
-    "Offset used to connect FFD signals to input signal of shade";
+    "Offset used to connect CFD signals to input signal of shade";
   final parameter Integer kQRadAbs_flow=if haveShade then kUSha + nConExtWin
        else kUSha
-    "Offset used to connect FFD signals to input signal that contains the radiation absorbed by the shade";
-  // Because heaPorAir is only receiving T from FFD, but does not send Q_flow to FFD, there is no '+1' increment
+    "Offset used to connect CFD signals to input signal that contains the radiation absorbed by the shade";
+  // Because heaPorAir is only receiving T from CFD, but does not send Q_flow to CFD, there is no '+1' increment
   // for kTSha
   final parameter Integer kTSha=kHeaPorAir + 1
-    "Offset used to connect FFD signals to output signal that contains the shade temperature";
+    "Offset used to connect CFD signals to output signal that contains the shade temperature";
 
   final parameter Integer kQConGai_flow=if haveShade then kQRadAbs_flow +
       nConExtWin else kQRadAbs_flow
-    "Offset used to connect FFD signals to input signal for connect convective sensible heat gain";
+    "Offset used to connect CFD signals to input signal for connect convective sensible heat gain";
 
   final parameter Integer kQLatGai_flow=kQConGai_flow + 1
-    "Offset used to connect FFD signals to input signal for connect radiative heat gain";
+    "Offset used to connect CFD signals to input signal for connect radiative heat gain";
 
   final parameter Integer kFluIntP=kQLatGai_flow + 1
-    "Offset used to connect FFD signals to input signal for pressure from the fluid ports";
+    "Offset used to connect CFD signals to input signal for pressure from the fluid ports";
 
   final parameter Integer kFluIntM_flow=kFluIntP + 1
-    "Offset used to connect FFD signals to input signals for mass flow rate from the fluid ports";
+    "Offset used to connect CFD signals to input signals for mass flow rate from the fluid ports";
   final parameter Integer kFluIntT_inflow=kFluIntM_flow + nPorts
-    "Offset used to connect FFD signals to input signals for inflowing temperature from the fluid ports";
+    "Offset used to connect CFD signals to input signals for inflowing temperature from the fluid ports";
   final parameter Integer kFluIntXi_inflow=kFluIntT_inflow + nPorts
-    "Offset used to connect FFD signals to input signals for inflowing species concentration from the fluid ports";
+    "Offset used to connect CFD signals to input signals for inflowing species concentration from the fluid ports";
 
   final parameter Integer kFluIntC_inflow=kFluIntXi_inflow + nPorts*Medium.nXi
-    "Offset used to connect FFD signals to input signals for inflowing trace substances from the fluid ports";
+    "Offset used to connect CFD signals to input signals for inflowing trace substances from the fluid ports";
 
   // Input signals to fluInt block
   final parameter Integer kFluIntT_outflow=if haveShade then kTSha + nConExtWin
        else kTSha
-    "Offset used to connect FFD signals to outgoing temperature for the fluid ports";
+    "Offset used to connect CFD signals to outgoing temperature for the fluid ports";
   final parameter Integer kFluIntXi_outflow=kFluIntT_outflow + nPorts
-    "Offset used to connect FFD signals to outgoing species concentration for the fluid ports";
+    "Offset used to connect CFD signals to outgoing species concentration for the fluid ports";
   final parameter Integer kFluIntC_outflow=kFluIntXi_outflow + nPorts*Medium.nXi
-    "Offset used to connect FFD signals to outgoing trace substances for the fluid ports";
+    "Offset used to connect CFD signals to outgoing trace substances for the fluid ports";
   final parameter Integer kSen=kFluIntC_outflow + nPorts*Medium.nC
-    "Offset used to connect FFD signals to output sensor";
+    "Offset used to connect CFD signals to output sensor";
 
   final parameter Integer nSur=kSurBou + nSurBou "Number of surfaces";
 protected
@@ -269,15 +269,15 @@ protected
     // Declaration of counters used in the loop.
     // This could be computed (again) in this function, but using it
     // as a function arguments avoids code duplication.
-    input Integer kConExt "Offset used to connect FFD signals to conExt";
-    input Integer kConExtWin "Offset used to connect FFD signals to conExtWin";
-    input Integer kGlaUns "Offset used to connect FFD signals to glaUns";
-    input Integer kGlaSha "Offset used to connect FFD signals to glaSha";
-    input Integer kConExtWinFra "Offset used to connect FFD signals to glaSha";
-    input Integer kConPar_a "Offset used to connect FFD signals to conPar_a";
-    input Integer kConPar_b "Offset used to connect FFD signals to conPar_b";
-    input Integer kConBou "Offset used to connect FFD signals to conBou";
-    input Integer kSurBou "Offset used to connect FFD signals to surBou";
+    input Integer kConExt "Offset used to connect CFD signals to conExt";
+    input Integer kConExtWin "Offset used to connect CFD signals to conExtWin";
+    input Integer kGlaUns "Offset used to connect CFD signals to glaUns";
+    input Integer kGlaSha "Offset used to connect CFD signals to glaSha";
+    input Integer kConExtWinFra "Offset used to connect CFD signals to glaSha";
+    input Integer kConPar_a "Offset used to connect CFD signals to conPar_a";
+    input Integer kConPar_b "Offset used to connect CFD signals to conPar_b";
+    input Integer kConBou "Offset used to connect CFD signals to conBou";
+    input Integer kSurBou "Offset used to connect CFD signals to surBou";
 */
     // Declaration of construction data
     input String nameConExt[nConExt] "Surface name";
@@ -437,7 +437,7 @@ initial equation
   end for;
 equation
   //////////////////////////////////////////////////////////////////////
-  // Data exchange with FFD block
+  // Data exchange with CFD block
   if haveConExt then
     for i in 1:nConExt loop
       if datConExt[i].boundaryCondition == Buildings.Rooms.Types.CFDBoundaryConditions.Temperature then
@@ -719,7 +719,7 @@ equation
 
   // Output signals from fluInt block
 
-  // The pressure of the air volume will be sent from Modelica to FFD
+  // The pressure of the air volume will be sent from Modelica to CFD
   connect(cfd.u[kFluIntP + 1], fluInt.p) annotation (Line(
       points={{-42,190},{-60,190},{-60,-180},{-11,-180}},
       color={0,0,127},
@@ -749,7 +749,7 @@ equation
     end for;
   end for;
   // Input signals to fluInt block
-  // The pressures of ports[2:nPorts] will be sent from FFD to Modelica
+  // The pressures of ports[2:nPorts] will be sent from CFD to Modelica
   for i in 1:nPorts loop
     connect(cfd.y[kFluIntT_outflow + i], fluInt.T_outflow[i]) annotation (Line(
         points={{-19,190},{60,190},{60,-188},{12,-188}},
@@ -815,12 +815,12 @@ equation
           fillPattern=FillPattern.Sphere)}),
     Documentation(info="<html>
 <p>
-This model computes the heat and mass balance of the air using Fast Fluid Dynamics.
+This model computes the heat and mass balance of the air using Computational Fluid Dynamics program.
 </p>
 <p>
 For a documentation of the exchange parameters and variables, see
-<a href=\"modelica://Buildings.Rooms.UsersGuide.FFD\">
-Buildings.Rooms.UsersGuide.FFD</a>.
+<a href=\"modelica://Buildings.Rooms.UsersGuide.CFD\">
+Buildings.Rooms.UsersGuide.CFD</a>.
 </p>
 </html>", revisions="<html>
 <ul>

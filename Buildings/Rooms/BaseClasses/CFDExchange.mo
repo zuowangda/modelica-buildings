@@ -432,8 +432,7 @@ algorithm
             100,100}}), graphics),
     Documentation(info="<html>
 <p>
-This block samples interface variables and exchanges data with the fast fluid flow dynamics
-code.
+This block samples interface variables and exchanges data with the CFD code.
 </p>
 <p>
 For a documentation of the exchange parameters and variables, see
@@ -444,8 +443,7 @@ Buildings.Rooms.UsersGuide.CFD</a>.
 <ul>
 <li>
 January 24, 2014, by Wangda Zuo:<br/>
-Enabled the transfer of Xi and X to CFD; Fixed the error of initial data exchange. 
- 
+Enabled the transfer of Xi and X to CFD. 
 </li>
 <li>
 July 19, 2013, by Michael Wetter:<br/>
