@@ -6,7 +6,7 @@ model CFDAirHeatMassBalance
   parameter String cfdFilNam "CFD input file name"
     annotation (Dialog(__Dymola_loadSelector(caption="Select CFD input file")));
   parameter Boolean useCFD=true
-    "Set to false to deactivate the FFD interface and use instead yFixed as output"
+    "Set to false to deactivate the CFD interface and use instead yFixed as output"
     annotation (Evaluate=true);
 
   parameter Modelica.SIunits.Time samplePeriod(min=100*Modelica.Constants.eps)
@@ -23,7 +23,7 @@ model CFDAirHeatMassBalance
     "Names of sensors as declared in the CFD input file";
   parameter String portName[nPorts]
     "Names of fluid ports as declared in the CFD input file";
-  // fixme: for the cfd instance, need to correctly assign flaWri
+
   CFDExchange cfd(
     final cfdFilNam=cfdFilNam,
     final startTime=startTime,
@@ -40,7 +40,7 @@ model CFDAirHeatMassBalance
     final portName=portName,
     final yFixed=yFixed,
     final nXi=Medium.nXi,
-    final nC=Medium.nC) "Block that exchanges data with the FFD simulation"
+    final nC=Medium.nC) "Block that exchanges data with the CFD simulation"
     annotation (Placement(transformation(extent={{-40,180},{-20,200}})));
 
   Modelica.Blocks.Interfaces.RealOutput yCFD[nSen] if haveSensor
