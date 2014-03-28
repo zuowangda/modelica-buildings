@@ -182,6 +182,13 @@ int read_cosim_parameter(PARA_DATA *para, REAL **var, int **BINDEX) {
     return 1;
   }
 
+  /****************************************************************************
+  | Get the start time of co-simulation
+  ****************************************************************************/
+  para->mytime->t = para->cosim->modelica->t;
+  sprintf(msg, "read_cosim_parameter():Simulation starts at %fs", para->mytime->t);
+  ffd_log(msg, FFD_NORMAL);
+
   return 0;
 } // End of read_cosim_parameter()
 
