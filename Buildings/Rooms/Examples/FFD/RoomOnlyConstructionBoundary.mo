@@ -1,6 +1,6 @@
 within Buildings.Rooms.Examples.FFD;
 model RoomOnlyConstructionBoundary
-  "test model for natural convection in an empty room with only construction boundary"
+  "Test model for natural convection in an empty room with only construction boundary."
   extends Modelica.Icons.Example;
   extends Buildings.Rooms.Examples.FFD.BaseClasses.PartialRoom(roo(datConBou(
         name={"East Wall","West Wall","North Wall","South Wall","Floor","Ceiling"},
@@ -58,6 +58,12 @@ The dimensions of the room are 1m x 1m x 1m.
 The temperature of the east wall is set to 40 degC and the rest walls are 10 degC.
 The initial temperature of room air is 10 degC and it will increase due to the warm wall on the east.
 Two sensors are placed in the room center (0.5m, 0.5m, 0.5m) that measure the temperature and the velocity.
+</p>
+<p>
+The following figure shows the streamlines and temperature [degC] on the X-Z plane at Y=0.5m simulated by the FFD. 
+</p>
+<p align=\"center\">
+<img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/RoomOnlyConstructionBoundary.png\" border=\"1\"/>
 </p>
 </html>", revisions="<html>
 <ul>

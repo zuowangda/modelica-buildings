@@ -1,6 +1,6 @@
 within Buildings.Rooms.Examples.FFD;
 model RoomOnlyExteriorWallNoWindow
-  "Natural convection in an empty room with only exterior walls without windows"
+  "Natural convection in an empty room with only exterior walls without windows."
   extends Modelica.Icons.Example;
   extends Buildings.Rooms.Examples.FFD.BaseClasses.PartialRoom(
     nConExt=6,
@@ -33,6 +33,15 @@ This model tests the cosimulation of
 Buildings.Rooms.CFD</a>
 with the FFD program by simulating the natural convection in an empty room with only exterior walls and without windows.
 </p>
+<p>
+The following figure shows the streamlines and temperature [degC] on the X-Z plane at Y=0.5m simulated by the FFD.
+The walls are exposed to the ambient environment and the isolation is emtremely poor. 
+In the cold mid-night of Chicago, the temperature of ceiling is the lowest and the temperature of ground floor is the highest. 
+</p>
+<p align=\"center\">
+<img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/RoomOnlyExteriorWallNoWindow.png\" border=\"1\"/>
+</p>
+<p align=\"left\">
 </html>", revisions="<html>
 <ul>
 <li>

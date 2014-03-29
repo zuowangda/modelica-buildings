@@ -13,8 +13,8 @@ model RoomExteriorWallWithWindow
       nConExtWin=nConExtWin,
       datConExt(
         name={"North Wall","South Wall","Floor","Ceiling"},
-        layers={matLayExt,matLayExt,matLayExt,matLayExt},
         each A=1,
+        layers={matLayExt,matLayExt,matLayExt,matLayExt},
         til={Buildings.HeatTransfer.Types.Tilt.Wall,Buildings.HeatTransfer.Types.Tilt.Wall,
             Buildings.HeatTransfer.Types.Tilt.Floor,Buildings.HeatTransfer.Types.Tilt.Ceiling},
         boundaryCondition={Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,
@@ -32,7 +32,8 @@ model RoomExteriorWallWithWindow
         azi={Buildings.HeatTransfer.Types.Azimuth.E,Buildings.HeatTransfer.Types.Azimuth.W},
         boundaryCondition={Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,
             Buildings.Rooms.Types.CFDBoundaryConditions.Temperature}),
-      cfdFilNam="Resources/Data/Rooms/FFD/WallWindow.ffd"));
+      cfdFilNam="Resources/Data/Rooms/FFD/WallWindow.ffd",
+      T_start=283.15));
 
   parameter HeatTransfer.Data.OpaqueConstructions.Insulation100Concrete200 matLayExt
     "Construction material for exterior walls"
@@ -53,8 +54,17 @@ model RoomExteriorWallWithWindow
 This model tests the cosimulation of 
 <a href=\"modelica://Buildings.Rooms.CFD\">
 Buildings.Rooms.CFD</a>
-with the FFD program by simulating the natural convection in a room with only exterior walls and without windows.
+with the FFD program by simulating the natural convection in a room with only exterior walls and windows.
 </p>
+<p>
+The following figure shows the streamlines and temperature [degC] on the X-Z plane at Y=0.5m simulated by the FFD.
+The walls are exposed to the ambient environment. 
+Both the wall and window are well insulated and the initial temperature of wall and windows are 20 degC.
+</p>
+<p align=\"center\">
+<img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/RoomExteriorWallWithWindow.png\" border=\"1\"/>
+</p>
+<p align=\"left\">
 </html>", revisions="<html>
 <ul>
 <li>
