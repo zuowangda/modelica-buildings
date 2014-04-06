@@ -163,69 +163,9 @@ typedef struct {
   REAL  dy; // Length delta_y of one cell in y-direction for uniform grid only
   REAL  dz; // Length delta_z of one cell in z-direction for uniform grid only
   int   uniform; // Only for generating grid by FFD. 1: uniform grid; 0: non-uniform grid 
-
-  int   i1; // Fixme: May be deleted
-  int   i2;
-  int   i3;
-  int   i4;
-  int   i5;
-  int   i6;
-  int   i7;
-  int   i8;
-  int   i9;
-  int   i10;
-  int   i11;
-  int   i12;
-  int   i13;
-  int   i14;
-
-  REAL  x1; // Fixme: May be deleted
-  REAL  x2; 
-  REAL  x3;
-  REAL  x4; 
-  REAL  x5;
-  REAL  x6; 
-  REAL  x7;
-  REAL  x8; 
-  REAL  x9;
-  REAL  x10; 
-  REAL  x11;
-  REAL  x12;
-  REAL  x13;
-  REAL  x14; 
-
-  int   j1; // Fixme: May be deleted
-  int   j2;
-  int   j3;
-  int   j4;
-  int   j5;
-  int   j6;
-  int   j7;
-  int   j8;
-  int   j9;
-  int   j10;
-
-  REAL  y1; // Fixme: May be deleted
-  REAL  y2;
-  REAL  y3;
-  REAL  y4;
-  REAL  y5;
-  REAL  y6;
-  REAL  y7;
-  REAL  y8;
-  REAL  y9;
-  REAL  y10;
-
-  int   k1; // Fixme: May be deleted
-  int   k2;
-  int   k3;
-  int   k4;
-  REAL  z1;
-  REAL  z2;
-  REAL  z3;
-  REAL  z4;
 } GEOM_DATA;
 
+// Parameter for the data output control
 typedef struct{
   int cal_mean; // 1: Calculate mean value; 0: False
   REAL v_ref; // Reference velocity for visualization
