@@ -226,8 +226,8 @@ typedef struct {
   int nb_bc; // Number of boundaries, provided by SCI
   int nb_ConExtWin; // Nmber of exterior construction with windows
   int nb_port; // nPort = nInlet + nOutlet
-  int nb_Xi; // Number of species // Fixme: Not used
-  int nb_C; // Number of substances // Fixme: Not used
+  int nb_Xi; // Number of species
+  int nb_C; // Number of substances
   int sha; // 1: have shade ; 0: no shade 
   char **wallName; // *wallName[nb_wall]: Name of solid boundary (Wall, Window)
   char **inletName; // *inletName[nb_inlet]: Name of inlet boundary
