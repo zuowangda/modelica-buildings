@@ -906,7 +906,6 @@ int surface_integrate(PARA_DATA *para, REAL **var, int **BINDEX) {
     /*-------------------------------------------------------------------------
     | Outlet
     -------------------------------------------------------------------------*/
-    /*
     else if(var[FLAGP][IX(i,j,k)]==OUTLET) {
       if(para->outp->version==DEBUG) {
         sprintf(msg, "surface_integrate(): Set the outlet[%d, %d, %d]", 
@@ -922,11 +921,10 @@ int surface_integrate(PARA_DATA *para, REAL **var, int **BINDEX) {
       for(j=0; j<para->bc->nb_C; j++)
         para->bc->CPortAve[bcid][j] += var[C1+j][IX(i,j,k)] * A_tmp;
         
-    } */
+    } 
     /*-------------------------------------------------------------------------
     | Inlet
     -------------------------------------------------------------------------*/
-    /*
     else if(var[FLAGP][IX(i,j,k)]==INLET) {  
       if(para->outp->version==DEBUG) {
         sprintf(msg, "surface_integrate(): Set 0 for inlet [%d,%d,%d].", 
@@ -941,7 +939,7 @@ int surface_integrate(PARA_DATA *para, REAL **var, int **BINDEX) {
 
       for(j=0; j<para->bc->nb_C; j++)
         para->bc->CPortAve[bcid][j] = 0;
-    } */
+    } 
     
   } // End of for(it=0; it<para->geom->index; it++)
   
