@@ -76,8 +76,11 @@ West wall: Fixed temperature at 10 degC,
 North & South wall, Ceiling, Floor: Fixed heat flux at 0 W/m2. 
 </li>
 <li>
-
 </p>
+<p align=\"center\">
+<img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/RoomOnlySurfaceBoundary.png\" border=\"1\"/>
+</p>
+<p align=\"left\">
 </html>", revisions="<html>
 <ul>
 <li>
