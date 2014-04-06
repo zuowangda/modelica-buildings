@@ -774,8 +774,12 @@ int assign_port_bc(PARA_DATA *para, REAL **var, int **BINDEX) {
     k = BINDEX[2][it];
     id = BINDEX[4][it];
 
+    /*-------------------------------------------------------------------------
+    | Only treat those inlet and outlet boundaries
+    -------------------------------------------------------------------------*/
     if(var[FLAGP][IX(i,j,k)]==INLET || var[FLAGP][IX(i,j,k)]==OUTLET) {
-      if(para->bc->velPort[id]>0) { //Fixme: This conditon is not correct
+      // Set it to inlet if the flow velocity is positive or equal to 0
+      if(para->bc->velPort[id]>=0) {
         var[FLAGP][IX(i,j,k)] = INLET; 
         var[TEMPBC][IX(i,j,k)] = para->bc->TPort[id];
         if(i==0)
@@ -793,7 +797,7 @@ int assign_port_bc(PARA_DATA *para, REAL **var, int **BINDEX) {
         else if(k==kmax+1)
           var[VZBC][IX(i,j,k)] = -para->bc->velPort[id];
       }
-      // Set it to outlet if flow out of room
+      // Set it to outlet if the flow velocity is negative
       else
         var[FLAGP][IX(i,j,k)] = OUTLET;
     }

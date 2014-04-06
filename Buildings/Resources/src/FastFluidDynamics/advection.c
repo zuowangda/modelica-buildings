@@ -47,25 +47,41 @@
 int advect(PARA_DATA *para, REAL **var, int var_type, int index, 
            REAL *d, REAL *d0, int **BINDEX) {
   int flag;
+
+  /****************************************************************************
+  | Select different advection function according to the variables
+  ****************************************************************************/
   switch (var_type) {
+    /*-------------------------------------------------------------------------
+    | Velocity at x direction
+    -------------------------------------------------------------------------*/
     case VX:
       flag = trace_vx(para, var, var_type, d, d0, BINDEX);
       if(flag!=0)
         ffd_log("advect(): Failed in advection for X-velocity.",
                 FFD_ERROR);
       break;
+    /*-------------------------------------------------------------------------
+    | Velocity at y direction
+    -------------------------------------------------------------------------*/
     case VY:
       flag = trace_vy(para, var, var_type, d, d0, BINDEX);
       if(flag!=0)
         ffd_log("advect(): Failed in advection for Y-velocity.",
                 FFD_ERROR);
       break;
+    /*-------------------------------------------------------------------------
+    | Velocity at z direction
+    -------------------------------------------------------------------------*/
     case VZ:
       flag = trace_vz(para, var, var_type, d, d0, BINDEX);
       if(flag!=0)
         ffd_log("advect(): Failed in advection for Z-velocity.",
                 FFD_ERROR);
       break;
+    /*-------------------------------------------------------------------------
+    | Temperature, Trace and Species
+    -------------------------------------------------------------------------*/
     case TEMP:
     case TRACE:
     case SPECIE:
@@ -77,6 +93,9 @@ int advect(PARA_DATA *para, REAL **var, int var_type, int index,
         ffd_log(msg, FFD_ERROR);
       }
       break;
+    /*-------------------------------------------------------------------------
+    | Variables not available in the FFD
+    -------------------------------------------------------------------------*/
     default:
       flag = 1;
       sprintf(msg, "advect(): Advection function not defined for variable "
@@ -118,11 +137,14 @@ int trace_vx(PARA_DATA *para, REAL **var, int var_type, REAL *d, REAL *d0,
   REAL OL[3];
   int  OC[3];
 
+  /****************************************************************************
+  | Go through all the cells with VX
+  ****************************************************************************/
   FOR_U_CELL
     if(flagu[IX(i,j,k)]>=0) continue;
-    /*-----------------------------------------------------------------------
+    /*-------------------------------------------------------------------------
     | Step 1: Tracing Back
-    -----------------------------------------------------------------------*/
+    -------------------------------------------------------------------------*/
     // Get velocities at the location of VX
     u0 = u[IX(i,j,k)];
     v0 = (REAL) 0.5 
@@ -202,9 +224,9 @@ int trace_vx(PARA_DATA *para, REAL **var, int var_type, REAL *d, REAL *d0,
 
   END_FOR // End of loop for all cells
 
-  /*---------------------------------------------------------------------------
-  | define the b.c.
-  ---------------------------------------------------------------------------*/
+  /****************************************************************************
+  | define the boudnary condition
+  ****************************************************************************/
   set_bnd(para, var, var_type, 0, d, BINDEX);
 
   return 0;
@@ -280,8 +302,7 @@ int trace_vy(PARA_DATA *para, REAL **var, int var_type, REAL *d, REAL *d0,
     it=1;
 
     // Trace back more if the any of the trace is still in process 
-    while(COOD[X]==1 || COOD[Y] ==1 || COOD[Z] == 1)
-    {
+    while(COOD[X]==1 || COOD[Y] ==1 || COOD[Z] == 1) {
       it++;
       if(COOD[X]==1 && LOC[X]==1)
         set_x_location(para, var, flagv, x, u0, i, j, k, OL, OC, LOC, COOD); 
@@ -299,15 +320,13 @@ int trace_vy(PARA_DATA *para, REAL **var, int var_type, REAL *d, REAL *d0,
     } // End of while() loop
 
     // Set the coordinates of previous location if it is as boundary
-    if(u0>=0 && LOC[X] == 0) OC[X] -=1; 
-    if(v0>=0 && LOC[Y] == 0) OC[Y] -=1;
-    if(w0>=0 && LOC[Z] == 0) OC[Z] -=1;
+    if(u0>=0 && LOC[X]==0) OC[X] -= 1; 
+    if(v0>=0 && LOC[Y]==0) OC[Y] -= 1;
+    if(w0>=0 && LOC[Z]==0) OC[Z] -= 1;
 
-    // Fixme: Do not understand here. Should it be
-    // if(u0<0 && LOC[X] = 0) OC[X] += 1;
-    if(u0<0 && LOC[X]==1) OC[X] -=1;
-    if(v0<0 && LOC[Y]==1) OC[Y] -=1;
-    if(w0<0 && LOC[Z]==1) OC[Z] -=1;
+    if(u0<0 && LOC[X]==1) OC[X] -= 1;
+    if(v0<0 && LOC[Y]==1) OC[Y] -= 1;
+    if(w0<0 && LOC[Z]==1) OC[Z] -= 1;
             
     /*-------------------------------------------------------------------------
     | Interpolating for all variables
