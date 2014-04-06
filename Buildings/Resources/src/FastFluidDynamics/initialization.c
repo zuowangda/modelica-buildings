@@ -68,7 +68,6 @@ int initialize(PARA_DATA *para) {
 ///
 ///\return No return needed
 ///////////////////////////////////////////////////////////////////////////////
-// Fixme: Need to go through the entire data structure to ensure all parameters are given default value
 void set_default_parameter(PARA_DATA *para) {
   para->mytime->t  = 0.0;
   para->mytime->step_current = 0;
