@@ -331,7 +331,7 @@ int write_cosim_data(PARA_DATA *para, REAL **var) {
   if(para->cosim->para->sha==1) {
     ffd_log("\tTemperature of the shade:", FFD_NORMAL);
     for(i=0; i<para->cosim->para->nConExtWin; i++) {
-      //Fixme: The shade feature is to be implemented
+      //Note: The shade feature is to be implemented
       para->cosim->ffd->TSha[i] = 20 + 273.15; 
       sprintf(msg, "\t\tSurface %d: %f[K]\n",
               i, para->cosim->ffd->TSha[i]);
