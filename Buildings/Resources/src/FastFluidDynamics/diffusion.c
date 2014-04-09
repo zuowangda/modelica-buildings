@@ -294,7 +294,10 @@ int coef_diff(PARA_DATA *para, REAL **var, REAL *psi, REAL *psi0,
         ap0[IX(i,j,k)] = Dx*Dy*Dz/dt;
         b[IX(i,j,k)] = psi0[IX(i,j,k)]*ap0[IX(i,j,k)];
       END_FOR
-
+      
+      // Add the source terms
+      source_diff(para, var, var_type, index);
+      // Set boundary conditions
       set_bnd(para, var, var_type, index, psi, BINDEX);
 
       FOR_EACH_CELL
