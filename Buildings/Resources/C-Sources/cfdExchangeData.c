@@ -79,8 +79,8 @@ int cfdExchangeData(double t0, double dt, double *u, int nU, int nY,
     }
   i = i + 2*cosim->para->nConExtWin;
   
-  cosim->modelica->heaConvec = (float) u[i]; 
-  if(verbose==1) printf("heaConvec = %f\n", cosim->modelica->heaConvec);
+  cosim->modelica->sensibleHeat = (float) u[i]; 
+  if(verbose==1) printf("sensibleHeat = %f\n", cosim->modelica->sensibleHeat);
   i++;
   
   cosim->modelica->latentHeat = (float) u[i];
