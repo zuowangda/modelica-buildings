@@ -48,6 +48,11 @@
 #include "solver.h"
 #endif
 
+#ifndef _GEOMETRY_H
+#define _GEMOMETRY_H
+#include "geometry.h"
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 /// Initialize the parameters 
 ///

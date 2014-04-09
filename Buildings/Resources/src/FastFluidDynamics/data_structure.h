@@ -162,6 +162,7 @@ typedef struct {
   REAL  dx; // Length delta_x of one cell in x-direction for uniform grid only
   REAL  dy; // Length delta_y of one cell in y-direction for uniform grid only
   REAL  dz; // Length delta_z of one cell in z-direction for uniform grid only
+  REAL  volFlu; // Total volume of fluid cells
   int   uniform; // Only for generating grid by FFD. 1: uniform grid; 0: non-uniform grid 
 } GEOM_DATA;
 

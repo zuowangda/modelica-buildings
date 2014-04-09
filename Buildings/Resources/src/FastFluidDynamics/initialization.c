@@ -286,6 +286,11 @@ int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX) {
   }
 
   /****************************************************************************
+  | Pre-calculate data needed but not change in the simulation
+  ****************************************************************************/
+  para->geom->volFlu = fluid_volume(para, var);
+
+  /****************************************************************************
   | Set all the averaged data to 0
   ****************************************************************************/
   flag = reset_time_averaged_data(para, var);

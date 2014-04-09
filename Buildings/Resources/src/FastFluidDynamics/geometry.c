@@ -15,6 +15,32 @@
 #include "geometry.h"
 
 ///////////////////////////////////////////////////////////////////////////////
+/// Calculate total fluid volume in the space
+///
+///\param para Pointer to FFD parameters
+///\param var Pointer to FFD simulation variables
+///
+///\return Volume weighted average
+///////////////////////////////////////////////////////////////////////////////
+REAL fluid_volume(PARA_DATA *para, REAL **var) {
+  int imax = para->geom->imax, jmax = para->geom->jmax; 
+  int kmax = para->geom->kmax;
+  int i, j, k;
+  int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
+  REAL V = 0;
+
+  FOR_EACH_CELL
+    if(var[FLAGP][IX(i,j,k)]==FLUID) {
+      V += vol(para, var, i, j, k);
+    }
+    else 
+      continue;
+  END_FOR
+
+  return V;
+}// End of fluid_volume( )
+
+///////////////////////////////////////////////////////////////////////////////
 /// Calculate the volume of of control volume (i,j,k)
 ///
 ///\param para Pointer to FFD parameters

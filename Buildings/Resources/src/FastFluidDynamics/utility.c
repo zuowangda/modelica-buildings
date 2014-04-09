@@ -286,26 +286,26 @@ REAL average_volume(PARA_DATA *para, REAL **var, REAL *psi) {
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
   REAL tmp1 = 0, tmp2 = 0, tmp3 = 0;
 
-
-  FOR_EACH_CELL
-    if(var[FLAGP][IX(i,j,k)]==FLUID) {
-      tmp1 = vol(para, var, i, j, k);
-      tmp2 += psi[IX(i,j,k)]*tmp1;
-      tmp3 += tmp1;
-    }
-    else 
-      continue;
-  END_FOR
-  
-  if(tmp3==0)
+  if (para->geom->volFlu==0)
     return 0;
-  else
-    return tmp2 / tmp3;
+  else {
+    FOR_EACH_CELL
+      if(var[FLAGP][IX(i,j,k)]==FLUID) {
+        tmp1 = vol(para, var, i, j, k);
+        tmp2 += psi[IX(i,j,k)]*tmp1;
+      }
+      else 
+        continue;
+    END_FOR
+
+    return tmp2 / para->geom->volFlu;
+  }
+
 }// End of average_volume( )
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Calcuate time averaged value
-///
 ///
 ///\param para Pointer to FFD parameters
 ///\param var Pointer to FFD simulation variables
