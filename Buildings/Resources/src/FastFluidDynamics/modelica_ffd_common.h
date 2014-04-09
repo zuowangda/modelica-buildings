@@ -40,16 +40,14 @@ typedef struct {
   float *temHea; // temHea[nSur]: Temperature or heat flow rate depending on surBou.bouCon
   float heaConvec; // Convective heat input into the room
   float latentHeat; // Latent heat input into the room
-  float *shaConSig; // shaConSig[nConExtWin]. 
+  float *shaConSig; // shaConSig[nConExtWin], valid only when there is a shade 
                     // 0: shade not deployed; 1: shade completely deployed
-                    // Fixme: how to know if it has shade?
   float *shaAbsRad; // shaAbsRad[nConExtWin]: Radiation absorbed by shades
   float p; // Room average static pressure
   float *mFloRatPor; // mFloRatPor[nPorts]: Mass flow rates into the room
                       // positive: into the room; neative out of the room
-  float *TPor; // TPor[nPorts] Air temperatures that the medium has if it were flowing into the room
-              // Fixme: Will the element exist if not flowing into the room? 
-              // Fixme: what will it be if not flowing into the room?
+  float *TPor; // TPor[nPorts] Air temperatures of the medium 
+               // flowing through the inlet and outlet
   float **XiPor; // XiPor[nPorts][Medium.nXi]: species concentration of inflowing medium at the port
              // First Medium.nXi elements are for port 1
   float **CPor; // CPor[nPorts][Medium.nC]: the trace substances of the inflowing medium

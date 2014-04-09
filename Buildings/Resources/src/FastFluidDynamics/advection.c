@@ -444,8 +444,7 @@ int trace_vz(PARA_DATA *para, REAL **var, int var_type, REAL *d, REAL *d0,
     if(u0>=0 && LOC[X] == 0) OC[X] -=1;
     if(v0>=0 && LOC[Y] == 0) OC[Y] -=1;
     if(w0>=0 && LOC[Z] == 0) OC[Z] -=1;
-    // Fixme: Do not understand here. Should it be
-    // if(u0<0 && LOC[X] = 0) OC[X] += 1;
+
     if(u0<0 && LOC[X]==1) OC[X] -=1;
     if(v0<0 && LOC[Y]==1) OC[Y] -=1;
     if(w0<0 && LOC[Z]==1) OC[Z] -=1;
@@ -557,8 +556,7 @@ int trace_scalar(PARA_DATA *para, REAL **var, int var_type, int index,
     if(u0>=0 && LOC[X]==0) OC[X] -=1;
     if(v0>=0 && LOC[Y]==0) OC[Y] -=1;
     if(w0>=0 && LOC[Z]==0) OC[Z] -=1;
-    // Fixme: Do not understand here. Should it be
-    // if(u0<0 && LOC[X] = 0) OC[X] += 1;
+
     if(u0<0 && LOC[X]==1) OC[X] -=1;
     if(v0<0 && LOC[Y]==1) OC[Y] -=1;
     if(w0<0 && LOC[Z]==1) OC[Z] -=1;
