@@ -31,7 +31,7 @@ model MixedConvection "Ventilation with mixed convection in an empty room"
   Fluid.Sources.FixedBoundary bouOut(nPorts=1, redeclare package Medium =
         MediumA)
     annotation (Placement(transformation(extent={{0,-10},{20,10}})));
-  Fluid.Sources.MassFlowSource_T bounIn(
+  Fluid.Sources.MassFlowSource_T bouIn(
     nPorts=1,
     redeclare package Medium = MediumA,
     m_flow=0.1,
@@ -49,7 +49,7 @@ equation
       smooth=Smooth.None));
   end for;
 
-    connect(bounIn.ports[1], roo.ports[1]) annotation (Line(
+  connect(bouIn.ports[1], roo.ports[1]) annotation (Line(
       points={{20,30},{51,30}},
       color={0,127,255},
       smooth=Smooth.None));
