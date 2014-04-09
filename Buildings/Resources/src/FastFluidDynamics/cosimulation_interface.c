@@ -349,10 +349,7 @@ int write_cosim_data(PARA_DATA *para, REAL **var) {
     /*-------------------------------------------------------------------------
     | Assign the temperature
     -------------------------------------------------------------------------*/
-    //if(para->mytime->t==0) // Use initial T for Modelica
-    //  para->cosim->ffd->TPor[id] = para->init->T + 273.15;
-    //else
-      para->cosim->ffd->TPor[id] = para->bc->TPortMean[i]/para->bc->APort[i] 
+    para->cosim->ffd->TPor[id] = para->bc->TPortMean[i]/para->bc->APort[i] 
                                  + 273.15;
     sprintf(msg, "\t\t%s: TPor[%d]=%f",
             para->cosim->para->portName[id], i, 
@@ -367,20 +364,10 @@ int write_cosim_data(PARA_DATA *para, REAL **var) {
     }
 
     for(j=0; j<para->bc->nb_Xi; j++) {
-      //if(para->mytime->t==0) {// Use inital Xi for Modelica
-      //  if(para->outp->version==DEBUG) {
-      //    ffd_log("t=0, use default value", FFD_NORMAL);
-      //  }
-      //  para->cosim->ffd->XiPor[id][j] = 0.0;
-     //   if(para->outp->version==DEBUG) {
-     //     ffd_log("\t\t\tAssigned the default value", FFD_NORMAL);
-     //   }
-     // }
-     // else {
-        para->bc->velPortMean[i] = abs(para->bc->velPortMean[i]) + SMALL;
-        para->cosim->ffd->XiPor[id][j] = para->bc->XiPortMean[i][j] 
-                                       / para->bc->velPortMean[i];
-     // }
+      para->bc->velPortMean[i] = abs(para->bc->velPortMean[i]) + SMALL;
+      para->cosim->ffd->XiPor[id][j] = para->bc->XiPortMean[i][j] 
+                                      / para->bc->velPortMean[i];
+
       sprintf(msg, "\t\t%s: Xi[%d]=%f",
               para->cosim->para->portName[id], j, 
               para->cosim->ffd->XiPor[id][j]);
@@ -390,13 +377,9 @@ int write_cosim_data(PARA_DATA *para, REAL **var) {
     | Assign the C
     -------------------------------------------------------------------------*/
     for(j=0; j<para->bc->nb_C; j++) {
-      //if(para->mytime->t==0) // Use inital Xi for Modelica
-      //  para->cosim->ffd->CPor[id][j] = 0.0;
-      //else {
-        para->bc->velPortMean[i] = abs(para->bc->velPortMean[i]) + SMALL;
-        para->cosim->ffd->CPor[id][j] = para->bc->CPortMean[i][j]
-                                      / para->bc->velPortMean[i]; 
-     // }
+      para->bc->velPortMean[i] = abs(para->bc->velPortMean[i]) + SMALL;
+      para->cosim->ffd->CPor[id][j] = para->bc->CPortMean[i][j]
+                                    / para->bc->velPortMean[i]; 
       sprintf(msg, "\t\t%s: C[%d]=%f",
               para->cosim->para->portName[id], j, 
               para->cosim->ffd->CPor[id][j]);
@@ -413,21 +396,14 @@ int write_cosim_data(PARA_DATA *para, REAL **var) {
 
     // Set the B.C. Temperature
     if(para->cosim->para->bouCon[id]==2) {
-      //if(para->mytime->t==0) // Use initial T for Modelica
-      //  para->cosim->ffd->temHea[id] = para->init->T + 273.15;
-      //else {
-        para->cosim->ffd->temHea[id] = para->bc->temHeaMean[i] 
-                                   / para->bc->AWall[i] + 273.15;
-      //}
+      para->cosim->ffd->temHea[id] = para->bc->temHeaMean[i] 
+                                  / para->bc->AWall[i] + 273.15;
       sprintf(msg, "\t\t%s: %f[K]",
               para->cosim->para->name[id], para->cosim->ffd->temHea[id]);
     }
     // Set the heat flux
     else {
-      //if(para->mytime->t==0)
-      //  para->cosim->ffd->temHea[id] = 0;
-      //else
-        para->cosim->ffd->temHea[id] = para->bc->temHeaMean[i];
+      para->cosim->ffd->temHea[id] = para->bc->temHeaMean[i];
       sprintf(msg, "\t\t%s: %f[W]",
               para->cosim->para->name[id], para->cosim->ffd->temHea[id]);
     }

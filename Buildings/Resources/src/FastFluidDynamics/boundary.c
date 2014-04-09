@@ -798,7 +798,6 @@ int mass_conservation(PARA_DATA *para, REAL **var, int **BINDEX) {
     i = BINDEX[0][it];
     j = BINDEX[1][it];
     k = BINDEX[2][it];
-    // Fixme: Adding or substracting velocity may cause change in flow direction
     if(flagp[IX(i,j,k)]==2) {
       if(i==0) u[IX(i,j,k)] -= dvel;
       if(i==imax+1) u[IX(i-1,j,k)]+= dvel;
