@@ -34,11 +34,6 @@ int initialize(PARA_DATA *para) {
     return 1;
   }
 
-  // Fixme: We may delete these 3 lines
-  para->geom->dx = para->geom->Lx / (para->geom->imax);
-  para->geom->dy = para->geom->Ly / (para->geom->jmax);
-  para->geom->dz = para->geom->Lz / (para->geom->kmax);
-
   /*---------------------------------------------------------------------------
   | Output the help information 
   ---------------------------------------------------------------------------*/
