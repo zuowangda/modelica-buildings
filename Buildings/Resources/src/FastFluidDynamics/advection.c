@@ -204,8 +204,14 @@ int trace_vx(PARA_DATA *para, REAL **var, int var_type, REAL *d, REAL *d0,
     if(v0>0 && LOC[Y]==0) OC[Y] -=1;
     if(w0>0 && LOC[Z]==0) OC[Z] -=1;
 
-    // Fixme: Do not understand here. Should it be
-    // if(u0<0 && LOC[X] = 0) OC[X] += 1;
+    // LOC=1 means that traced back point hits boundary.
+    // When u is less than zero, the traced back point is towards west. 
+    // When it hits the boundary, according to the code, 
+    // the east cell of west boundary will be given as the traced back location
+    // and the index (OC) is also marching on one cell. 
+    // This means that the index and traced back location are on same cell. 
+    // That is why the index needs to move backward for one cell 
+    // in order to do interpolation.
     if(u0<0 && LOC[X]==1) OC[X] -=1; 
     if(v0<0 && LOC[Y]==1) OC[Y] -=1;
     if(w0<0 && LOC[Z]==1) OC[Z] -=1;
