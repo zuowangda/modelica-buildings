@@ -128,7 +128,6 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
   fscanf(file_params,"\n");
 
   // Store the locations of grid cell surfaces
-  // Fixme: use one "temp", not tempx tempy and tempz
   tempx = 0.0; tempy = 0.0; tempz = 0.0;
   for(i=0; i<=imax+1; i++) {
     tempx += delx[i];
@@ -379,7 +378,7 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
             BINDEX[4][index] = para->bc->nb_inlet + i;
             index++;
 
-            // Fixme: Why assign TMP, U, V, W for oulet B.C?
+            // Give the initial value, but the value will be overwritten later
             var[TEMPBC][IX(ii,ij,ik)] = TMP;
             var[VXBC][IX(ii,ij,ik)] = U; 
             var[VYBC][IX(ii,ij,ik)] = V; 
@@ -785,7 +784,7 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
 
   /*****************************************************************************
   | Read the boundary conditions for contaminant source
-  | Fixme: The data is ignored in current version
+  | Warning: The data is ignored in current version
   *****************************************************************************/
   fgets(string, 400, file_params);
   sscanf(string,"%d", &para->bc->nb_source); 
@@ -802,7 +801,7 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
     ffd_log(msg, FFD_WARNING);
     sprintf(msg, "read_sci_input(): Xi_dot=%f", MASS);
     ffd_log(msg, FFD_NORMAL);
-    // Fixme:Need to add code to assign the BC value as other part does
+    //Warning: Need to add code to assign the BC value as other part does
   }
 
   para->geom->index=index;
