@@ -38,7 +38,7 @@ typedef struct {
   int flag; // To control the data exhcange. 0: old data, 1: new data; -1: Stop cosimulation
   float dt; // Time step size for next synchronization
   float *temHea; // temHea[nSur]: Temperature or heat flow rate depending on surBou.bouCon
-  float heaConvec; // Convective heat input into the room
+  float sensibleHeat; // Convective sensible heat input into the room
   float latentHeat; // Latent heat input into the room
   float *shaConSig; // shaConSig[nConExtWin], valid only when there is a shade 
                     // 0: shade not deployed; 1: shade completely deployed

@@ -597,9 +597,11 @@ int compare_boundary_area(PARA_DATA *para, REAL **var, int **BINDEX) {
 ///////////////////////////////////////////////////////////////////////////////
 int assign_thermal_bc(PARA_DATA *para, REAL **var, int **BINDEX) {
   int i, j, k, it, id, modelicaId;
-  int imax = para->geom->imax, jmax = para->geom->jmax;
+  int imax = para->geom->imax, jmax = para->geom->jmax,
+      kmax = para->geom->kmax;
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
-  REAL *temHea;
+  REAL sensibleHeat=para->cosim->modelica->sensibleHeat;
+  REAL *temHea, celVol;
 
   /****************************************************************************
   | Assign the boundary conditon if there is a solid surface
@@ -678,6 +680,19 @@ int assign_thermal_bc(PARA_DATA *para, REAL **var, int **BINDEX) {
   else
     ffd_log("assign_thermal_bc(): No solid surfaces:", FFD_NORMAL);
 
+  /****************************************************************************
+  | Calculate heat injected into the space
+  ****************************************************************************/
+  sprintf(msg, "Convective sensible heat received by FFD is %f", 
+                sensibleHeat);
+  ffd_log(msg, FFD_NORMAL);
+
+  FOR_EACH_CELL
+    if (var[FLAGP][IX(i,j,k)]==FLUID){
+       celVol = vol(para, var, i, j, k);
+       var[TEMPS][IX(i,j,k)] = sensibleHeat * celVol / para->geom->volFlu;
+    }
+  END_FOR
   return 0;
 } // End of assign_thermal_bc()
 
