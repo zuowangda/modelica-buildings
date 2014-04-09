@@ -3,13 +3,6 @@ package FFD "Package that tests the models for coupled simulation between Modeli
   extends Modelica.Icons.ExamplesPackage;
 
 
-
-
-
-
-
-
-
 annotation (Documentation(info="<html>
 <p>
 The coupled simulation of model

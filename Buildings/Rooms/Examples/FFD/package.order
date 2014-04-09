@@ -6,3 +6,5 @@ RoomOnlySurfaceBoundary
 RayleighNumber
 ForcedConvection
 MixedConvection
+MixedConvectionWithControl
+RayleighNumberWithControl
