@@ -4,12 +4,12 @@
 ///
 /// \brief  Some frequently used functions for FFD 
 ///
-/// \author Mingang Jin, Qingyan Chen
-///         Purdue University
-///         Jin55@purdue.edu, YanChen@purdue.edu
-///         Wangda Zuo
+/// \author Wangda Zuo, Ana Cohen
 ///         University of Miami
 ///         W.Zuo@miami.edu
+///         Purdue University
+///         Mingang Jin, Qingyan Chen
+///         Jin55@purdue.edu, YanChen@purdue.edu
 ///
 /// \date   8/3/2013
 ///
@@ -462,7 +462,7 @@ int add_time_averaged_data(PARA_DATA *para, REAL **var) {
 REAL qwall(PARA_DATA *para, REAL **var,int **BINDEX) {
   int i, j, k;
   int it;
-  int index=para->geom->index;
+  int index = para->geom->index;
   int imax = para->geom->imax, jmax = para->geom->jmax;
   int kmax = para->geom->kmax;
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
@@ -473,19 +473,19 @@ REAL qwall(PARA_DATA *para, REAL **var,int **BINDEX) {
 
   REAL *flagp = var[FLAGP];
 
-  for(it=0;it<index;it++) {
+  for(it=0; it<index; it++) {
     i=BINDEX[0][it];
     j=BINDEX[1][it];
     k=BINDEX[2][it];
 
-    if(flagp[IX(i,j,k)]==1)	{
-		  if(i==0) {
-			  if(flagp[IX(i+1,j,k)]<0) {
+    if(flagp[IX(i,j,k)]==1) {
+      if(i==0) {
+        if(flagp[IX(i+1,j,k)]<0) {
           qwall += (psi[IX(i,j,k)]-psi[IX(i+1,j,k)])*coeff_h
                 *(gy[IX(i,j,k)]-gy[IX(i,j-1,k)])*(gz[IX(i,j,k)]-gz[IX(i,j,k-1)]);
         }
-			}
-			else if(i==imax+1) {
+      }
+      else if(i==imax+1) {
 	      if(flagp[IX(i-1,j,k)]<0) { 
           qwall += (psi[IX(i,j,k)]-psi[IX(i-1,j,k)])*coeff_h
                 *(gy[IX(i,j,k)]-gy[IX(i,j-1,k)])*(gz[IX(i,j,k)]-gz[IX(i,j,k-1)]);
@@ -536,17 +536,17 @@ REAL qwall(PARA_DATA *para, REAL **var,int **BINDEX) {
           qwall += (psi[IX(i,j,k)]-psi[IX(i,j,k-1)])*coeff_h
                 *(gy[IX(i,j,k)]-gy[IX(i,j-1,k)])*(gx[IX(i,j,k)]-gx[IX(i-1,j,k)]);
         } 
-				}
-			else {
-			  if(flagp[IX(i,j,k+1)]<0) {
+      }
+      else {
+        if(flagp[IX(i,j,k+1)]<0) {
           qwall += (psi[IX(i,j,k)]-psi[IX(i,j,k+1)])*coeff_h
                 *(gy[IX(i,j,k)]-gy[IX(i,j-1,k)])*(gx[IX(i,j,k)]-gx[IX(i-1,j,k)]);
         } 
-				if(flagp[IX(i,j,k-1)]<0) {
+        if(flagp[IX(i,j,k-1)]<0) {
           qwall += (psi[IX(i,j,k)]-psi[IX(i,j,k-1)])*coeff_h
                 *(gy[IX(i,j,k)]-gy[IX(i,j-1,k)])*(gx[IX(i,j,k)]-gx[IX(i-1,j,k)]);
-        }					
-			}
+        }
+      }
     }
   }
 
@@ -623,3 +623,104 @@ void free_data(REAL **var) {
   if(var[QFLUX])  free(var[QFLUX]);
 
 } // End of free_data()
+
+///////////////////////////////////////////////////////////////////////////////
+/// Determine the maximum value of given scalar variable
+///
+///\param para Pointer to FFD parameters
+///\param dat Pointer to scalar variable
+///
+///\return Smax Maximum value of the scalar variable
+///////////////////////////////////////////////////////////////////////////////
+REAL scalar_global_max(PARA_DATA *para, REAL *dat) {
+  int i, j, k;  
+  int imax = para->geom->imax, jmax = para->geom->jmax;
+  int kmax = para->geom->kmax;
+  int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
+  REAL Smax;
+
+  Smax = dat[IX(1,1,1)];
+
+  FOR_ALL_CELL
+    Smax = Smax > dat[IX(i,j,k)] ? Smax : dat[IX(i,j,k)];
+  END_FOR   
+
+  return Smax;
+} // End of scalar_global_max()
+
+///////////////////////////////////////////////////////////////////////////////
+/// Determine the minimum value of given scalar variable
+///
+///\param para Pointer to FFD parameters
+///\param dat Pointer to scalar variable
+///
+///\return Smin Minimum value of the scalar variable
+///////////////////////////////////////////////////////////////////////////////
+REAL scalar_global_min(PARA_DATA *para, REAL *dat) {
+  int i, j, k;  
+  int imax = para->geom->imax, jmax = para->geom->jmax;
+  int kmax = para->geom->kmax;  
+  int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
+  REAL SMin;
+  
+  SMin = dat[IX(1,1,1)];   
+  
+  FOR_ALL_CELL    
+    SMin = SMin < dat[IX(i,j,k)] ? SMin : dat[IX(i,j,k)];  
+  END_FOR   
+
+  return SMin;
+} // End of scalar_global_min()
+
+///////////////////////////////////////////////////////////////////////////////
+/// Determine the maximum velocity
+///
+///\param para Pointer to FFD parameters
+///\param var Pointer to FFD simulation variables
+///
+///\return Vmax Maximum velocity in the simulated domain
+///////////////////////////////////////////////////////////////////////////////
+REAL V_global_max(PARA_DATA *para, REAL **var) {
+  int i, j, k;  
+  int imax = para->geom->imax, jmax = para->geom->jmax;
+  int kmax = para->geom->kmax;
+  int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
+  REAL *u = var[VX], *v = var[VY], *w = var[VZ];
+  REAL Vmax, tmp;
+  
+  Vmax = 0;
+  
+  FOR_ALL_CELL
+    tmp = (u[IX(i,j,k)]*u[IX(i,j,k)] + v[IX(i,j,k)]*v[IX(i,j,k)]
+         + w[IX(i,j,k)]*w[IX(i,j,k)]);
+     Vmax =Vmax > tmp ? Vmax : tmp;
+  END_FOR
+
+  return sqrt(Vmax);
+} // End of  V_global_max()
+
+///////////////////////////////////////////////////////////////////////////////
+/// Determine the minimum velocity
+///
+///\param para Pointer to FFD parameters
+///\param var Pointer to FFD simulation variables
+///
+///\return Vmin Minimum velocity in the simulated domain
+///////////////////////////////////////////////////////////////////////////////
+REAL V_global_min(PARA_DATA *para, REAL **var) {
+  int i, j, k;
+  int imax = para->geom->imax, jmax = para->geom->jmax;
+  int kmax = para->geom->kmax;
+  int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
+  REAL *u = var[VX], *v = var[VY], *w = var[VZ];
+  REAL tmp, Vmin;
+  
+  Vmin = 0;   
+  
+  FOR_ALL_CELL    
+    tmp = ((u[IX(i,j,k)]*u[IX(i,j,k)])+(v[IX(i,j,k)]*v[IX(i,j,k)]));
+    Vmin = Vmin < tmp ? Vmin : tmp;
+  END_FOR   
+  
+  return sqrt(Vmin);
+} // End of V_global_min()

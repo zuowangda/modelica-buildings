@@ -174,7 +174,7 @@ static void open_glut_window() {
   glutInitWindowSize(para.outp->winx, para.outp->winy);
   
 
-  para.outp->win_id = glutCreateWindow("FFD, Author: W. Zuo, Q. Chen");
+  para.outp->win_id = glutCreateWindow("FFD");
 
   /*---------------------------------------------------------------------------
   |void glClearColor(GLclampf red, GLclampf green, GLclampf blue,

@@ -4,7 +4,7 @@
 ///
 /// \brief  Visualization features
 ///
-/// \author Wangda Zuo
+/// \author Wangda Zuo, Ana Cohen
 ///         University of Miami
 ///         W.Zuo@miami.edu
 ///
@@ -58,16 +58,18 @@ void post_display(void) {
 ///\return No return needed
 ///////////////////////////////////////////////////////////////////////////////
 void ffd_display_func(PARA_DATA *para, REAL **var) {
-  int k = (int) para->geom->kmax/2;
   pre_2d_display(para);
 
   switch(para->outp->screen) {
     case 1:
-      draw_xy_velocity(para, var, k); break;
+      draw_velocity(para, var); 
+      break;
     case 2:
-      draw_xy_density(para, var, k); break;
+      draw_density(para, var); 
+      break;
     case 3: 
-      draw_xy_temperature(para, var, k); break;
+      draw_temperature(para, var); 
+      break;
     default: 
       break;
   }
@@ -118,7 +120,9 @@ void ffd_idle_func(PARA_DATA *para, REAL **var, int **BINDEX) {
 void ffd_key_func(PARA_DATA *para, REAL **var, int **BINDEX, 
                   unsigned char key) {
 
-  // Set control variable according to key input
+  /****************************************************************************
+  | Set control variable according to key input
+  ****************************************************************************/
   switch(key) {
     // Restart the simulation
     case '0':
@@ -141,6 +145,24 @@ void ffd_key_func(PARA_DATA *para, REAL **var, int **BINDEX,
     // Draw contaminant concentration
     case '3':
       para->outp->screen = 3; 
+      break;
+    // Select YZ-plane
+    case 'x':
+    case 'X':
+      para->geom->plane = YZ;
+      para->geom->pindex = (int) para->geom->imax/2;
+      break;
+    // Select ZX-plane
+    case 'y':
+    case 'Y':
+      para->geom->plane = ZX;
+      para->geom->pindex = (int) para->geom->jmax/2;
+      break;
+    // Select XY-plane
+    case 'z':
+    case 'Z': 
+      para->geom->plane = XY;
+      para->geom->pindex = (int) para->geom->kmax/2;
       break;
     // Start to calcualte mean value
     case 'm':
@@ -268,12 +290,13 @@ void get_xy_UI(PARA_DATA *para, REAL **var, int k) {
 
   if(i<1 || i>imax || j<1 || j>jmax) return;
 
+  // Add force
   if(mouse_down[0]) {
     u_s[IX(i,j,k)] = para->prob->force;
     v_s[IX(i,j,k)] = para->prob->force;
   }
 
-  //if(mouse_down[0])   T_s[IX(i,j)] = 1.0;
+  // Add source in contaminant
   if(mouse_down[2]) 
     d_s[IX(i,j,k)] = para->prob->source;
 
@@ -284,6 +307,31 @@ void get_xy_UI(PARA_DATA *para, REAL **var, int k) {
 } // End of get_xy_UI( )
 
 ///////////////////////////////////////////////////////////////////////////////
+/// Select density distribution according to the plane
+///
+///\param para Pointer to FFD parameters
+///\param var Pointer to all variables
+///
+///\return No return needed
+///////////////////////////////////////////////////////////////////////////////
+void draw_density(PARA_DATA *para, REAL **var) {
+  switch (para->geom->plane) {
+    case XY:
+      draw_xy_density(para, var);
+      break;
+    case YZ: 
+      draw_yz_density(para, var);
+      break;
+    case ZX: 
+      draw_zx_density(para, var);
+      break;
+    default:
+      ffd_log("draw_density(): Wrong plane index", FFD_ERROR);
+      break;
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// Draw density distribution in XY plane
 ///
 ///\param para Pointer to FFD parameters
@@ -292,86 +340,211 @@ void get_xy_UI(PARA_DATA *para, REAL **var, int k) {
 ///
 ///\return No return needed
 ///////////////////////////////////////////////////////////////////////////////
-void draw_xy_density(PARA_DATA *para, REAL **var, int k) {
+void draw_xy_density(PARA_DATA *para, REAL **var) {
   int i, j;
   REAL d00, d01, d10, d11;
   REAL *x = var[X], *y = var[Y], *dens = var[TRACE];
   int imax = para->geom->imax, jmax = para->geom->jmax;
+  int kmax = para->geom->kmax; 
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
+  int pindex = para->geom->pindex;
 
   glBegin(GL_QUADS);
 
   for(i=0; i<=imax; i++) 
     for(j=0; j<=jmax; j++) {
-      d00 = dens[IX(i,  j  ,k)];
-      d01 = dens[IX(i,  j+1,k)];
-      d10 = dens[IX(i+1,j  ,k)];
-      d11 = dens[IX(i+1,j+1,k)];
+      d00 = dens[IX(i  ,j  ,pindex)];
+      d01 = dens[IX(i  ,j+1,pindex)];
+      d10 = dens[IX(i+1,j  ,pindex)];
+      d11 = dens[IX(i+1,j+1,pindex)];
 
-      glColor3f(d00, d00, d00); glVertex2f(x[IX(i  ,j,k)], y[IX(i,j  ,k)]);
-      glColor3f(d10, d10, d10); glVertex2f(x[IX(i+1,j,k)], y[IX(i,j  ,k)]);
-      glColor3f(d11, d11, d11); glVertex2f(x[IX(i+1,j,k)], y[IX(i,j+1,k)]);
-      glColor3f(d01, d01, d01); glVertex2f(x[IX(i  ,j,k)], y[IX(i,j+1,k)]);
-    }
+      glColor3f(d00,d00,d00); 
+      glVertex2f(x[IX(i  ,j,pindex)], y[IX(i,j  ,pindex)]);
+      glColor3f(d10,d10,d10); 
+      glVertex2f(x[IX(i+1,j,pindex)], y[IX(i,j  ,pindex)]);
+      glColor3f(d11,d11,d11); 
+      glVertex2f(x[IX(i+1,j,pindex)], y[IX(i,j+1,pindex)]);
+      glColor3f(d01,d01,d01);
+      glVertex2f(x[IX(i  ,j,pindex)], y[IX(i,j+1,pindex)]);
+  }
 
   glEnd();
 } // End of draw_xy_density()
+
+///////////////////////////////////////////////////////////////////////////////
+/// Draw density distribution in YZ plane
+///
+///\param para Pointer to FFD parameters
+///\param var Pointer to all variables
+///
+///\return No return needed
+///////////////////////////////////////////////////////////////////////////////
+void draw_yz_density(PARA_DATA *para, REAL **var) {
+  int j, k;
+  REAL d00, d01, d10, d11;
+  REAL *y = var[Y], *z = var[Z], *dens = var[TRACE];
+  int imax = para->geom->imax, jmax = para->geom->jmax;
+  int kmax = para->geom->kmax;
+  int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
+  int pindex = para->geom->pindex;
+
+  glBegin(GL_QUADS);
+
+  for(j=0; j<=jmax; j++) 
+    for(k=0; k<=kmax; k++) {
+      d00 = dens[IX(pindex,j  ,k  )];
+      d01 = dens[IX(pindex,j  ,k+1)];
+      d10 = dens[IX(pindex,j+1,k  )];
+      d11 = dens[IX(pindex,j+1,k+1)];
+
+      glColor3f(d00,d00,d00); 
+      glVertex2f(y[IX(pindex,j  ,k)], z[IX(pindex,j,k  )]);
+      glColor3f(d10,d10,d10); 
+      glVertex2f(y[IX(pindex,j+1,k)], z[IX(pindex,j,k  )]);
+      glColor3f(d11,d11,d11); 
+      glVertex2f(y[IX(pindex,j+1,k)], z[IX(pindex,j,k+1)]);
+      glColor3f(d01,d01,d01); 
+      glVertex2f(y[IX(pindex,j  ,k)], z[IX(pindex,j,k+1)]);
+  }
+  glEnd();
+} // End of draw_yz_density()
+
+///////////////////////////////////////////////////////////////////////////////
+/// Draw density distribution in ZX plane
+///
+///\param para Pointer to FFD parameters
+///\param var Pointer to all variables
+///
+///\return No return needed
+///////////////////////////////////////////////////////////////////////////////
+void draw_zx_density(PARA_DATA *para, REAL **var) {
+  int i, k;
+  REAL d00, d01, d10, d11;
+  REAL *x = var[X], *z = var[Z], *dens = var[TRACE];
+  int imax = para->geom->imax, jmax = para->geom->jmax;
+  int kmax = para->geom->kmax;
+  int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
+  int pindex = para->geom->pindex;
+
+  glBegin(GL_QUADS);
+
+  for(i=0; i<=imax; i++) 
+    for(k=0; k<=kmax; k++) {
+      d00 = dens[IX(i  ,pindex,k  )];
+      d01 = dens[IX(i  ,pindex,k+1)];
+      d10 = dens[IX(i+1,pindex,k  )];
+      d11 = dens[IX(i+1,pindex,k+1)];
+
+      glColor3f(d00,d00,d00);
+      glVertex2f(x[IX(i  ,pindex,k)], z[IX(i,pindex,k  )]);
+      glColor3f(d10,d10,d10);
+      glVertex2f(x[IX(i+1,pindex,k)], z[IX(i,pindex,k  )]);
+      glColor3f(d11,d11,d11);
+      glVertex2f(x[IX(i+1,pindex,k)], z[IX(i,pindex,k+1)]);
+      glColor3f(d01,d01,d01);
+      glVertex2f(x[IX(i  ,pindex,k)], z[IX(i,pindex,k+1)]);
+    }
+  glEnd();
+} // End of draw_zx_density()
+
+
+///////////////////////////////////////////////////////////////////////////////
+/// Define the contour color according to the input value
+///
+///\param color Contour value
+///
+///\return no return needed
+///////////////////////////////////////////////////////////////////////////////
+void draw_contour(int color) {
+  // void glColor3b(GLbyte red, GLbyte green, GLbyte blue)
+  switch(color) {
+    case 10: 
+      glColor3f(1.000000f, 0.250000f, 0.250000f); break;
+    case 9:
+      glColor3f(0.951368f, 0.460596f, 0.088036f); break;
+    case 8:
+      glColor3f(0.811394f, 0.683088f, 0.005518f); break;
+    case 7:
+      glColor3f(0.608390f, 0.868521f, 0.023089f); break;
+    case 6:
+      glColor3f(0.383447f, 0.979360f, 0.137193f); break;
+    case 5:
+      glColor3f(0.182096f, 0.993172f, 0.324733f); break;
+    case 4:
+      glColor3f(0.045092f, 0.907159f, 0.547749f); break;
+    case 3:
+      glColor3f(0.000167f, 0.738733f, 0.761100f); break;
+    case 2:
+      glColor3f(0.060675f, 0.512914f, 0.926411f); break;
+    case 1:
+      glColor3f(0.198814f, 0.304956f, 0.996230f); break;
+    default:
+      glColor3f(0.404253f, 0.122874f, 0.972873f); break;
+  } 
+} // End of draw_contour()
+
+///////////////////////////////////////////////////////////////////////////////
+/// Select temperature according to the plane
+///
+///\param para Pointer to FFD parameters
+///\param var Pointer to all variables
+///
+///\return No return needed
+///////////////////////////////////////////////////////////////////////////////
+void draw_temperature(PARA_DATA *para, REAL **var) {
+
+  para->outp->Tmax = scalar_global_max(para, var[TEMP]);
+  para->outp->Tmin = scalar_global_min(para, var[TEMP]);
+  switch (para->geom->plane) {
+    case XY:
+      draw_xy_temperature(para, var);
+      break;
+    case YZ: 
+      draw_yz_temperature(para, var);
+      break;
+    case ZX: 
+      draw_zx_temperature(para, var);
+      break;
+    default:
+      ffd_log("draw_temperature(): Wrong plane index", FFD_ERROR);
+      break;
+  }
+} // End of draw_temperature
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Draw temperature contour in XY plane
 ///
 ///\param para Pointer to FFD parameters
 ///\param var Pointer to all variables
-///\param k K-index of the plane
 ///
 ///\return No return needed
 ///////////////////////////////////////////////////////////////////////////////
-void draw_xy_temperature(PARA_DATA *para, REAL **var, int k) {
+void draw_xy_temperature(PARA_DATA *para, REAL **var) {
   int i, j;
   REAL *x = var[X], *y = var[Y], *z = var[Z], *temp = var[TEMP];
   int mycolor;
   int imax = para->geom->imax, jmax = para->geom->jmax;
+  int kmax = para->geom->kmax;
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
+  int pindex = para->geom->pindex;
 
   glBegin(GL_QUADS);
 
   for(i=0; i<=imax; i++) {
     for(j=0; j<=jmax; j++) {
-      mycolor = (int) 10 * (temp[IX(i,j,k)]/para->outp->Temp_ref); 
+      // Automatically define the temperature contour
+      // Add 0.001 to avoid divided by 0 if Tmax = Tmin
+      mycolor = (int) 10 * ((temp[IX(i,j,pindex)]-para->outp->Tmin)
+              /(para->outp->Tmax - para->outp->Tmin+0.001));
       mycolor = mycolor>10 ? 10: mycolor;
 
-      /*---------------------------------------------------------------------
-      | void glColor3b(GLbyte red, GLbyte green, GLbyte blue)
-      | control the color of the velocity field
-      ---------------------------------------------------------------------*/
-      switch(mycolor) {
-        case 10: 
-          glColor3f(1.000000f, 0.250000f, 0.250000f); break;
-        case 9:
-          glColor3f(0.951368f, 0.460596f, 0.088036f); break;
-        case 8:
-          glColor3f(0.811394f, 0.683088f, 0.005518f); break;
-        case 7:
-          glColor3f(0.608390f, 0.868521f, 0.023089f); break;
-        case 6:
-          glColor3f(0.383447f, 0.979360f, 0.137193f); break;
-        case 5:
-          glColor3f(0.182096f, 0.993172f, 0.324733f); break;
-        case 4:
-          glColor3f(0.045092f, 0.907159f, 0.547749f); break;
-        case 3:
-          glColor3f(0.000167f, 0.738733f, 0.761100f); break;
-        case 2:
-          glColor3f(0.060675f, 0.512914f, 0.926411f); break;
-        case 1:
-          glColor3f(0.198814f, 0.304956f, 0.996230f); break;
-        default:
-          glColor3f(0.404253f, 0.122874f, 0.972873f); break;
-      } 
-      glVertex2f(x[IX(i  ,j,k)], y[IX(i,j  ,k)]);
-      glVertex2f(x[IX(i+1,j,k)], y[IX(i,j  ,k)]);
-      glVertex2f(x[IX(i+1,j,k)], y[IX(i,j+1,k)]);
-      glVertex2f(x[IX(i  ,j,k)], y[IX(i,j+1,k)]);
+      draw_contour(mycolor);
+
+      glVertex2f(x[IX(i  ,j,pindex)], y[IX(i,j  ,pindex)]);
+      glVertex2f(x[IX(i+1,j,pindex)], y[IX(i,j  ,pindex)]);
+      glVertex2f(x[IX(i+1,j,pindex)], y[IX(i,j+1,pindex)]);
+      glVertex2f(x[IX(i  ,j,pindex)], y[IX(i,j+1,pindex)]);
     }
   }
 
@@ -379,15 +552,121 @@ void draw_xy_temperature(PARA_DATA *para, REAL **var, int k) {
 } // End of draw_xy_temperature()
 
 ///////////////////////////////////////////////////////////////////////////////
+/// Draw temperature contour in YZ plane
+///
+///\param para Pointer to FFD parameters
+///\param var Pointer to all variables
+///
+///\return No return needed
+///////////////////////////////////////////////////////////////////////////////
+void draw_yz_temperature(PARA_DATA *para, REAL **var) {
+  int j, k;
+  REAL *x = var[X], *y = var[Y], *z = var[Z], *temp = var[TEMP];
+  int mycolor;
+  int imax = para->geom->imax, jmax = para->geom->jmax;
+  int kmax = para->geom->kmax;
+  int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
+  int pindex = para->geom->pindex;
+
+  glBegin(GL_QUADS);
+
+  for(j=0; j<=jmax; j++) {
+    for(k=0; k<=kmax; k++) {
+      // Automatically define the temperature contour
+      // Add 0.001 to avoid divided by 0 if Tmax = Tmin
+      mycolor = (int) 10 * ((temp[IX(pindex,j,k)]-para->outp->Tmin)
+              / (para->outp->Tmax-para->outp->Tmin+0.001));
+      mycolor = mycolor>10 ? 10: mycolor;
+
+      draw_contour(mycolor);
+
+      glVertex2f(y[IX(pindex,j  ,k)], z[IX(pindex,j,k  )]);
+      glVertex2f(y[IX(pindex,j+1,k)], z[IX(pindex,j,k  )]);
+      glVertex2f(y[IX(pindex,j+1,k)], z[IX(pindex,j,k+1)]);
+      glVertex2f(y[IX(pindex,j  ,k)], z[IX(pindex,j,k+1)]);
+    }
+  }
+
+  glEnd();
+} // End of draw_yz_temperature()
+
+///////////////////////////////////////////////////////////////////////////////
+/// Draw temperature contour in ZX plane
+///
+///\param para Pointer to FFD parameters
+///\param var Pointer to all variables
+///
+///\return No return needed
+///////////////////////////////////////////////////////////////////////////////
+void draw_zx_temperature(PARA_DATA *para, REAL **var) {
+  int i, k;
+  REAL *x = var[X], *y = var[Y], *z = var[Z], *temp = var[TEMP];
+  int mycolor;
+  int imax = para->geom->imax, jmax = para->geom->jmax;
+  int kmax = para->geom->kmax;
+  int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
+  int pindex = para->geom->pindex;
+
+  glBegin(GL_QUADS);
+
+  for(i=0; i<=imax; i++) {
+    for(k=0; k<=kmax; k++) {
+      // Automatically define the temperature contour
+      // Add 0.001 to avoid divided by 0 if Tmax = Tmin
+      mycolor = (int) 10 * ((temp[IX(i,pindex,k)]-para->outp->Tmin)
+                /(para->outp->Tmax-para->outp->Tmin+0.001));
+      mycolor = mycolor>10 ? 10: mycolor;
+
+      draw_contour(mycolor);
+
+      glVertex2f(x[IX(i  ,pindex,k)], z[IX(i,pindex,k  )]);
+      glVertex2f(x[IX(i+1,pindex,k)], z[IX(i,pindex,k  )]);
+      glVertex2f(x[IX(i+1,pindex,k)], z[IX(i,pindex,k+1)]);
+      glVertex2f(x[IX(i  ,pindex,k)], z[IX(i,pindex,k+1)]);
+    }
+  }
+
+  glEnd();
+} // End of draw_zx_temperature()
+
+///////////////////////////////////////////////////////////////////////////////
+/// Select velocity according to the plane
+///
+///\param para Pointer to FFD parameters
+///\param var Pointer to all variables
+///
+///\return No return needed
+///////////////////////////////////////////////////////////////////////////////
+void draw_velocity(PARA_DATA *para, REAL **var) {
+  para->outp->v_max = V_global_max(para, var);
+
+  switch (para->geom->plane) {
+    case XY:
+      draw_xy_velocity(para, var);
+      break;
+    case YZ: 
+      draw_yz_velocity(para, var);
+      break;
+    case ZX: 
+      draw_zx_velocity(para, var);
+      break;
+    default:
+      printf("Could not find plane.\n");
+      getchar();
+      ffd_log("draw_velocity(): Wrong plane index", FFD_ERROR);
+      break;
+  }
+} // End of draw_velocity()
+
+///////////////////////////////////////////////////////////////////////////////
 /// Draw velocity in XY plane
 ///
 ///\param para Pointer to FFD parameters
 ///\param var Pointer to all variables
-///\param k K-index of the plane
 ///
 ///\return No return needed
 ///////////////////////////////////////////////////////////////////////////////
-void draw_xy_velocity(PARA_DATA *para, REAL **var, int k) {
+void draw_xy_velocity(PARA_DATA *para, REAL **var) {
   int i, j;
   REAL x0, y0;
   REAL *x = var[X], *y = var[Y];
@@ -395,6 +674,7 @@ void draw_xy_velocity(PARA_DATA *para, REAL **var, int k) {
   int mycolor;
   int imax = para->geom->imax, jmax = para->geom->jmax;
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
+  int pindex = para->geom->pindex;
 
   /*---------------------------------------------------------------------------
   | specify the width of rasterized lines 
@@ -404,47 +684,110 @@ void draw_xy_velocity(PARA_DATA *para, REAL **var, int k) {
 
   j = 1;
   for(i=1; i<=imax; i+=para->outp->i_N) {
-    x0 = x[IX(i,j,k)];
+    x0 = x[IX(i,j,pindex)];
 
     for(j=1; j<=jmax; j+=para->outp->j_N) {
-      y0 = y[IX(i,j,k)];
-      mycolor = (int) 100 * fabs(u[IX(i,j,k)]) / 
-                      fabs(para->outp->v_ref); 
+      y0 = y[IX(i,j,pindex)];
+      mycolor = (int) 10 * fabs(u[IX(i,j,pindex)]) / 
+                fabs(para->outp->v_max);
       mycolor = mycolor>10 ? 10: mycolor;
 
-      /*-----------------------------------------------------------------------
-      | void glColor3b(GLbyte red, GLbyte green, GLbyte blue)
-      | control the color of the velocity field
-      -----------------------------------------------------------------------*/
-      switch(mycolor) {
-        case 10: 
-          glColor3f(1.000000f, 0.250000f, 0.250000f); break;
-        case 9:
-          glColor3f(0.951368f, 0.460596f, 0.088036f); break;       
-        case 8:
-          glColor3f(0.811394f, 0.683088f, 0.005518f); break;
-        case 7:
-          glColor3f(0.608390f, 0.868521f, 0.023089f); break;
-        case 6:
-          glColor3f(0.383447f, 0.979360f, 0.137193f); break;
-        case 5:
-          glColor3f(0.182096f, 0.993172f, 0.324733f); break;
-        case 4:
-          glColor3f(0.045092f, 0.907159f, 0.547749f); break;
-        case 3:
-          glColor3f(0.000167f, 0.738733f, 0.761100f); break;
-        case 2:
-          glColor3f(0.060675f, 0.512914f, 0.926411f); break;
-        case 1:
-          glColor3f(0.198814f, 0.304956f, 0.996230f); break;
-        default:
-          glColor3f(0.404253f, 0.122874f, 0.972873f); break;
-      } 
-        
+      draw_contour(mycolor);
+
       glVertex2f(x0, y0);
-      glVertex2f(x0 + para->outp->v_length*u[IX(i,j,k)], 
-                 y0 + para->outp->v_length*v[IX(i,j,k)]);
+      glVertex2f(x0 + para->outp->v_length*u[IX(i,j,pindex)], 
+                 y0 + para->outp->v_length*v[IX(i,j,pindex)]);
     }
   }
   glEnd ();
 } // End of draw_xy_velocity()
+
+///////////////////////////////////////////////////////////////////////////////
+/// Draw velocity in YZ plane
+///
+///\param para Pointer to FFD parameters
+///\param var Pointer to all variables
+///
+///\return No return needed
+///////////////////////////////////////////////////////////////////////////////
+void draw_yz_velocity(PARA_DATA *para, REAL **var) {
+  int j, k;
+  REAL y0, z0;
+  REAL *y = var[Y], *z = var[Z]; 
+  REAL *v = var[VY], *w = var[VZ];
+  int mycolor;
+  int imax = para->geom->imax, jmax = para->geom->jmax;
+  int kmax = para->geom->kmax;
+  int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
+  int pindex = para->geom->pindex;
+
+  /*---------------------------------------------------------------------------
+  | specify the width of rasterized lines 
+  ---------------------------------------------------------------------------*/
+  glLineWidth(1.0);
+  glBegin(GL_LINES);
+
+  k = 1;
+  for(j=1; j<=jmax; j+=para->outp->j_N) {
+    y0 = y[IX(pindex,j,k)];
+
+    for(k=1; k<=kmax; k+=para->outp->k_N) {
+      z0 = z[IX(pindex,j,k)];
+      mycolor = (int) 10 * fabs(v[IX(pindex,j,k)]) / 
+                fabs(para->outp->v_max);
+      mycolor = mycolor>10 ? 10: mycolor;
+
+      draw_contour(mycolor);
+
+      glVertex2f(y0, z0);
+      glVertex2f(y0 + para->outp->v_length*v[IX(pindex,j,k)], 
+                 z0 + para->outp->v_length*w[IX(pindex,j,k)]);
+    }
+  }
+  glEnd ();
+} // End of draw_yz_velocity()
+
+///////////////////////////////////////////////////////////////////////////////
+/// Draw velocity in ZX plane
+///
+///\param para Pointer to FFD parameters
+///\param var Pointer to all variables
+///
+///\return No return needed
+///////////////////////////////////////////////////////////////////////////////
+void draw_zx_velocity(PARA_DATA *para, REAL **var) {
+  int i, k;
+  REAL x0, z0;
+  REAL *x = var[X], *z = var[Z]; 
+  REAL *u = var[VX], *w = var[VZ];
+  int mycolor;
+  int imax = para->geom->imax, jmax = para->geom->jmax;
+  int kmax = para->geom->kmax;
+  int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
+  int pindex = para->geom->pindex;
+
+  /*---------------------------------------------------------------------------
+  | specify the width of rasterized lines 
+  ---------------------------------------------------------------------------*/
+  glLineWidth(1.0);
+  glBegin(GL_LINES);
+
+  k = 1;
+  for(i=1; i<=imax; i+=para->outp->i_N) {
+    x0 = x[IX(i,pindex,k)];
+
+    for(k=1; k<=kmax; k+=para->outp->k_N) {
+      z0 = z[IX(i,pindex,k)];
+      mycolor = (int) 10 * fabs(u[IX(i,pindex,k)]) / 
+                fabs(para->outp->v_max);
+      mycolor = mycolor>10 ? 10: mycolor;
+
+      draw_contour(mycolor);
+
+      glVertex2f(x0, z0);
+      glVertex2f(x0 + para->outp->v_length*u[IX(i,pindex,k)], 
+                 z0 + para->outp->v_length*w[IX(i,pindex,k)]);
+    }
+  }
+  glEnd ();
+} // End of draw_zx_velocity()

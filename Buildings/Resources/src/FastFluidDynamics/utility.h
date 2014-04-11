@@ -4,12 +4,12 @@
 ///
 /// \brief  Some frequently used functions for FFD 
 ///
-/// \author Mingang Jin, Qingyan Chen
-///         Purdue University
-///         Jin55@purdue.edu, YanChen@purdue.edu
-///         Wangda Zuo
+/// \author Wangda Zuo, Ana Cohen
 ///         University of Miami
 ///         W.Zuo@miami.edu
+///         Purdue University
+///         Mingang Jin, Qingyan Chen
+///         Jin55@purdue.edu, YanChen@purdue.edu
 ///
 /// \date   8/3/2013
 ///
@@ -29,9 +29,7 @@
 #include "geometry.h"
 #endif
 
-
 FILE *file_log;
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Check the residual of equation
@@ -166,7 +164,6 @@ int add_time_averaged_data (PARA_DATA *para, REAL **var);
 ///////////////////////////////////////////////////////////////////////////////
 /// Check the energy transfer rate through the wall to the air
 ///
-///
 ///\param para Pointer to FFD parameters
 ///\param var Pointer to FFD simulation variables
 ///\param BINDEX Pointer to the boudnary index
@@ -180,7 +177,6 @@ REAL qwall(PARA_DATA *para, REAL **var,int **BINDEX);
 ///
 ///\param BINDEX Pointer to the boudnary index
 ///
-///
 ///\return 0 if no error occurred
 ///////////////////////////////////////////////////////////////////////////////
 void free_index(int **BINDEX);
@@ -190,7 +186,46 @@ void free_index(int **BINDEX);
 ///
 ///\param var Pointer to FFD simulation variables
 ///
-///
 ///\return 0 if no error occurred
 ///////////////////////////////////////////////////////////////////////////////
 void free_data(REAL **var); 
+
+///////////////////////////////////////////////////////////////////////////////
+/// Determine the maximum value of given scalar variable
+///
+///\param para Pointer to FFD parameters
+///\param dat Pointer to scalar variable
+///
+///\return Smax Maximum value of the scalar variable
+///////////////////////////////////////////////////////////////////////////////
+REAL scalar_global_max(PARA_DATA *para, REAL *dat);
+
+///////////////////////////////////////////////////////////////////////////////
+/// Determine the minimum value of given scalar variable
+///
+///\param para Pointer to FFD parameters
+///\param dat Pointer to scalar variable
+///
+///\return Smin Minimum value of the scalar variable
+///////////////////////////////////////////////////////////////////////////////
+REAL scalar_global_min(PARA_DATA *para, REAL *dat);
+
+///////////////////////////////////////////////////////////////////////////////
+/// Determine the maximum velocity
+///
+///\param para Pointer to FFD parameters
+///\param var Pointer to FFD simulation variables
+///
+///\return Vmax Maximum velocity in the simulated domain
+///////////////////////////////////////////////////////////////////////////////
+REAL V_global_max(PARA_DATA *para, REAL **var);
+
+///////////////////////////////////////////////////////////////////////////////
+/// Determine the minimum velocity
+///
+///\param para Pointer to FFD parameters
+///\param var Pointer to FFD simulation variables
+///
+///\return Vmin Minimum velocity in the simulated domain
+///////////////////////////////////////////////////////////////////////////////
+REAL V_global_min(PARA_DATA *para, REAL **var);

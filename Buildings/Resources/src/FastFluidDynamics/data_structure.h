@@ -149,6 +149,7 @@ typedef enum{FFD, SCI, TECPLOT} FILE_FORMAT;
 
 typedef enum{FFD_WARNING, FFD_ERROR, FFD_NORMAL, FFD_NEW} FFD_MSG_TYPE;
 
+typedef enum{XY, YZ, ZX} PLANETYPE;
 
 // Parameter for geometry and mesh
 typedef struct {
@@ -159,6 +160,8 @@ typedef struct {
   int   jmax; // Number of interior cells in y-direction
   int   kmax; // Number of interior cells in z-direction
   int   index; // Total number of boundary cells
+  int   pindex; // Index in plane
+  PLANETYPE   plane; // plane selection
   REAL  dx; // Length delta_x of one cell in x-direction for uniform grid only
   REAL  dy; // Length delta_y of one cell in y-direction for uniform grid only
   REAL  dz; // Length delta_z of one cell in z-direction for uniform grid only
@@ -169,11 +172,15 @@ typedef struct {
 // Parameter for the data output control
 typedef struct{
   int cal_mean; // 1: Calculate mean value; 0: False
+  REAL v_max; // Maximum velocity for visualizations (Reference)
   REAL v_ref; // Reference velocity for visualization
   REAL Temp_ref; // Reference temperature for visualizations
   REAL v_length; // Change of velocity vector length in demo window
+  REAL Tmax; // Maximum temperature for visualizations (Reference)
+  REAL Tmin; // Minimum temperature for visualizations (Reference)
   int i_N; // Number of grids plotted in x direction
   int j_N; // Number of grids plotted in y direction
+  int k_N; // Number of grids plotted in z direction
   int winx; // Resolution of screen at x direction in pixel
   int winy; // Resolution of screen at y direction in pixel
   int omx; // Internal

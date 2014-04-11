@@ -95,8 +95,10 @@ void set_default_parameter(PARA_DATA *para) {
   para->outp->version    = DEBUG; // Running the debug version
   para->outp->i_N        = 1;
   para->outp->j_N        = 1;
+  para->outp->k_N        = 1;
   para->outp->tstep_display = 10; // Update the display for every 10 time steps
-
+  para->outp->screen     = 1; // Draw velocity
+  para->geom->plane      = ZX; // Draw ZX plane
   para->bc->nb_port = 0;
   para->bc->nb_Xi = 0;
   para->bc->nb_C = 0;
@@ -289,6 +291,7 @@ int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX) {
   | Pre-calculate data needed but not change in the simulation
   ****************************************************************************/
   para->geom->volFlu = fluid_volume(para, var);
+  para->geom->pindex     = (int) para->geom->jmax/2;
 
   /****************************************************************************
   | Set all the averaged data to 0
