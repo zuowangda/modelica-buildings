@@ -128,15 +128,44 @@ void ffd_motion_func(PARA_DATA *para, int x, int y);
 void ffd_reshape_func(PARA_DATA *para, int width, int height);
 
 ///////////////////////////////////////////////////////////////////////////////
+/// Relate mouse movements to forces & sources in 2D plane
+///
+///\param para Pointer to FFD parameters
+///\param var Pointer to all variables
+///
+///\return No return needed
+///////////////////////////////////////////////////////////////////////////////
+void get_UI(PARA_DATA *para, REAL **var);
+
+///////////////////////////////////////////////////////////////////////////////
 /// Relate mouse movements to forces & sources in XY plane
 ///
 ///\param para Pointer to FFD parameters
 ///\param var Pointer to all variables
-///\param k K-index of the plane
 ///
 ///\return No return needed
 ///////////////////////////////////////////////////////////////////////////////
-void get_xy_UI(PARA_DATA *para, REAL **var, int k);
+void get_xy_UI(PARA_DATA *para, REAL **var);
+
+///////////////////////////////////////////////////////////////////////////////
+/// Relate mouse movements to forces & sources in YZ plane
+///
+///\param para Pointer to FFD parameters
+///\param var Pointer to all variables
+///
+///\return No return needed
+///////////////////////////////////////////////////////////////////////////////
+void get_yz_UI(PARA_DATA *para, REAL **var);
+
+///////////////////////////////////////////////////////////////////////////////
+/// Relate mouse movements to forces & sources in ZX plane
+///
+///\param para Pointer to FFD parameters
+///\param var Pointer to all variables
+///
+///\return No return needed
+///////////////////////////////////////////////////////////////////////////////
+void get_zx_UI(PARA_DATA *para, REAL **var);
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Select density distribution according to the plane

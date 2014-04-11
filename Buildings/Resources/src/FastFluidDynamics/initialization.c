@@ -69,9 +69,10 @@ void set_default_parameter(PARA_DATA *para) {
   para->mytime->t_start = clock();
 
   para->prob->alpha = (REAL) 2.376e-5; // Thermal diffusity
-  para->prob->diff = (REAL) 0.00001;
-  para->prob->force = (REAL) 1.0; 
-  para->prob->source = (REAL) 1.0;
+  para->prob->diff = 0.00001;
+  para->prob->force = 1.0; 
+  para->prob->heat = 1.0; 
+  para->prob->source = 100.0;
 
   para->prob->chen_a = (REAL) 0.03874; // Coeffcient of Chen's model
   para->prob->Prt = (REAL) 0.9; // Turbulent Prandl number
@@ -91,6 +92,7 @@ void set_default_parameter(PARA_DATA *para) {
   para->outp->v_length   = (REAL) 0.5;  
   para->outp->winx       = 600;
   para->outp->winy       = 600;
+  para->outp->winz       = 600;
   para->outp->v_ref      = (REAL) 1.0; 
   para->outp->version    = DEBUG; // Running the debug version
   para->outp->i_N        = 1;

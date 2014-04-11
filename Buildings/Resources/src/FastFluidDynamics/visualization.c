@@ -88,7 +88,7 @@ void ffd_display_func(PARA_DATA *para, REAL **var) {
 ///////////////////////////////////////////////////////////////////////////////
 void ffd_idle_func(PARA_DATA *para, REAL **var, int **BINDEX) {
   // Get the display in XY plane
-  get_xy_UI(para, var, (int)para->geom->kmax/2);
+  get_UI(para, var);
 
   vel_step(para, var, BINDEX);
   den_step(para, var, BINDEX);
@@ -240,63 +240,144 @@ void ffd_reshape_func(PARA_DATA *para, int width, int height) {
 } // End of ffd_reshape_func()
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Relate mouse movements to forces & sources in XY plane
+/// Relate mouse movements to forces & sources in 2D plane
 ///
 ///\param para Pointer to FFD parameters
 ///\param var Pointer to all variables
-///\param k K-index of the plane
 ///
 ///\return No return needed
 ///////////////////////////////////////////////////////////////////////////////
-void get_xy_UI(PARA_DATA *para, REAL **var, int k) {
+void get_UI(PARA_DATA *para, REAL **var) {
   int imax = para->geom->imax, jmax = para->geom->jmax;
-  REAL Lx = para->geom->Lx, Ly = para->geom->Ly;
-  int i, j;
-  REAL *u_s = var[VXS], *v_s = var[VYS], *d_s = var[TRACE], *T_s = var[TEMPS];
-  REAL *x = var[X], *y = var[Y];
+  int kmax = para->geom->kmax;
+  int UIimax, UIjmax;
+  REAL Lx, Ly;
+  int i, j, k, i0, j0;
+  int pindex = para->geom->pindex;
+  REAL *d_s = var[TRACE], *T_s = var[TEMPS];
+  REAL *x, *y, *u_s, *v_s;
   REAL x0, y0, x_click, y_click;
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
-  int win_x = para->outp->winx, win_y = para->outp->winy;
+  int winx, winy;
   int mx = para->outp->mx, my = para->outp->my;
   int *mouse_down = para->outp->mouse_down;
-
-  // Set initial value of source to 0
-  for(i=0; i<imax+1; i++)
-    for(j=0; j<jmax+1; j++)
-      u_s[IX(i,j,k)] = v_s[IX(i,j,k)] = d_s[IX(i,j,k)] = T_s[IX(i,j,k)] = 0.0;
-
+  
   // If no mouse action, return
   if(!mouse_down[0] && !mouse_down[2] ) return;
 
-  x0 = x[IX(0,0,k)], y0 = y[IX(0,0,k)];
-  x_click = (mx/(REAL)win_x) * Lx;
-  y_click = (1.0f - my/(REAL)win_y) * Ly;
-  i = (int)( (mx/(REAL)win_x) * imax + 1);
- 	j = (int)((1.0f - my/(REAL)win_y) * jmax + 1);
-  
-  if(x[IX(i,j,k)] - x0 > x_click )
-    while(x[IX(i,j,k)] - x0 > x_click)
-      i--;        
-  else
-    while(x[IX(i,j,k)] - x0 < x_click)
-      i++;
+  /****************************************************************************
+  | Set the parameter according to the plane
+  ****************************************************************************/
+  switch(para->geom->plane) {
+    case XY:
+      x = var[X], y = var[Y];
+      u_s = var[VXS], v_s = var[VYS];
+      UIimax = imax, UIjmax = jmax;
+      winx = para->outp->winx, winy = para->outp->winy;
+      x0 = x[IX(0,0,pindex)];
+      y0 = y[IX(0,0,pindex)];
+      Lx = para->geom->Lx;
+      Ly = para->geom->Ly;
+      break;
+    case YZ:
+      x = var[Y], y =var[Z];
+      u_s = var[VYS], v_s = var[VZS];
+      UIimax = jmax, UIjmax = kmax;
+      winx = para->outp->winy, winy = para->outp->winz;
+      x0 = x[IX(pindex,0,0)], y0 = y[IX(pindex,0,0)];
+      Lx = para->geom->Ly;
+      Ly = para->geom->Lz;
+      break;
+    case ZX:
+      x = var[X], y = var[Z];
+      u_s = var[VXS], v_s = var[VZS];
+      UIimax = imax, UIjmax = kmax;
+      winx = para->outp->winx, winy = para->outp->winz;
+      x0 = x[IX(0,pindex,0)], y0 = y[IX(0,pindex,0)];
+      Lx = para->geom->Lx, Ly = para->geom->Lz;
+      break;
+    default:
+      break;
+  }
 
-  if(y[IX(i,j,k)]-y0 > y_click)
-    while(y[IX(i,j,k)]-y0 > y_click)
-      j--;        
-  else
-    while(y[IX(i,j,k)]-y0 < y_click)
-      j++;
+  // Set initial value of source to 0
+  FOR_EACH_CELL
+    u_s[IX(i,j,k)] = v_s[IX(i,j,k)] = d_s[IX(i,j,k)] = T_s[IX(i,j,k)] = 0.0;
+  END_FOR
 
-  if(i<1 || i>imax || j<1 || j>jmax) return;
+  x_click = (mx/(REAL)winx) * Lx;
+  y_click = (1.0f - my/(REAL)winy) * Ly;
 
-  // Add force
+  i0 = (int)( (mx/(REAL)winx) * imax + 1);
+  j0 = (int)((1.0f - my/(REAL)winy) * jmax + 1);
+
+  /****************************************************************************
+  | Identify the index of cell to add the source
+  ****************************************************************************/
+  switch(para->geom->plane) {
+    /*-------------------------------------------------------------------------
+    | XY Plane: x->X, y->Y
+    -------------------------------------------------------------------------*/
+    case XY:
+      i = i0, j = j0, k = pindex;
+      if(x[IX(i,j,k)] - x0 > x_click )
+        while(x[IX(i,j,k)] - x0 > x_click) i--;        
+      else
+        while(x[IX(i,j,k)] - x0 < x_click) i++;
+      if(y[IX(i,j,k)]-y0 > y_click)
+        while(y[IX(i,j,k)]-y0 > y_click) j--;        
+      else
+        while(y[IX(i,j,k)]-y0 < y_click) j++;
+      break;
+    /*-------------------------------------------------------------------------
+    | YZ Plane: x->Y; y->Z
+    -------------------------------------------------------------------------*/
+    case YZ:
+      i = pindex; j = i0, k = j0;
+      if(x[IX(i,j,k)] - x0 > x_click )
+        while(x[IX(i,j,k)] - x0 > x_click) j--;
+      else
+        while(x[IX(i,j,k)] - x0 < x_click) j++;
+      if(y[IX(pindex,i,j)]-y0 > y_click)
+        while(y[IX(i,j,k)]-y0 > y_click) k--;
+      else
+        while(y[IX(i,j,k)]-y0 < y_click) k++;
+      break;
+    /*-------------------------------------------------------------------------
+    | ZX Plane: x->X; y->Z
+    -------------------------------------------------------------------------*/
+    case ZX:
+      i = i0; j = pindex, k = j0;
+      if(x[IX(i,j,k)]-x0 > x_click)
+        while(x[IX(i,j,k)]-x0 > x_click) i--;
+      else
+        while(x[IX(i,j,k)]-x0 < x_click) i++;
+      if(y[IX(i,pindex,j)]-y0 > y_click)
+        while(y[IX(i,j,k)]-y0 > y_click) k--;
+      else
+        while(y[IX(i,j,k)]-y0 < y_click) k++;
+      break;
+    default:
+      break;
+  }
+  if(i<1 || i>UIimax || j<1 || j>UIjmax) return;
+
+  /****************************************************************************
+  | Add force
+  ****************************************************************************/
   if(mouse_down[0]) {
     u_s[IX(i,j,k)] = para->prob->force;
     v_s[IX(i,j,k)] = para->prob->force;
   }
-
-  // Add source in contaminant
+  /****************************************************************************
+  | Add heat
+  ****************************************************************************/
+  if(mouse_down[1]) {
+    T_s[IX(i,j,k)] = para->prob->heat;
+  }
+  /****************************************************************************
+  | Add source in contaminant
+  ****************************************************************************/
   if(mouse_down[2]) 
     d_s[IX(i,j,k)] = para->prob->source;
 
@@ -304,8 +385,7 @@ void get_xy_UI(PARA_DATA *para, REAL **var, int k) {
   para->outp->omy = my;
 
   return;
-} // End of get_xy_UI( )
-
+}
 ///////////////////////////////////////////////////////////////////////////////
 /// Select density distribution according to the plane
 ///

@@ -183,6 +183,7 @@ typedef struct{
   int k_N; // Number of grids plotted in z direction
   int winx; // Resolution of screen at x direction in pixel
   int winy; // Resolution of screen at y direction in pixel
+  int winz; // Resolution of screen at x direction in pixel
   int omx; // Internal
   int omy; // Internal
   int mx; // Internal
@@ -216,6 +217,7 @@ typedef struct{
   //REAL trefmax; // T Reference max defined by SCI
   REAL Cp; // Specific heat capacity
   REAL force; // Force to be added in demo window for velocity when left-click on mouse
+  REAL heat; // Heat to be added in demo window for contaminants when click middle button on mouse 
   REAL source; // Source to be added in demo window for contaminants when right click on mouse 
   int movie; // Output data for making animation (1:yes, 0:no)
   int output;   // Internl: 0: have not been written; 1: done
