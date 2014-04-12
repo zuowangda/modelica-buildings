@@ -93,6 +93,15 @@ void ffd_key_func(PARA_DATA *para, REAL **var, int **BINDEX,
                   unsigned char key);
 
 ///////////////////////////////////////////////////////////////////////////////
+/// Ensure the pindex is within the valid range 
+///
+///\param para Pointer to FFD parameters
+///
+///\return No return needed
+///////////////////////////////////////////////////////////////////////////////
+void check_pindex(PARA_DATA *para);
+
+///////////////////////////////////////////////////////////////////////////////
 /// FFD routines for GLUT mouse callback routines 
 ///
 ///\param para Pointer to FFD parameters

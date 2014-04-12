@@ -188,8 +188,49 @@ void ffd_key_func(PARA_DATA *para, REAL **var, int **BINDEX,
     case 'L':
       para->outp->v_length ++;
       break;
+    case '+':
+      para->geom->pindex ++;
+      check_pindex(para);
+      break;
+    case '-':
+      para->geom->pindex --;
+      check_pindex(para);
+      break;
   }
 } // End of ffd_key_func()
+
+///////////////////////////////////////////////////////////////////////////////
+/// Ensure the pindex is within the valid range 
+///
+///\param para Pointer to FFD parameters
+///
+///\return No return needed
+///////////////////////////////////////////////////////////////////////////////
+void check_pindex(PARA_DATA *para) {
+  int imax = para->geom->imax, jmax = para->geom->jmax,
+      kmax = para->geom->kmax, *pindex = &para->geom->pindex;
+
+  /****************************************************************************
+  | Check the minimum value of index
+  ****************************************************************************/
+  if(*pindex<1) *pindex = 1;
+  /****************************************************************************
+  | Check the maximum value of index
+  ****************************************************************************/
+  else {
+    switch(para->geom->plane) {
+      case XY:
+        if(*pindex > kmax) *pindex = kmax;
+        break;
+      case YZ:
+        if(*pindex > imax) *pindex = imax;
+        break;
+      case ZX:
+        if(*pindex > jmax) *pindex = jmax;
+        break;
+    }
+  }
+} // End of check_pindex()
 
 ///////////////////////////////////////////////////////////////////////////////
 /// FFD routines for GLUT mouse callback routines 
@@ -386,6 +427,7 @@ void get_UI(PARA_DATA *para, REAL **var) {
 
   return;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// Select density distribution according to the plane
 ///
@@ -526,7 +568,6 @@ void draw_zx_density(PARA_DATA *para, REAL **var) {
     }
   glEnd();
 } // End of draw_zx_density()
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Define the contour color according to the input value
