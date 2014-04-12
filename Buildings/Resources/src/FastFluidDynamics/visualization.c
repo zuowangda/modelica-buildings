@@ -181,12 +181,12 @@ void ffd_key_func(PARA_DATA *para, REAL **var, int **BINDEX,
     // Reduce the drawed length of veloity
     case 'k':
     case 'K':
-      para->outp->v_length --;
+      para->outp->v_length = para->outp->v_length*0.5;
       break;
     // Increase the drawed length of velocity
     case 'l':
     case 'L':
-      para->outp->v_length ++;
+      para->outp->v_length = para->outp->v_length*2;
       break;
     case '+':
       para->geom->pindex ++;
