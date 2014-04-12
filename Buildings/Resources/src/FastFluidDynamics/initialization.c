@@ -89,11 +89,11 @@ void set_default_parameter(PARA_DATA *para) {
   // Default values for Output
   para->outp->Temp_ref   = 0;//35.5f;//10.25f;
   para->outp->cal_mean   = 0;
-  para->outp->v_length   = (REAL) 0.5;  
+  para->outp->v_length   = 1;  
   para->outp->winx       = 600;
   para->outp->winy       = 600;
   para->outp->winz       = 600;
-  para->outp->v_ref      = (REAL) 1.0; 
+  para->outp->v_ref      = 1.0; 
   para->outp->version    = DEBUG; // Running the debug version
   para->outp->i_N        = 1;
   para->outp->j_N        = 1;
