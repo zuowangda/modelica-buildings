@@ -35,7 +35,7 @@ int write_tecplot_data(PARA_DATA *para, REAL **var, char *name) {
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
   REAL *x = var[X], *y = var[Y], *z =var[Z];
   REAL *u = var[VX], *v = var[VY], *w = var[VZ], *p = var[IP];
-  REAL *T = var[TEMP];
+  REAL *T = var[TEMP], *Xi = var[Xi1];
   REAL *flagp = var[FLAGP];
   char *filename;
   FILE *datafile;
@@ -71,15 +71,15 @@ int write_tecplot_data(PARA_DATA *para, REAL **var, char *name) {
            imax+2, jmax+2, kmax+2);
 
   fprintf( datafile, 
-           "VARIABLES =X, Y, Z, I, J, K, U, V, W, T, FlagP, P \n");
+           "VARIABLES =X, Y, Z, I, J, K, U, V, W, T, Xi, FlagP, P \n");
   fprintf( datafile, "ZONE F=POINT, I=%d, J=%d, K=%d\n", imax+2, jmax+2, kmax+2 );
  
   FOR_ALL_CELL
     fprintf(datafile, "%f\t%f\t%f\t%d\t%d\t%d\t",
-       x[IX(i,j,k)], y[IX(i,j,k)], z[IX(i,j,k)], i, j, k);    
-    fprintf(datafile, "%f\t%f\t%f\t%f\t%f\t%f\n",
+       x[IX(i,j,k)], y[IX(i,j,k)], z[IX(i,j,k)], i, j, k);
+    fprintf(datafile, "%f\t%f\t%f\t%f\t%f\t%f\t%f\n",
             u[IX(i,j,k)], v[IX(i,j,k)], w[IX(i,j,k)], T[IX(i,j,k)],
-            flagp[IX(i,j,k)], p[IX(i,j,k)]);    
+            Xi[IX(i,j,k)], flagp[IX(i,j,k)], p[IX(i,j,k)]);
   END_FOR
 
   sprintf(msg, "write_tecplot_data(): Wrote file %s.", filename);
