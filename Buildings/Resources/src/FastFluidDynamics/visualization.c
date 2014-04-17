@@ -188,6 +188,7 @@ void ffd_key_func(PARA_DATA *para, REAL **var, int **BINDEX,
     case 'L':
       para->outp->v_length = para->outp->v_length*2;
       break;
+    // Move the plane along the axis
     case '+':
       para->geom->pindex ++;
       check_pindex(para);
@@ -195,6 +196,9 @@ void ffd_key_func(PARA_DATA *para, REAL **var, int **BINDEX,
     case '-':
       para->geom->pindex --;
       check_pindex(para);
+      break;
+    default:
+      // Ignore the wrong key input
       break;
   }
 } // End of ffd_key_func()
