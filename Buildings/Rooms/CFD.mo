@@ -21,9 +21,6 @@ model CFD
   parameter Modelica.SIunits.Time samplePeriod(min=100*Modelica.Constants.eps)
     "Sample period of component"
     annotation(Dialog(group = "Sampling"));
-  parameter Modelica.SIunits.Time startTime
-    "First sample time instant. fixme: this should be at first step."
-    annotation(Dialog(group = "Sampling"));
 
   parameter String sensorName[:] = {""}
     "Names of sensors as declared in the CFD input file";
@@ -47,6 +44,10 @@ protected
     "Flag, true if the model has at least one sensor";
   final parameter Integer nSen(min=0) = size(sensorName, 1)
     "Number of sensors that are connected to CFD output";
+ parameter Modelica.SIunits.Time startTime(fixed=false)
+    "First sample time instant. fixme: this should be at first step.";
+initial equation
+  startTime = time;
 equation
   connect(qGai_flow, heaGai.qGai_flow) annotation (Line(
       points={{-280,80},{-250,80},{-250,100},{-222,100}},
