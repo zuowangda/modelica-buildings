@@ -284,6 +284,14 @@ int ffd_cosimulation(CosimulationData *cosim) {
 ///\return 0 if no error occurred
 ///////////////////////////////////////////////////////////////////////////////
 int ffd(int cosimulation) {
+#ifndef _MSC_VER //Linux
+  //Initialize glut library
+  char fakeParam[] = "fake";
+  char *fakeargv[] = { fakeParam, NULL };
+  int fakeargc = 1;
+  glutInit( &fakeargc, fakeargv );
+#endif
+
   // Initialize the parameters
   para.geom = &geom;
   para.inpu = &inpu;
@@ -296,14 +304,6 @@ int ffd(int cosimulation) {
   para.init   = &init;
   // Stand alone simulation: 0; Cosimulaiton: 1
   para.solv->cosimulation = cosimulation; 
-
-#ifndef _MSC_VER //Linux
-  //Initialize glut library
-  char fakeParam[] = "fake";
-  char *fakeargv[] = { fakeParam, NULL };
-  int fakeargc = 1;
-  glutInit( &fakeargc, fakeargv );
-#endif
 
   if(initialize(&para)!=0) {
     ffd_log("ffd(): Could not initialize simulation parameters.", FFD_ERROR);
