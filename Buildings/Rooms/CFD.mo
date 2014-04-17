@@ -45,9 +45,10 @@ protected
   final parameter Integer nSen(min=0) = size(sensorName, 1)
     "Number of sensors that are connected to CFD output";
  parameter Modelica.SIunits.Time startTime(fixed=false)
-    "First sample time instant. fixme: this should be at first step.";
+    "First sample time instant.";
 initial equation
   startTime = time;
+
 equation
   connect(qGai_flow, heaGai.qGai_flow) annotation (Line(
       points={{-280,80},{-250,80},{-250,100},{-222,100}},
