@@ -34,13 +34,14 @@
 ///\param nConExtWin Number of exterior construction with windows
 ///\param nXi Number of species
 ///\param nC Number of trace substances
+///\param rho_start Density at initial state
 ///
 ///\return 0 if no error occurred
 ///////////////////////////////////////////////////////////////////////////////
 int cfdStartCosimulation(char *cfdFilNam, char **name, double *A, double *til, 
                 int *bouCon, int nPorts, char** portName, int haveSensor,
                 char **sensorName, int haveShade, int nSur, int nSen,
-                int nConExtWin, int nXi, int nC) {
+                int nConExtWin, int nXi, int nC, double rho_start) {
   int i, nBou;
   /****************************************************************************
   | For call FFD-DLL
@@ -75,6 +76,7 @@ int cfdStartCosimulation(char *cfdFilNam, char **name, double *A, double *til,
   cosim->para->sha = haveShade;
   cosim->para->nC = nC;
   cosim->para->nXi = nXi;
+  cosim->para->rho_start = rho_start;
 
   nBou = nSur + nPorts;
 
