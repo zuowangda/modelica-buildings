@@ -73,11 +73,6 @@
 #include "cosimulation.h"
 #endif
 
-#ifndef _COSIMULATION_INTERFACE_H
-#define _COSIMULATION_INTERFACE_H
-#include "cosimulation_interface.h"
-#endif
-
 ///////////////////////////////////////////////////////////////////////////////
 /// FFD solver
 ///
