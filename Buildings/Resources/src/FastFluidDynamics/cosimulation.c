@@ -186,8 +186,20 @@ int read_cosim_parameter(PARA_DATA *para, REAL **var, int **BINDEX) {
   | Get the start time of co-simulation
   ****************************************************************************/
   para->mytime->t = para->cosim->modelica->t;
-  sprintf(msg, "read_cosim_parameter():Simulation starts at %fs", para->mytime->t);
+  sprintf(msg, "read_cosim_parameter(): Simulation starts at %fs", 
+          para->mytime->t);
   ffd_log(msg, FFD_NORMAL);
+
+  /****************************************************************************
+  | Get the air density if there is a fluid port
+  ****************************************************************************/
+  if(para->bc->nb_port>0 && para->prob->rho!=para->cosim->para->rho_start) {
+    sprintf(msg, "read_cosim_parameter(): Overwrite the density of air "
+           "%f kg/m3 with %f kg/m3", para->prob->rho, 
+           para->cosim->para->rho_start);
+    para->prob->rho = para->cosim->para->rho_start;
+    ffd_log(msg, FFD_NORMAL);
+  } 
 
   return 0;
 } // End of read_cosim_parameter()

@@ -22,6 +22,7 @@ typedef struct {
   int nXi; // Number of species
   int nC; // Number of trace substances 
   int sha; // 1: have shade ; 0: no shade 
+  float rho_start; // Density at initial state
   char *fileName; // Name of FFD input file
   char **name; // *name[nSur]: Name of surfaces and flow ports
   char **portName; // *name[nPorts]: Name of fluid ports
