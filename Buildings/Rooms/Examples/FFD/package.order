@@ -8,3 +8,4 @@ ForcedConvection
 MixedConvection
 MixedConvectionWithControl
 RayleighNumberWithControl
+WindowShade
