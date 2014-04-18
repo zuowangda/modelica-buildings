@@ -23,6 +23,8 @@ model CFDAirHeatMassBalance
     "Names of sensors as declared in the CFD input file";
   parameter String portName[nPorts]
     "Names of fluid ports as declared in the CFD input file";
+  parameter Real shadeRatio[nConExtWin]
+    "The initial setting of shades on class (0: unshaded; 1: fully shaded)";
 
   CFDExchange cfd(
     final cfdFilNam=cfdFilNam,
@@ -108,6 +110,7 @@ protected
       bouConConExtWin=datConExtWin.boundaryCondition,
       AGla=datConExtWin.AGla,
       AFra=datConExtWin.AFra,
+      uSha=shadeRatio,
       nameConPar=datConPar.name,
       AConPar=datConPar.A,
       tilConPar=datConPar.til,
@@ -301,7 +304,7 @@ protected
       nConExtWin] "Boundary condition";
     input Modelica.SIunits.Area AGla[nConExtWin] "Surface area";
     input Modelica.SIunits.Area AFra[nConExtWin] "Surface area";
-
+    input Real uSha[nConExtWin] "Shade ratio";
     input String nameConPar[nConPar] "Surface name";
     input Modelica.SIunits.Area AConPar[nConPar] "Surface area";
     input Modelica.SIunits.Angle tilConPar[nConPar] "Surface tilt";
@@ -337,12 +340,12 @@ protected
           bouCon=bouConConExtWin[i]) for i in 1:nConExtWin},
         {CFDSurfaceIdentifier(
           name=nameConExtWin[i] + " (glass, unshaded)",
-          A=AGla[i],
+          A=AGla[i]*(1-uSha[i]),
           til=tilConExtWin[i],
           bouCon=bouConConExtWin[i]) for i in 1:nConExtWin},
         {CFDSurfaceIdentifier(
           name=nameConExtWin[i] + " (glass, shaded)",
-          A=AGla[i],
+          A=AGla[i]*uSha[i],
           til=tilConExtWin[i],
           bouCon=bouConConExtWin[i]) for i in 1:(if haveShade then nConExtWin
          else 0)},
@@ -836,7 +839,8 @@ Buildings.Rooms.UsersGuide.CFD</a>.
 December 31, 2013, by Wangda Zuo:<br/>
 - Corrected the connections. cfd.u should always be connected to Q_flow_out and cfd.y to T_in.
 - Added unit [W] for total convective sensible heat before it is input into component cfd.  
-- Enabled transfer of C and X information
+- Enabled transfer of C and X information.
+- Added initial value of shade.
 <li>
 July 17, 2013, by Michael Wetter:<br/>
 First implementation.

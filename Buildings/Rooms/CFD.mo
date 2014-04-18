@@ -10,7 +10,8 @@ model CFD
     final haveSensor=haveSensor,
     final nSen=nSen,
     final sensorName=sensorName,
-    final portName=portName),
+    final portName=portName,
+    final shadeRatio=shadeRatio),
     final energyDynamics = Modelica.Fluid.Types.Dynamics.FixedInitial,
     massDynamics = Modelica.Fluid.Types.Dynamics.FixedInitial);
 
@@ -21,6 +22,9 @@ model CFD
   parameter Modelica.SIunits.Time samplePeriod(min=100*Modelica.Constants.eps)
     "Sample period of component"
     annotation(Dialog(group = "Sampling"));
+
+  parameter Real shadeRatio[nConExtWin]
+    "The initial setting of shades on class (0: unshaded; 1: fully shaded)";
 
   parameter String sensorName[:] = {""}
     "Names of sensors as declared in the CFD input file";
