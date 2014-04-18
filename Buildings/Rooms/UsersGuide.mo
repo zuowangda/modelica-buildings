@@ -787,13 +787,22 @@ If <code>bouCon[i] = 2</code>, then
 heat flow rate is sent from Modelica to CFD.
 </li>
 <li>
-There is also an array <code>sensorName</code> that contains the names of all sensors,
+There is an array <code>sensorName</code> that contains the names of all sensors,
 in the same order as they are declared when instantiating the model
 <a href=\"modelica://Buildings.Rooms.CFD\">
 Buildings.Rooms.CFD</a>.
 If no sensors are declared in Modelica, then this array will have zero elements.
 How many sensor are declared in Modelica can be checked through the variable <code>nSen</code>,
 which is sent from Modelica to CFD.
+</li>
+<li>
+There is also an array <code>AirProperty</code> that contains the properties of the air. 
+The orders of elements in this array are as follows:
+<ol>
+<li>
+The density of air at the initial state.
+</li>
+</ol> 
 </li>
 </ul>
 <p>
