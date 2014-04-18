@@ -10,10 +10,11 @@ model CFDFluidInterface
             "Select CFD input file")));
   parameter Integer nPorts(final min=2)=0 "Number of ports"
     annotation(Evaluate=true, Dialog(connectorSizing=true, tab="General",group="Ports"));
-
+  parameter Modelica.SIunits.Density rho_start
+    "Density, used to compute fluid mass";
   parameter Modelica.SIunits.Volume V "Volume";
   final parameter Modelica.SIunits.Mass m_start = rho_start * V
-    "Initial mass of air inside the room. Fixme: use actual density.";
+    "Initial mass of air inside the room.";
 
   Modelica.Blocks.Interfaces.RealInput T_outflow[nPorts](
   each start=T_start,
@@ -73,12 +74,6 @@ model CFDFluidInterface
       origin={0,-100})));
 
 protected
-  parameter Modelica.SIunits.Density rho_start=Medium.density(
-   Medium.setState_pTX(
-     T=T_start,
-     p=p_start,
-     X=X_start[1:Medium.nXi])) "Density, used to compute fluid mass";
-
   Modelica.Blocks.Interfaces.RealOutput Xi_inflow_internal[max(nPorts, nPorts*Medium.nXi)](
   min=0,
   max=1,

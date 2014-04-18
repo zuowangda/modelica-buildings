@@ -40,7 +40,8 @@ model CFDAirHeatMassBalance
     final portName=portName,
     final yFixed=yFixed,
     final nXi=Medium.nXi,
-    final nC=Medium.nC) "Block that exchanges data with the CFD simulation"
+    final nC=Medium.nC,
+    rho_start=rho_start) "Block that exchanges data with the CFD simulation"
     annotation (Placement(transformation(extent={{-40,180},{-20,200}})));
 
   Modelica.Blocks.Interfaces.RealOutput yCFD[nSen] if haveSensor
@@ -81,6 +82,12 @@ protected
       for i in 1:Medium.nC)
     "Trace substances of the fluid that flows into the HVAC system used for yFixed"
     annotation (Dialog(group="Outputs if activateInterface=false"));
+
+   parameter Modelica.SIunits.Density rho_start=Medium.density(
+   Medium.setState_pTX(
+     T=T_start,
+     p=p_start,
+     X=X_start[1:Medium.nXi])) "Density, used to compute fluid mass";
 
   final parameter CFDSurfaceIdentifier surIde[kSurBou + nSurBou]=
       assignSurfaceIdentifier(
@@ -178,7 +185,8 @@ protected
     final T_start=T_start,
     final X_start=X_start,
     final C_start=C_start,
-    final C_nominal=C_nominal) "Fluid interface"
+    final C_nominal=C_nominal,
+    rho_start=rho_start) "Fluid interface"
     annotation (Placement(transformation(extent={{10,-198},{-10,-178}})));
 
   // The following list declares the first index minus 1

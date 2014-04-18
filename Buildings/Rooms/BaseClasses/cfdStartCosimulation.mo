@@ -20,7 +20,7 @@ function cfdStartCosimulation "Start the cosimulation with CFD"
   input Integer nConExtWin(min=0) "number of exterior construction with window";
   input Integer nXi(min=0) "Number of independent species";
   input Integer nC(min=0) "Number of trace substances";
-
+  input Modelica.SIunits.Density rho_start "Density at initial state";
   output Integer retVal
     "Return value of the function (0 indicates CFD successfully started.)";
 external"C" retVal = cfdStartCosimulation(
@@ -38,7 +38,8 @@ external"C" retVal = cfdStartCosimulation(
     nSen,
     nConExtWin,
     nXi,
-    nC) annotation (Include="#include <cfdStartCosimulation.c>",
+    nC,
+    rho_start) annotation (Include="#include <cfdStartCosimulation.c>",
       IncludeDirectory="modelica://Buildings/Resources/C-Sources");
 
   annotation (Documentation(info="<html>

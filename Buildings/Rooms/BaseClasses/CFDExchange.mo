@@ -31,6 +31,7 @@ block CFDExchange "Block that exchanges data with the CFD code"
   parameter String portName[:]
     "Names of fluid ports as declared in the CFD input file";
   parameter Boolean verbose=false "Set to true for verbose output";
+  parameter Modelica.SIunits.Density rho_start "Density at initial state";
 
   Modelica.Blocks.Interfaces.RealInput u[nWri] "Inputs to CFD"
     annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
@@ -61,7 +62,6 @@ protected
     "Flag, used to tag identical sensor names";
   parameter Boolean idePorNam[max(0, nPorts - 1)](fixed=false)
     "Flag, used to tag identical port names";
-
   ///////////////////////////////////////////////////////////////////////////
   // Function that sends the parameters of the model from Modelica to CFD
   function sendParameters
@@ -86,7 +86,7 @@ protected
     input Integer nXi
       "Number of independent species concentration of the inflowing medium";
     input Integer nC "Number of trace substances of the inflowing medium";
-
+    input Modelica.SIunits.Density rho_start "Density at initial state";
   protected
     Integer nConExtWin=0;
     Integer coSimFlag=0;
@@ -115,7 +115,8 @@ protected
         nSen,
         nConExtWin,
         nXi,
-        nC);
+        nC,
+        rho_start);
     assert(coSimFlag < 0.5, "Could not start the cosimulation.");
 
   end sendParameters;
@@ -325,6 +326,7 @@ initial equation
     nPorts=nPorts,
     nXi=nXi,
     nC=nC,
+    rho_start=rho_start,
     verbose=verbose);
 
 initial algorithm
