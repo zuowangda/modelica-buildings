@@ -37,7 +37,7 @@ int read_cosim_parameter(PARA_DATA *para, REAL **var, int **BINDEX) {
 
   /****************************************************************************
   | Compare number of solid surface boundaries 
-  | (Wall, Window Glass and Window Frame)
+  | (Wall, Window Glass with and withour shading, and Window Frame)
   ****************************************************************************/
   if(para->cosim->para->nSur==para->bc->nb_wall) {
     sprintf(msg, "\tnSur=%d", para->cosim->para->nSur);
