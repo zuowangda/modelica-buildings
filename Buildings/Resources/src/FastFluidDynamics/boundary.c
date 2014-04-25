@@ -647,11 +647,10 @@ int set_bnd_trace(PARA_DATA *para, REAL **var, int trace_index, REAL *psi,
           psi[IX(i,j,k)] = psi[IX(i,j,k-1)];
       } 
     } // End of wall boundary
-
     /*-------------------------------------------------------------------------
     | Outlet boundary
     -------------------------------------------------------------------------*/
-    if(flagp[IX(i,j,k)]==OUTLET) {
+    else if(flagp[IX(i,j,k)]==OUTLET) {
       // West
       if(i==0) {
         aw[IX(i+1,j,k)] = 0;
