@@ -170,10 +170,14 @@ int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX) {
     var[QFLUX][i]   = 0.0;
     var[Xi1][i]     = 0.0;
     var[Xi2][i]     = 0.0;
+    var[Xi1S][i]    = 0.0;
+    var[Xi2S][i]    = 0.0;
     var[Xi1BC][i]   = 0.1;
     var[Xi2BC][i]   = 0.0;
     var[C1][i]      = 0.0;
     var[C2][i]      = 0.0;
+    var[C1S][i]     = 0.0;
+    var[C2S][i]     = 0.0;
     var[C1BC][i]    = 0.0;
     var[C2BC][i]    = 0.0;
   }
