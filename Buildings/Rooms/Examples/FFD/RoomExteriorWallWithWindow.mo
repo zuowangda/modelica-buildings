@@ -33,7 +33,8 @@ model RoomExteriorWallWithWindow
         boundaryCondition={Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,
             Buildings.Rooms.Types.CFDBoundaryConditions.Temperature}),
       cfdFilNam="Resources/Data/Rooms/FFD/WallWindow.ffd",
-      T_start=283.15));
+      T_start=283.15,
+      shadeRatio={0,0}));
 
   parameter HeatTransfer.Data.OpaqueConstructions.Insulation100Concrete200 matLayExt
     "Construction material for exterior walls"
