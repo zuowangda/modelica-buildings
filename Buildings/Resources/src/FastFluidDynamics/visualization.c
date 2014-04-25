@@ -299,7 +299,7 @@ void get_UI(PARA_DATA *para, REAL **var) {
   REAL Lx, Ly;
   int i, j, k, i0, j0;
   int pindex = para->geom->pindex;
-  REAL *d_s = var[Xi1], *T_s = var[TEMPS];
+  REAL *d_s = var[Xi1S], *T_s = var[TEMPS];
   REAL *x, *y, *u_s, *v_s;
   REAL x0, y0, x_click, y_click;
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
