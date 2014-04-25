@@ -165,17 +165,17 @@ int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX) {
     var[VXBC][i]    = 0.0;
     var[VYBC][i]    = 0.0;
     var[VZBC][i]    = 0.0;
-    var[TEMPBC][i]  = 0.0;
+    var[TEMPBC][i]  = 0.0;;
     var[QFLUXBC][i] = 0.0;
     var[QFLUX][i]   = 0.0;
     var[Xi1][i]     = 0.0;
     var[Xi2][i]     = 0.0;
-    var[Xi3][i]     = 0.0;
-    var[Xi4][i]     = 0.0;
+    var[Xi1BC][i]   = 0.1;
+    var[Xi2BC][i]   = 0.0;
     var[C1][i]      = 0.0;
     var[C2][i]      = 0.0;
-    var[C3][i]      = 0.0;
-    var[C4][i]      = 0.0;
+    var[C1BC][i]    = 0.0;
+    var[C2BC][i]    = 0.0;
   }
 
   // Calculate the thermal diffusivity

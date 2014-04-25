@@ -283,6 +283,8 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
             var[VXBC][IX(ii,ij,ik)] = U; 
             var[VYBC][IX(ii,ij,ik)] = V; 
             var[VZBC][IX(ii,ij,ik)] = W;
+            var[Xi1BC][IX(ii,ij,ik)] = MASS;
+
             flagp[IX(ii,ij,ik)] = INLET; // Cell flag to be inlet
             if(para->outp->version==DEBUG) {
               sprintf(msg, "read_sci_input(): get inlet cell[%d,%d,%d]=%.1f",
@@ -383,6 +385,7 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
             var[VXBC][IX(ii,ij,ik)] = U; 
             var[VYBC][IX(ii,ij,ik)] = V; 
             var[VZBC][IX(ii,ij,ik)] = W;
+            var[Xi1BC][IX(ii,ij,ik)] = MASS;
             flagp[IX(ii,ij,ik)] = OUTLET;
             if(para->outp->version==DEBUG) {
               sprintf(msg, "read_sci_input(): get outlet cell[%d,%d,%d]=%.1f",
