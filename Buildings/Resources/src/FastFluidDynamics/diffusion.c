@@ -79,12 +79,14 @@ int diffusion(PARA_DATA *para, REAL **var, int var_type, int index,
                 check_residual(para, var, psi));
         ffd_log(msg, FFD_NORMAL);
         break;
-      case TRACE:
+      case Xi1:
+      case Xi2:
         sprintf(msg, "diffusion(): Residual of Trace %d is %f",
                 index, check_residual(para, var, psi));
         ffd_log(msg, FFD_NORMAL);
         break;
-      case SPECIE:
+      case C1:
+      case C2:
         sprintf(msg, "diffusion(): Residual of Specie %d is %f",
                 index, check_residual(para, var, psi));
         ffd_log(msg, FFD_NORMAL);
@@ -264,8 +266,10 @@ int coef_diff(PARA_DATA *para, REAL **var, REAL *psi, REAL *psi0,
     | Scalar Variable
     -------------------------------------------------------------------------*/
     case TEMP:
-    case TRACE:
-    case SPECIE:
+    case Xi1:
+    case Xi2:
+    case C1:
+    case C2:
       if(para->prob->tur_model == LAM)   
         kapa = para->prob->alpha; 
       else if(para->prob->tur_model == CONSTANT) 
@@ -345,11 +349,13 @@ int source_diff(PARA_DATA *para, REAL **var, int var_type, int index) {
       case TEMP: 
         b[IX(i,j,k)] += var[TEMPS][IX(i,j,k)];
         break;
-      case SPECIE:
-        b[IX(i,j,k)] += var[SPECIE+index][IX(i,j,k)];
+      case C1:
+      case C2:
+        b[IX(i,j,k)] += var[C1+index][IX(i,j,k)];
         break;
-      case TRACE:
-        b[IX(i,j,k)] += var[TRACE+index][IX(i,j,k)];
+      case Xi1:
+      case Xi2:
+        b[IX(i,j,k)] += var[Xi1+index][IX(i,j,k)];
         break;
     }
   END_FOR

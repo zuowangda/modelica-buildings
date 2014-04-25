@@ -619,6 +619,14 @@ void free_data(REAL **var) {
   if(var[VYBC])  free(var[VYBC]);
   if(var[VZBC])  free(var[VZBC]);
   if(var[TEMPBC])  free(var[TEMPBC]);
+  if(var[Xi1])  free(var[Xi1]);
+  if(var[Xi2])  free(var[Xi2]);
+  if(var[Xi1BC])  free(var[Xi1BC]);
+  if(var[Xi2BC])  free(var[Xi2BC]);
+  if(var[C1])  free(var[C1]);
+  if(var[C2])  free(var[C2]);
+  if(var[C1BC])  free(var[C1BC]);
+  if(var[C2BC])  free(var[C2BC]);
   if(var[QFLUXBC])  free(var[QFLUXBC]);
   if(var[QFLUX])  free(var[QFLUX]);
 
