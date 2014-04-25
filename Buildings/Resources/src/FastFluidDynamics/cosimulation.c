@@ -727,7 +727,7 @@ int assign_thermal_bc(PARA_DATA *para, REAL **var, int **BINDEX) {
 ///\return 0 if no error occurred
 ///////////////////////////////////////////////////////////////////////////////
 int assign_port_bc(PARA_DATA *para, REAL **var, int **BINDEX) {
-  int i, j, k, id, it;
+  int i, j, k, id, it, Xid, Cid;
   int imax = para->geom->imax, jmax = para->geom->jmax;
   int kmax = para->geom->kmax;
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
@@ -753,17 +753,17 @@ int assign_port_bc(PARA_DATA *para, REAL **var, int **BINDEX) {
     /*-------------------------------------------------------------------------
     | Convert nXi types of species
     -------------------------------------------------------------------------*/
-    for(k=0; k<para->cosim->para->nXi; k++) {
-      para->bc->XiPort[j][k] = para->cosim->modelica->XiPor[i][k];
-      sprintf(msg, "\tXi[%d]=%f", k, para->bc->XiPort[j][k]);
+    for(Xid=0; Xid<para->cosim->para->nXi; Xid++) {
+      para->bc->XiPort[j][Xid] = para->cosim->modelica->XiPor[i][Xid];
+      sprintf(msg, "\tXi[%d]=%f", Xid, para->bc->XiPort[j][Xid]);
       ffd_log(msg, FFD_NORMAL);
     }
     /*-------------------------------------------------------------------------
     | Convert nC types of trace substances
     -------------------------------------------------------------------------*/
-    for(k=0; k<para->cosim->para->nC; k++) {
-      para->bc->CPort[j][k] = para->cosim->modelica->CPor[i][k];
-      sprintf(msg, "\tC[%d]=%f", k, para->bc->CPort[j][k]);
+    for(Cid=0; Cid<para->cosim->para->nC; Cid++) {
+      para->bc->CPort[j][Cid] = para->cosim->modelica->CPor[i][Cid];
+      sprintf(msg, "\tC[%d]=%f", Cid, para->bc->CPort[j][Cid]);
       ffd_log(msg, FFD_NORMAL);
     }
   }
@@ -785,6 +785,12 @@ int assign_port_bc(PARA_DATA *para, REAL **var, int **BINDEX) {
       if(para->bc->velPort[id]>=0) {
         var[FLAGP][IX(i,j,k)] = INLET; 
         var[TEMPBC][IX(i,j,k)] = para->bc->TPort[id];
+        for(Xid=0; Xid<para->cosim->para->nXi; Xid++)
+          var[Xi1BC+Xid][IX(i,j,k)] = para->bc->XiPort[id][Xid];
+        for(Cid=0; Cid<para->cosim->para->nC; Cid++)
+          var[C1BC+Cid][IX(i,j,k)] = para->bc->CPort[id][Cid];
+
+
         if(i==0)
           var[VXBC][IX(i,j,k)] = para->bc->velPort[id];
         else if(i==imax+1)
