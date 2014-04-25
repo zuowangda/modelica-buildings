@@ -245,7 +245,7 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
       fgets(string, 400, file_params);
       sscanf(string,"%d%d%d%d%d%d%f%f%f%f%f", &SI, &SJ, &SK, &EI, 
              &EJ, &EK, &TMP, &MASS, &U, &V, &W);
-      sprintf(msg, "read_sci_input(): VX=%f, VY=%f, VX=%f, T=%f, Xi=%f", 
+      sprintf(msg, "read_sci_input(): VX=%f, VY=%f, VZ=%f, T=%f, Xi=%f", 
               U, V, W, TMP, MASS);
       ffd_log(msg, FFD_NORMAL);
       if(EI==0) { 
