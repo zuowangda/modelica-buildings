@@ -272,14 +272,14 @@ int den_step(PARA_DATA *para, REAL **var, int **BINDEX) {
       ffd_log(msg, FFD_NORMAL);
     }
     den = var[Xi1+i];
-    flag = advect(para, var, SPECIE, i, den0, den, BINDEX);
+    flag = advect(para, var, Xi1+i, i, den0, den, BINDEX);
     if(flag!=0) {
       sprintf(msg, "den_step(): Could not advect species %d", i+1);
       ffd_log(msg, FFD_ERROR);
       return flag;
     }
 
-    flag = diffusion(para, var, SPECIE, i, den, den0, BINDEX);
+    flag = diffusion(para, var, Xi1+i, i, den, den0, BINDEX);
     if(flag!=0) {
       sprintf(msg, "den_step(): Could not diffuse species %d", i+1);
       ffd_log(msg, FFD_ERROR);
@@ -296,14 +296,14 @@ int den_step(PARA_DATA *para, REAL **var, int **BINDEX) {
       ffd_log(msg, FFD_NORMAL);
     }
     den = var[C1+i];
-    flag = advect(para, var, TRACE, i, den0, den, BINDEX);
+    flag = advect(para, var, Xi1, i, den0, den, BINDEX);
     if(flag!=0) {
       sprintf(msg, "den_step(): Could not advect trace substance %d", i+1);
       ffd_log(msg, FFD_ERROR);
       return flag;
     }
 
-    flag = diffusion(para, var, TRACE, i, den, den0, BINDEX);
+    flag = diffusion(para, var, Xi1, i, den, den0, BINDEX);
     if(flag!=0) {
       sprintf(msg, "den_step(): Could not diffuse trace substance %d", i+1);
       ffd_log(msg, FFD_ERROR);
@@ -407,8 +407,10 @@ int equ_solver(PARA_DATA *para, REAL **var, int var_type, REAL *psi) {
       break;
     case TEMP:
     case IP:
-    case TRACE:
-    case SPECIE:
+    case Xi1:
+    case Xi2:
+    case C1:
+    case C2:
       Gauss_Seidel(para, var, flagp, psi);
       break;
     default:
