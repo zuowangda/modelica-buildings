@@ -117,7 +117,7 @@ void set_default_parameter(PARA_DATA *para) {
 ///\return 0 if no error occurred
 ///////////////////////////////////////////////////////////////////////////////
 int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX) {
-  int i; 
+  int i, j; 
   int size = (para->geom->imax+2)*(para->geom->jmax+2)*(para->geom->kmax+2);
   int flag = 0;
   
@@ -233,7 +233,7 @@ int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX) {
               FFD_ERROR);
       return 1;
     }
-    
+
     for(i=0; i<para->bc->nb_port; i++) {
       para->bc->XiPort[i] = (REAL *) malloc(sizeof(REAL)*para->bc->nb_Xi);
       para->bc->XiPortAve[i] = (REAL *) malloc(sizeof(REAL)*para->bc->nb_Xi);
@@ -245,6 +245,12 @@ int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX) {
                 "Xi at Port[%d].", i);
         ffd_log(msg, FFD_ERROR);
         return 1;
+      }
+
+      for(j=0; j<para->bc->nb_Xi; j++) {
+        para->bc->XiPort[i][j] = 0.0;
+        para->bc->XiPortAve[i][j] = 0.0;
+        para->bc->XiPortMean[i][j] = 0.0;
       }
     }
     if(para->outp->version==DEBUG) {
@@ -279,6 +285,12 @@ int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX) {
                 "Could not allocate memory for C at Port[i].",
                 FFD_ERROR);
         return 1;
+      }
+
+      for(j=0; j<para->bc->nb_C; j++) {
+        para->bc->CPort[i][j] = 0.0;
+        para->bc->CPortAve[i][j] = 0.0;
+        para->bc->CPortMean[i][j] = 0.0;
       }
     }
     if(para->outp->version==DEBUG) {
