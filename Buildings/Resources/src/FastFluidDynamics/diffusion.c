@@ -351,11 +351,11 @@ int source_diff(PARA_DATA *para, REAL **var, int var_type, int index) {
         break;
       case C1:
       case C2:
-        b[IX(i,j,k)] += var[C1+index][IX(i,j,k)];
+        b[IX(i,j,k)] += var[C1S+index][IX(i,j,k)];
         break;
       case Xi1:
       case Xi2:
-        b[IX(i,j,k)] += var[Xi1+index][IX(i,j,k)];
+        b[IX(i,j,k)] += var[Xi1S+index][IX(i,j,k)];
         break;
     }
   END_FOR
