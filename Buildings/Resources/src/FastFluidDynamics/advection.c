@@ -83,8 +83,10 @@ int advect(PARA_DATA *para, REAL **var, int var_type, int index,
     | Temperature, Trace and Species
     -------------------------------------------------------------------------*/
     case TEMP:
-    case TRACE:
-    case SPECIE:
+    case Xi1:
+    case Xi2:
+    case C1:
+    case C2:
       flag = trace_scalar(para, var, var_type, index, d, d0, BINDEX);
       if(flag!=0) {
         sprintf(msg, 

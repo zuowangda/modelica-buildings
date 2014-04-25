@@ -115,16 +115,14 @@ Place the stdlib.h line above the glut.h line in the code.
 #define VYBC 41
 #define VZBC 42
 #define TEMPBC 43
-#define SPECIE 44
 #define Xi1 44
 #define Xi2 45
-#define Xi3 46
-#define Xi4 47
-#define TRACE 48
+#define Xi1BC 46
+#define Xi2BC 47
 #define C1  48
 #define C2  49
-#define C3  50
-#define C4  51
+#define C1BC 50
+#define C2BC 51  // Last variable
 
 typedef enum{NOSLIP, SLIP, INFLOW, OUTFLOW, PERIODIC, SYMMETRY} BCTYPE;
 
