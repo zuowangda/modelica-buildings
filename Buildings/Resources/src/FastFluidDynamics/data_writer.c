@@ -147,7 +147,7 @@ int write_tecplot_all_data(PARA_DATA *para, REAL **var, char *name) {
   fprintf(dataFile, "T, TM, TS, ");
   fprintf(dataFile, "GX, GY, GZ, ");
   fprintf(dataFile, "FLAGU, FLAGV, FLAGW, FLAGP, ");
-  fprintf(dataFile, "VXBC, VYBC, VZBV, TEMPBC, ");
+  fprintf(dataFile, "VXBC, VYBC, VZBV, TEMPBC, Xi1BC, Xi2BC, C1BC, C2BC, ");
   fprintf(dataFile, "QFLUX, QFLUXBC, ");
   fprintf(dataFile, "AP, AN, AS, AW, AE, AF, AB, B, AP0, PP");
   fprintf(dataFile, "\n");
@@ -179,6 +179,9 @@ int write_tecplot_all_data(PARA_DATA *para, REAL **var, char *name) {
     fprintf(dataFile, "%f\t%f\t%f\t%f\t",
             var[VXBC][IX(i,j,k)], var[VYBC][IX(i,j,k)], 
             var[VZBC][IX(i,j,k)], var[TEMPBC][IX(i,j,k)]);
+    fprintf(dataFile, "%f\t%f\t%f\t%f\t",
+            var[Xi1BC][IX(i,j,k)], var[Xi2BC][IX(i,j,k)],
+            var[C1BC][IX(i,j,k)], var[C2BC][IX(i,j,k)]);
     // Heat flux
     fprintf(dataFile, "%f\t%f\t",
             var[QFLUX][IX(i,j,k)], var[QFLUXBC][IX(i,j,k)]);
@@ -219,7 +222,7 @@ void convert_to_tecplot(PARA_DATA *para, REAL **var) {
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
   REAL *u = var[VX], *v = var[VY], *w = var[VZ];
   REAL *um = var[VXM], *vm = var[VYM], *wm = var[VZM];
-  REAL *p = var[IP], *d = var[TRACE];
+  REAL *p = var[IP], *d = var[Xi1];
   REAL *T = var[TEMP], *Tm = var[TEMPM];
 
   /****************************************************************************
@@ -321,7 +324,7 @@ int write_unsteady(PARA_DATA *para, REAL **var, char *name){
   int kmax = para->geom->kmax;
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
   REAL *u = var[VX], *v = var[VY], *w = var[VZ], *p = var[IP];
-  REAL  *d = var[TRACE];
+  REAL  *d = var[Xi1];
   REAL *T = var[TEMP];
   char *filename;
   FILE *datafile;
