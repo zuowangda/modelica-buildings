@@ -65,8 +65,10 @@ int set_bnd(PARA_DATA *para, REAL **var, int var_type, int index, REAL *psi,
         ffd_log("set_bnd(): Could not set boundary condition for temperature.",
                 FFD_ERROR);
       break;
-    case SPECIE:
-    case TRACE:
+    case Xi1:
+    case Xi2:
+    case C1:
+    case C2:
       flag = set_bnd_trace(para, var, index, psi, BINDEX); 
       if(flag!=0)
         ffd_log("set_bnd(): Could not set boundary condition for trace.",
@@ -607,7 +609,7 @@ int set_bnd_trace(PARA_DATA *para, REAL **var, int trace_index, REAL *psi,
     -------------------------------------------------------------------------*/
     if(flagp[IX(i,j,k)]==INLET) {
       id = BINDEX[4][it]; 
-      psi[IX(i,j,k)] = para->bc->XiPort[id][trace_index];
+      psi[IX(i,j,k)] = 0.1; //var[trace_index][IX(i,j,k)];
     }
     /*-------------------------------------------------------------------------
     | Solid wall or block
