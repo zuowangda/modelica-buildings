@@ -299,7 +299,7 @@ void get_UI(PARA_DATA *para, REAL **var) {
   REAL Lx, Ly;
   int i, j, k, i0, j0;
   int pindex = para->geom->pindex;
-  REAL *d_s = var[TRACE], *T_s = var[TEMPS];
+  REAL *d_s = var[Xi1], *T_s = var[TEMPS];
   REAL *x, *y, *u_s, *v_s;
   REAL x0, y0, x_click, y_click;
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
@@ -469,7 +469,7 @@ void draw_density(PARA_DATA *para, REAL **var) {
 void draw_xy_density(PARA_DATA *para, REAL **var) {
   int i, j;
   REAL d00, d01, d10, d11;
-  REAL *x = var[X], *y = var[Y], *dens = var[TRACE];
+  REAL *x = var[X], *y = var[Y], *dens = var[Xi1];
   int imax = para->geom->imax, jmax = para->geom->jmax;
   int kmax = para->geom->kmax; 
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
@@ -508,7 +508,7 @@ void draw_xy_density(PARA_DATA *para, REAL **var) {
 void draw_yz_density(PARA_DATA *para, REAL **var) {
   int j, k;
   REAL d00, d01, d10, d11;
-  REAL *y = var[Y], *z = var[Z], *dens = var[TRACE];
+  REAL *y = var[Y], *z = var[Z], *dens = var[Xi1];
   int imax = para->geom->imax, jmax = para->geom->jmax;
   int kmax = para->geom->kmax;
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
@@ -546,7 +546,7 @@ void draw_yz_density(PARA_DATA *para, REAL **var) {
 void draw_zx_density(PARA_DATA *para, REAL **var) {
   int i, k;
   REAL d00, d01, d10, d11;
-  REAL *x = var[X], *z = var[Z], *dens = var[TRACE];
+  REAL *x = var[X], *z = var[Z], *dens = var[Xi1];
   int imax = para->geom->imax, jmax = para->geom->jmax;
   int kmax = para->geom->kmax;
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
