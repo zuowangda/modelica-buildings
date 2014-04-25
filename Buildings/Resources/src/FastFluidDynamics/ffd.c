@@ -49,7 +49,7 @@ int allocate_memory (PARA_DATA *para) {
   /****************************************************************************
   | Allocate memory for variables
   ****************************************************************************/
-  nb_var = C4+1;
+  nb_var = C2BC+1;
   var       = (REAL **) malloc ( nb_var*sizeof(REAL*) );
   if(var==NULL) {
     ffd_log("allocate_memory(): Could not allocate memory for var.",
@@ -334,6 +334,7 @@ int ffd(int cosimulation) {
   if(para.inpu->read_old_ffd_file==1) read_ffd_data(&para, var);
 
   ffd_log("ffd.c: Start FFD solver.", FFD_NORMAL);
+  //write_tecplot_data(&para, var, "initial");
 
   // Solve the problem
   if(para.outp->version==DEMO) {
