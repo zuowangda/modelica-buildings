@@ -29,7 +29,7 @@ geom.uniform 1 // Only for generating grid by FFD. 1: uniform grid; 0: non-unifo
 outp.cal_mean 1 // 1: Calculate mean value; 0: False
 outp.v_ref 0.1 // Reference velocity for visualization
 outp.Temp_ref 10 // Reference temperature for visualizations
-outp.v_length 1 // Change of velocity vector length in demo window
+outp.v_length 0.000001 // Change of velocity vector length in demo window
 outp.i_N 1 // Number of grids plotted in x direction
 outp.j_N 1 // Number of grids plotted in y direction
 outp.winx 600 // Resolution of screen at x direction in pixel
