@@ -1,4 +1,4 @@
-simulateModel("Buildings.Rooms.Examples.FFD.RayleighNumber", stopTime=7200, method="radau", tolerance=1e-06, resultFile="RayleighNumber");
+simulateModel("Buildings.Rooms.Examples.FFD.NaturalConvection", stopTime=7200, method="radau", tolerance=1e-06, resultFile="NaturalConvection");
 removePlots();
 Advanced.FullPlotTooltip = true;
 createPlot(id = 1,
@@ -12,7 +12,7 @@ createPlot(id = 1,
  grid = true,
  color = true,
  online = false,
- filename = "RayleighNumber.mat",
+ filename = "NaturalConvection.mat",
  leftTitleType = 1,
  bottomTitleType = 1,
  colors = {{0,0,255}});
