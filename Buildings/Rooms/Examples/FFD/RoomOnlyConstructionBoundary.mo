@@ -48,7 +48,7 @@ equation
         "Simulate and plot"),
     Documentation(info="<html>
 <p>
-This model tests the cosimulation of 
+This model tests the copuled simulation of 
 <a href=\"modelica://Buildings.Rooms.CFD\">
 Buildings.Rooms.CFD</a>
 with the FFD program by simulating the natural convection in an empty room with only construction boundaries.
@@ -56,11 +56,11 @@ with the FFD program by simulating the natural convection in an empty room with 
 <p>
 The dimensions of the room are 1m x 1m x 1m.
 The temperature of the east wall is set to 40 degC and the rest walls are 10 degC.
-The initial temperature of room air is 10 degC and it will increase due to the warm wall on the east.
+The temperature of room air is 10 degC at t = 0s and increases with time.
 Two sensors are placed in the room center (0.5m, 0.5m, 0.5m) that measure the temperature and the velocity.
 </p>
 <p>
-The following figure shows the streamlines and temperature [degC] on the X-Z plane at Y=0.5m simulated by the FFD. 
+The following figure shows the streamlines and temperature [degC] on the X-Z plane at Y = 0.5m simulated by the FFD. 
 </p>
 <p align=\"center\">
 <img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/RoomOnlyConstructionBoundary.png\" border=\"1\"/>
