@@ -69,14 +69,14 @@ equation
         "Simulate and plot"),
     Documentation(info="<html>
 <p>
-This model tests the co-simulation of 
+This model tests the coupled simulation of 
 <a href=\"modelica://Buildings.Rooms.CFD\">
 Buildings.Rooms.CFD</a>
 with the FFD program by simulating the ventilation with mixed convection in an empty room.
 The temperature of floor is fixed at 30 degC and the temperature on other walls and ceiling are fixed at 10 degC.
 The supply air temperature is fixed at 10 degC. 
 </p>
-Figure (a) shows the schematic of FFD simulation and Figure (b) shows the streamlines and temperature on the X-Z plane at Y=0.5 simulated by the FFD. 
+Figure (a) shows the schematic of FFD simulation and Figure (b) shows the velocity vectors and temperature on the X-Z plane at Y = 0.5m simulated by the FFD. 
 </p>
 <p align=\"center\">
 <img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/ConvectionSchematic.png\" border=\"1\"/>

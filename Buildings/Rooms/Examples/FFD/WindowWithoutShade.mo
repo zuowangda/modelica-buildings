@@ -52,7 +52,7 @@ model WindowWithoutShade
         "Simulate and plot"),
     Documentation(info="<html>
 <p>
-This model tests the cosimulation of 
+This model tests the coupled simulation of 
 <a href=\"modelica://Buildings.Rooms.CFD\">
 Buildings.Rooms.CFD</a>
 with the FFD program by simulating the natural convection in a room with only exterior walls and windows.
@@ -68,7 +68,7 @@ Both the wall and window are well insulated and the initial temperature of wall 
 <p align=\"center\">
 Figure (a)
 </p>
-Figure (b) shows the streamlines and temperature [degC] on the X-Z plane at Y=0.5m simulated by the FFD.
+Figure (b) shows the velocity vectors and temperature [degC] on the X-Z plane at Y = 0.5m simulated by the FFD.
 <p align=\"center\">
 <img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/WindowWithoutShade.png\" border=\"1\"/>
 </p>
