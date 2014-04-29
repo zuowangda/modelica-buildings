@@ -33,7 +33,8 @@ kinematic viscosity <i>&nu;=1.5e-5</i> m2/s,
 thermal diffusivity <i>&alpha;=2e-5</i> m2/s,
 characteristic length <i>L=1</i> m. 
 
-The boundary conditions are:
+Figure (a) shows the schematic of the FFD simulation. 
+The following conditions are applied at Modelica side:
 <ul>
 <li>
 East wall: Fixed temperature at <i>T<sub>e</sub>=0</i> degC, 
@@ -46,7 +47,19 @@ North & South wall, Ceiling, Floor: Fixed heat flux at 0 W/m2.
 </li>
 </ul>
 <p align=\"center\">
+<img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/OnlyWallSchematic.png\" border=\"1\"/>
+</p>
+<p align=\"center\">
+Figure (a)
+</p>
+<p>
+Figure (b) shows the velocity vectors and temperature [degC] on the X-Z plane at Y = 0.5m simulated by the FFD.
+</p>
+<p align=\"center\">
 <img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/NaturalConvection.png\" border=\"1\"/>
+</p>
+<p align=\"center\">
+Figure (b)
 </p>
 <p align=\"left\">
 <p>
