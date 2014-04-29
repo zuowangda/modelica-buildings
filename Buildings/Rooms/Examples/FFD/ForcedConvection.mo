@@ -3,7 +3,6 @@ model ForcedConvection "Ventilation with forced convection in an empty room"
   extends Modelica.Icons.Example;
   extends Buildings.Rooms.Examples.FFD.BaseClasses.PartialRoom(
     roo(
-      linearizeRadiation=false,
       surBou(
         name={"East Wall","West Wall","North Wall","South Wall","Ceiling","Floor"},
         A={0.9,0.9,1,1,1,1},
@@ -19,7 +18,8 @@ model ForcedConvection "Ventilation with forced convection in an empty room"
       nPorts=2,
       portName={"Inlet","Outlet"},
       cfdFilNam="Resources/Data/Rooms/FFD/ForcedConvection.ffd",
-      samplePeriod=6),
+      samplePeriod=6,
+      linearizeRadiation=true),
       nSurBou=6);
 
   HeatTransfer.Sources.FixedTemperature TWal[nSurBou](each T=283.15)
@@ -60,7 +60,7 @@ equation
         "Simulate and plot"),
     Documentation(info="<html>
 <p>
-This model tests the co-simulation of 
+This model tests the coupled simulation of 
 <a href=\"modelica://Buildings.Rooms.CFD\">
 Buildings.Rooms.CFD</a>
 with the FFD program by simulating the ventilation with forced convection in an empty room.

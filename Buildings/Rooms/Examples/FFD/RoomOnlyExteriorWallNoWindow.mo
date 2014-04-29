@@ -18,7 +18,8 @@ model RoomOnlyExteriorWallNoWindow
         boundaryCondition={Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,
             Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,
             Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,
-            Buildings.Rooms.Types.CFDBoundaryConditions.Temperature})));
+            Buildings.Rooms.Types.CFDBoundaryConditions.Temperature}),
+      samplePeriod=30));
 
   annotation (
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
@@ -28,18 +29,34 @@ model RoomOnlyExteriorWallNoWindow
         "Simulate and plot"),
     Documentation(info="<html>
 <p>
-This model tests the cosimulation of 
+This model tests the coupled simulation of 
 <a href=\"modelica://Buildings.Rooms.CFD\">
 Buildings.Rooms.CFD</a>
 with the FFD program by simulating the natural convection in an empty room with only exterior walls and without windows.
 </p>
 <p>
-The following figure shows the streamlines and temperature [degC] on the X-Z plane at Y=0.5m simulated by the FFD.
-The walls are exposed to the ambient environment and the isolation is emtremely poor. 
+Figure (a) shows the schematic of the FFD simulation.
+The dimensions of the room are 1m x 1m x 1m.
+The walls are exposed to the ambient environment and the insulation is emtremely poor.
+At t=0s, the tmperatuer of walls are 20 degC and tmperature of air is 30 degC.
+All temperature drop quickyl due to the heat loss. 
+Two sensors are placed in the room center (0.5m, 0.5m, 0.5m) that measure the temperature and the velocity. 
+</p>
+<p align=\"center\">
+<img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/OnlyWallSchematic.png\" border=\"1\"/>
+</p>
+<p align=\"center\">
+Figure (a)
+</p>
+<p>
+Figure (b) shows the streamlines and temperature [degC] on the X-Z plane at Y = 0.5m simulated by the FFD.
 In the cold mid-night of Chicago, the temperature of ceiling is the lowest and the temperature of ground floor is the highest. 
 </p>
 <p align=\"center\">
 <img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/RoomOnlyExteriorWallNoWindow.png\" border=\"1\"/>
+</p>
+<p align=\"center\">
+Figure (b)
 </p>
 <p align=\"left\">
 </html>", revisions="<html>

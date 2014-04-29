@@ -54,16 +54,26 @@ Buildings.Rooms.CFD</a>
 with the FFD program by simulating the natural convection in an empty room with only construction boundaries.
 </p>
 <p>
+Figure (a) shows the schematic of the FFD simulation.
 The dimensions of the room are 1m x 1m x 1m.
 The temperature of the east wall is set to 40 degC and the rest walls are 10 degC.
-The temperature of room air is 10 degC at t = 0s and increases with time.
-Two sensors are placed in the room center (0.5m, 0.5m, 0.5m) that measure the temperature and the velocity.
+The temperature of room air is 30 degC at t = 0s.
+Two sensors are placed in the room center (0.5m, 0.5m, 0.5m) that measure the temperature and the velocity. 
+</p>
+<p align=\"center\">
+<img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/OnlyWallSchematic.png\" border=\"1\"/>
+</p>
+<p align=\"center\">
+Figure (a)
 </p>
 <p>
-The following figure shows the streamlines and temperature [degC] on the X-Z plane at Y = 0.5m simulated by the FFD. 
+Figure (b) shows the streamlines and temperature [degC] on the X-Z plane at Y = 0.5m simulated by the FFD. 
 </p>
 <p align=\"center\">
 <img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/RoomOnlyConstructionBoundary.png\" border=\"1\"/>
+</p>
+<p align=\"center\">
+Figure (b)
 </p>
 </html>", revisions="<html>
 <ul>
