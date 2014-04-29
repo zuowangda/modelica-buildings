@@ -34,7 +34,7 @@ outp.i_N 1 // Number of grids plotted in x direction
 outp.j_N 1 // Number of grids plotted in y direction
 outp.winx 600 // Resolution of screen at x direction in pixel
 outp.winy 600 // Resolution of screen at y direction in pixel
-outp.version DEBUG // DEMO, DEBUG, RUN
+outp.version RUN // DEMO, DEBUG, RUN
 
 prob.nu 0.000016 // Kinematic viscosity
 prob.rho 1.1774 // Density
@@ -69,7 +69,7 @@ sensor.nb_sensor 2 // Number of sensors
 sensor.name OccupiedZoneAirTemperature // Name of sensor
 sensor.name Velocity // Name of sensor
 
-init.T 10.0 // Initial condition for Temperature
+init.T 30.0 // Initial condition for Temperature
 init.u 0.0 // Initial condition for velocity u
 init.v 0.0 // Initial condition for velocity v
 init.w 0.0 // Initial condition for velocity w
