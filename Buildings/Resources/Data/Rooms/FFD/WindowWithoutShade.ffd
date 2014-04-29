@@ -34,7 +34,7 @@ outp.i_N 1 // Number of grids plotted in x direction
 outp.j_N 1 // Number of grids plotted in y direction
 outp.winx 600 // Resolution of screen at x direction in pixel
 outp.winy 600 // Resolution of screen at y direction in pixel
-outp.version DEMO // DEMO, DEBUG, RUN
+outp.version RUN // DEMO, DEBUG, RUN
 
 prob.nu 0.000016 // Kinematic viscosity
 prob.rho 1.1774 // Density
