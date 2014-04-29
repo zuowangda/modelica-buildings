@@ -1,7 +1,7 @@
 within Buildings.Rooms.Examples.FFD;
-model RayleighNumberWithControl
+model NaturalConvectionWithControl
   "A case of natural convection with feedback loop control"
-  extends Rooms.Examples.FFD.RayleighNumber(matLayRoo(
+  extends NaturalConvection(                matLayRoo(
                                             material= {Buildings.HeatTransfer.Data.Solids.Concrete(x=0.0001)}), roo(
         nPorts=0,
       useCFD=true,
@@ -51,4 +51,4 @@ equation
       smooth=Smooth.None));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{200,200}}), graphics));
-end RayleighNumberWithControl;
+end NaturalConvectionWithControl;
