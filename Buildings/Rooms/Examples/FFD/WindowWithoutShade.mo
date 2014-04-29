@@ -1,6 +1,6 @@
 within Buildings.Rooms.Examples.FFD;
-model RoomExteriorWallWithWindow
-  "Natural convection in an empty room with exterior walls and windows"
+model WindowWithoutShade
+  "Natural convection in an empty room with exterior walls, windows without shade"
   extends Modelica.Icons.Example;
   extends Buildings.Rooms.Examples.FFD.BaseClasses.PartialRoom(
     nConExt=4,
@@ -32,7 +32,7 @@ model RoomExteriorWallWithWindow
         azi={Buildings.HeatTransfer.Types.Azimuth.E,Buildings.HeatTransfer.Types.Azimuth.W},
         boundaryCondition={Buildings.Rooms.Types.CFDBoundaryConditions.Temperature,
             Buildings.Rooms.Types.CFDBoundaryConditions.Temperature}),
-      cfdFilNam="Resources/Data/Rooms/FFD/WallWindow.ffd",
+      cfdFilNam="Resources/Data/Rooms/FFD/WindowWithoutShade.ffd",
       T_start=283.15,
       shadeRatio={0,0}));
 
@@ -48,7 +48,7 @@ model RoomExteriorWallWithWindow
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
             200,200}}), graphics),
     __Dymola_Commands(file=
-          "modelica://Buildings/Resources/Scripts/Dymola/Rooms/Examples/FFD/RoomExteriorWallWithWindow.mos"
+          "modelica://Buildings/Resources/Scripts/Dymola/Rooms/Examples/FFD/WindowWithoutShade.mos"
         "Simulate and plot"),
     Documentation(info="<html>
 <p>
@@ -58,12 +58,19 @@ Buildings.Rooms.CFD</a>
 with the FFD program by simulating the natural convection in a room with only exterior walls and windows.
 </p>
 <p>
-The following figure shows the streamlines and temperature [degC] on the X-Z plane at Y=0.5m simulated by the FFD.
+Figure (a) shows the schematic of FFD simulation. 
 The walls are exposed to the ambient environment. 
 Both the wall and window are well insulated and the initial temperature of wall and windows are 20 degC.
 </p>
 <p align=\"center\">
-<img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/RoomExteriorWallWithWindow.png\" border=\"1\"/>
+<img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/WindowWithoutShadeSchematic.png\" border=\"1\"/>
+</p>
+<p align=\"center\">
+Figure (a)
+</p>
+Figure (b) shows the streamlines and temperature [degC] on the X-Z plane at Y=0.5m simulated by the FFD.
+<p align=\"center\">
+<img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/WindowWithoutShade.png\" border=\"1\"/>
 </p>
 <p align=\"left\">
 </html>", revisions="<html>
@@ -74,4 +81,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-end RoomExteriorWallWithWindow;
+end WindowWithoutShade;
