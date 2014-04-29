@@ -1,11 +1,11 @@
 BaseClasses
 RoomOnlyConstructionBoundary
 RoomOnlyExteriorWallNoWindow
-RoomExteriorWallWithWindow
 RoomOnlySurfaceBoundary
-RayleighNumber
+NaturalConvection
+NaturalConvectionWithControl
 ForcedConvection
 MixedConvection
 MixedConvectionWithControl
-RayleighNumberWithControl
-WindowShade
+WindowWithoutShade
+WindowWithShade
