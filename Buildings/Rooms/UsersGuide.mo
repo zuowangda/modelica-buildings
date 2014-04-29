@@ -800,7 +800,7 @@ There is also an array <code>AirProperty</code> that contains the properties of 
 The orders of elements in this array are as follows:
 <ol>
 <li>
-The density of air at the initial state.
+The density of air at the initial state (the CFD will accept it only when there is a mass exchange between the two programs).
 </li>
 </ol> 
 </li>
