@@ -1,17 +1,17 @@
 within Buildings.Rooms.Examples.FFD;
-model RayleighNumber
+model NaturalConvection
   "An ideal natural convection flow with Rayleigh number of 1E5"
   extends Buildings.Rooms.Examples.FFD.RoomOnlySurfaceBoundary(
     TEasWal(T=273.15),
     TWesWal(T=274.15),
-    roo(cfdFilNam="Resources/Data/Rooms/FFD/RayleighNumber.ffd", T_start=273.15),
+    roo(cfdFilNam="Resources/Data/Rooms/FFD/NaturalConvection.ffd", T_start=273.15),
     system(T_ambient=273.15));
 
   annotation (
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
             200,200}}), graphics),
     __Dymola_Commands(file=
-          "modelica://Buildings/Resources/Scripts/Dymola/Rooms/Examples/FFD/RayleighNumber.mos"
+          "modelica://Buildings/Resources/Scripts/Dymola/Rooms/Examples/FFD/NaturalConvection.mos"
         "Simulate and plot"),
     Documentation(info="<html>
 <p>
@@ -46,7 +46,7 @@ North & South wall, Ceiling, Floor: Fixed heat flux at 0 W/m2.
 </li>
 </ul>
 <p align=\"center\">
-<img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/RayleighNumber.png\" border=\"1\"/>
+<img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/NaturalConvection.png\" border=\"1\"/>
 </p>
 <p align=\"left\">
 <p>
@@ -71,4 +71,4 @@ Reduction of numerical viscosity in FFD model.</a><br/>
 Journal of Engineering Applications of Computational Fluid Mechanics, 6(2), p. 234-247. 
 </p>
 </html>"));
-end RayleighNumber;
+end NaturalConvection;
