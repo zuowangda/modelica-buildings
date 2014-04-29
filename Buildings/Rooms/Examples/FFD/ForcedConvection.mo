@@ -64,10 +64,19 @@ This model tests the co-simulation of
 <a href=\"modelica://Buildings.Rooms.CFD\">
 Buildings.Rooms.CFD</a>
 with the FFD program by simulating the ventilation with forced convection in an empty room.
-The following figure shows streamlines and contour of horizontal velocity U simulated by the FFD. 
+Figure (a) shows the schematic of the FFD simulation and Figure (b) shows streamlines and contour of horizontal velocity U simulated by the FFD. 
+</p>
+<p align=\"center\">
+<img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/ConvectionSchematic.png\" border=\"1\"/>
+</p>
+<p align=\"center\">
+Figure (a)
 </p>
 <p align=\"center\">
 <img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/ForcedConvection.png\" border=\"1\"/>
+</p>
+<p align=\"center\">
+Figure (b)
 </p>
 <p align=\"left\">
 </html>", revisions="<html>

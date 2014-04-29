@@ -76,10 +76,19 @@ with the FFD program by simulating the ventilation with mixed convection in an e
 The temperature of floor is fixed at 30 degC and the temperature on other walls and ceiling are fixed at 10 degC.
 The supply air temperature is fixed at 10 degC. 
 </p>
-The following figure shows the streamlines and temperature on the X-Z plane at Y=0.5 simulated by the FFD. 
+Figure (a) shows the schematic of FFD simulation and Figure (b) shows the streamlines and temperature on the X-Z plane at Y=0.5 simulated by the FFD. 
+</p>
+<p align=\"center\">
+<img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/ConvectionSchematic.png\" border=\"1\"/>
+</p>
+<p align=\"center\">
+Figure (a)
 </p>
 <p align=\"center\">
 <img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/MixedConvection.png\" border=\"1\"/>
+</p>
+<p align=\"center\">
+Figure (b)
 </p>
 <p align=\"left\">
 </html>", revisions="<html>
