@@ -58,27 +58,39 @@ equation
         "Simulate and plot"),
     Documentation(info="<html>
 <p>
-This model tests the cosimulation of 
+This model tests the coupled simulation of 
 <a href=\"modelica://Buildings.Rooms.CFD\">
 Buildings.Rooms.CFD</a>
 with the FFD program by simulating the natural convection in an empty room with only surface boundaries. 
 It is also used to test the adiabatic boundary conditon in the FFD code.
 </p>
 <p>
-The boundary conditions in this model are:
+Figure (a) shows the schematic of the FFD simulation. 
+The following conditions are applied at Modelica side:
 <li>
-East wall: Fixed temperature at 40 degC, 
+East Wall: Fixed temperature at 40 degC, 
 </li>
 <li>
-West wall: Fixed temperature at 10 degC,
+West Wall: Fixed temperature at 10 degC,
 </li>
 <li>
-North & South wall, Ceiling, Floor: Fixed heat flux at 0 W/m2. 
+North & South Wall, Ceiling, Floor: Fixed heat flux at 0 W/m2. 
 </li>
-<li>
+</p>
+<p align=\"center\">
+<img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/OnlyWallSchematic.png\" border=\"1\"/>
+</p>
+<p align=\"center\">
+Figure (a)
+</p>
+<p>
+Figure (b) shows the streamlines and temperature [degC] on the X-Z plane at Y = 0.5m simulated by the FFD.
 </p>
 <p align=\"center\">
 <img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/RoomOnlySurfaceBoundary.png\" border=\"1\"/>
+</p>
+<p align=\"center\">
+Figure (b)
 </p>
 <p align=\"left\">
 </html>", revisions="<html>
