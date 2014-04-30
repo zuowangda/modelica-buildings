@@ -613,6 +613,7 @@ int assign_thermal_bc(PARA_DATA *para, REAL **var, int **BINDEX) {
       kmax = para->geom->kmax;
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
   REAL sensibleHeat=para->cosim->modelica->sensibleHeat;
+  REAL latentHeat=para->cosim->modelica->latentHeat;
   REAL *temHea, celVol;
 
   /****************************************************************************
@@ -705,6 +706,14 @@ int assign_thermal_bc(PARA_DATA *para, REAL **var, int **BINDEX) {
        var[TEMPS][IX(i,j,k)] = sensibleHeat * celVol / para->geom->volFlu;
     }
   END_FOR
+
+  /****************************************************************************
+  | Data received, but not used in current version
+  ****************************************************************************/
+  sprintf(msg, "Latent heat received by FFD is %f",
+                 latentHeat);
+  ffd_log(msg, FFD_NORMAL);
+
   return 0;
 } // End of assign_thermal_bc()
 
