@@ -36,7 +36,7 @@ model WindowWithShade
       linearizeRadiation=false,
       shadeRatio={0.5,0.5},
       T_start=283.15,
-      samplePeriod=6));
+      samplePeriod=10));
 
   parameter HeatTransfer.Data.OpaqueConstructions.Insulation100Concrete200 matLayExt
     "Construction material for exterior walls"
@@ -77,13 +77,16 @@ Both the wall and window are well insulated and the initial temperature of wall 
 <p align=\"center\">
 Figure (a)
 </p>
-Figure (b) shows the streamlines and temperature [degC] on the X-Z plane at Y=0.5m simulated by the FFD.
+Figure (b) shows the streamlines and temperature [degC] on the X-Z plane at Y=0.5m at t = 300s simulated by the FFD.
 <p align=\"center\">
-
+<img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Rooms/Examples/FFD/WindowWithShade.png\" border=\"1\"/>
 </p>
 <p align=\"center\">
 Figure (b)
 </p>
+<p>
+Note: Current version of the FFD program does not support the moving boundary.
+Thus, the shade control signal must to be constant that is the same as the initial value.
 <p align=\"left\">
 </html>", revisions="<html>
 <ul>
