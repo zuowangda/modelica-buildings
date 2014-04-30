@@ -58,6 +58,7 @@
 #include "visualization.h"
 #endif
 
+static PARA_DATA para;
 ///////////////////////////////////////////////////////////////////////////////
 /// Assign the parameter for cosimulation
 ///

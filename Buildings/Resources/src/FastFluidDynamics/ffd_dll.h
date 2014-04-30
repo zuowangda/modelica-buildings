@@ -23,7 +23,7 @@
 #include "ffd.h"
 #endif
 
-static PARA_DATA para;
+//static PARA_DATA para;
 
 // Windows
 #ifdef _MSC_VER
