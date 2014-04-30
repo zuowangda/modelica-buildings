@@ -21,6 +21,8 @@ block CFDExchange "Block that exchanges data with the CFD code"
   parameter Real yFixed[nRea] "Fixed output, used if activateInterface=false"
     annotation (Evaluate=true, Dialog(enable=not activateInterface));
   parameter Integer nSur(min=1) "Number of surfaces";
+  parameter Integer nConExtWin(min=0)
+    "number of exterior construction with window";
   parameter CFDSurfaceIdentifier surIde[nSur] "Surface identifiers";
   parameter Boolean haveShade
     "Set to true if at least one window in the room has a shade";
@@ -82,13 +84,14 @@ protected
     input Integer nSur "Number of surfaces";
     input Integer nSen(min=0)
       "Number of sensors that are connected to CFD output";
+    input Integer nConExtWin(min=0)
+      "number of exterior construction with window";
     input Boolean verbose "Set to true for verbose output";
     input Integer nXi
       "Number of independent species concentration of the inflowing medium";
     input Integer nC "Number of trace substances of the inflowing medium";
     input Modelica.SIunits.Density rho_start "Density at initial state";
   protected
-    Integer nConExtWin=0;
     Integer coSimFlag=0;
   algorithm
     if verbose then
@@ -323,6 +326,7 @@ initial equation
     haveShade=haveShade,
     nSur=nSur,
     nSen=nSen,
+    nConExtWin=nConExtWin,
     nPorts=nPorts,
     nXi=nXi,
     nC=nC,

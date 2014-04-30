@@ -43,7 +43,8 @@ model CFDAirHeatMassBalance
     final yFixed=yFixed,
     final nXi=Medium.nXi,
     final nC=Medium.nC,
-    rho_start=rho_start) "Block that exchanges data with the CFD simulation"
+    rho_start=rho_start,
+    nConExtWin=NConExtWin) "Block that exchanges data with the CFD simulation"
     annotation (Placement(transformation(extent={{-40,180},{-20,200}})));
 
   Modelica.Blocks.Interfaces.RealOutput yCFD[nSen] if haveSensor
