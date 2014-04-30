@@ -796,7 +796,7 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
   
   if(para->bc->nb_source!=0) {
     sscanf(string,"%s%d%d%d%d%d%d%f", 
-           &name, &SI, &SJ, &SK, &EI, &EJ, &EK, &MASS);
+           name, &SI, &SJ, &SK, &EI, &EJ, &EK, &MASS);
     bcnameid++;
  
     sprintf(msg, "read_sci_input(): Source %s is not used in current version.",
@@ -873,7 +873,7 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
 
   // Read simulation time settings
   fgets(string, 400, file_params);
-  sscanf(string,"%f %lf %d", &para->mytime->t_start, &para->mytime->dt,
+  sscanf(string,"%f %lld %d", &para->mytime->t_start, &para->mytime->dt,
     &para->mytime->step_total);
 
   sprintf(msg, "read_sci_input(): para->mytime->t_start=%lu", 

@@ -471,7 +471,6 @@ void draw_xy_density(PARA_DATA *para, REAL **var) {
   REAL d00, d01, d10, d11;
   REAL *x = var[X], *y = var[Y], *dens = var[Xi1];
   int imax = para->geom->imax, jmax = para->geom->jmax;
-  int kmax = para->geom->kmax; 
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
   int pindex = para->geom->pindex;
 
@@ -647,10 +646,9 @@ void draw_temperature(PARA_DATA *para, REAL **var) {
 ///////////////////////////////////////////////////////////////////////////////
 void draw_xy_temperature(PARA_DATA *para, REAL **var) {
   int i, j;
-  REAL *x = var[X], *y = var[Y], *z = var[Z], *temp = var[TEMP];
+  REAL *x = var[X], *y = var[Y], *temp = var[TEMP];
   int mycolor;
   int imax = para->geom->imax, jmax = para->geom->jmax;
-  int kmax = para->geom->kmax;
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
   int pindex = para->geom->pindex;
 
@@ -686,7 +684,7 @@ void draw_xy_temperature(PARA_DATA *para, REAL **var) {
 ///////////////////////////////////////////////////////////////////////////////
 void draw_yz_temperature(PARA_DATA *para, REAL **var) {
   int j, k;
-  REAL *x = var[X], *y = var[Y], *z = var[Z], *temp = var[TEMP];
+  REAL *y = var[Y], *z = var[Z], *temp = var[TEMP];
   int mycolor;
   int imax = para->geom->imax, jmax = para->geom->jmax;
   int kmax = para->geom->kmax;
@@ -725,7 +723,7 @@ void draw_yz_temperature(PARA_DATA *para, REAL **var) {
 ///////////////////////////////////////////////////////////////////////////////
 void draw_zx_temperature(PARA_DATA *para, REAL **var) {
   int i, k;
-  REAL *x = var[X], *y = var[Y], *z = var[Z], *temp = var[TEMP];
+  REAL *x = var[X], *z = var[Z], *temp = var[TEMP];
   int mycolor;
   int imax = para->geom->imax, jmax = para->geom->jmax;
   int kmax = para->geom->kmax;

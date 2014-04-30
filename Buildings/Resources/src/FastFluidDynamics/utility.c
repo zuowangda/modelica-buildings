@@ -284,7 +284,7 @@ REAL average_volume(PARA_DATA *para, REAL **var, REAL *psi) {
   int kmax = para->geom->kmax;
   int i, j, k;
   int IMAX = imax+2, IJMAX = (imax+2)*(jmax+2);
-  REAL tmp1 = 0, tmp2 = 0, tmp3 = 0;
+  REAL tmp1 = 0, tmp2 = 0;
 
   if (para->geom->volFlu==0)
     return 0;
@@ -726,7 +726,8 @@ REAL V_global_min(PARA_DATA *para, REAL **var) {
   Vmin = 0;   
   
   FOR_ALL_CELL    
-    tmp = ((u[IX(i,j,k)]*u[IX(i,j,k)])+(v[IX(i,j,k)]*v[IX(i,j,k)]));
+    tmp = (u[IX(i,j,k)]*u[IX(i,j,k)])+(v[IX(i,j,k)]*v[IX(i,j,k)]
+         + w[IX(i,j,k)]*w[IX(i,j,k)]);
     Vmin = Vmin < tmp ? Vmin : tmp;
   END_FOR   
   
