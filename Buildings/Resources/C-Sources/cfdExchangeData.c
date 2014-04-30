@@ -68,17 +68,19 @@ int cfdExchangeData(double t0, double dt, double *u, int nU, int nY,
       printf("temHea[%d] = %f\n", i, cosim->modelica->temHea[i]); 
   }
 
-  if(cosim->para->sha==1)
+  if(cosim->para->sha==1) {
+    printf("Set shade conditions for %d windows\n", cosim->para->nConExtWin);
     for(j=0; j<cosim->para->nConExtWin; j++) {
       cosim->modelica->shaConSig[j] = (float) u[i+j];
       cosim->modelica->shaAbsRad[j] = (float) u[i+j+cosim->para->nConExtWin];
       if(verbose==1)
         printf("shaConSig[%d] = %f, shaAbsRad[%d] = %f\n", 
-               cosim->modelica->shaConSig[j],
-               cosim->modelica->shaAbsRad[j]);
+               j, cosim->modelica->shaConSig[j],
+               j, cosim->modelica->shaAbsRad[j]);
     }
-  i = i + 2*cosim->para->nConExtWin;
-  
+    i = i + 2*cosim->para->nConExtWin;
+  }
+
   cosim->modelica->sensibleHeat = (float) u[i]; 
   if(verbose==1) printf("sensibleHeat = %f\n", cosim->modelica->sensibleHeat);
   i++;
