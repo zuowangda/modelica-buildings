@@ -136,7 +136,7 @@ copy "%BuildConfiguration%\%MSbuildName%.lib" "%DIR%" /Y
 ::Clean Build Folder
 ::*******************************************************************
 echo Clean %BuildConfiguration% Build Folder
-rmdir %BuildConfiguration% /s
+rmdir %BuildConfiguration% /s /q
 goto :eof
 ::Note: /s: Removes the specified directory and all subdirectories including any files.
 
