@@ -741,26 +741,33 @@ int read_sci_input(PARA_DATA *para, REAL **var, int **BINDEX) {
       ffd_log(msg, FFD_NORMAL);
 
       // Reset X index
-      if(SI==1) {
+      if(SI==1) { // West
         SI = 0;
         if(EI>=imax) EI = EI + 1;
       }
-      else // 
+      else if(SI==imax+1) // East
         EI = EI + SI;
+      else // Internal
+        EI = EI + SI - 1;
+
       // Reset Y index
-      if(SJ==1) {
+      if(SJ==1) { // South
         SJ = 0;
         if(EJ>=jmax) EJ = EJ + 1;
       }
-      else 
+      else if(SJ==jmax+1) // North
         EJ = EJ + SJ;
+      else // Internal
+        EJ = EJ + SJ - 1;
       // Reset Z index
-      if(SK==1) {
+      if(SK==1) { // Floor
         SK = 0;
         if(EK>=kmax) EK = EK + 1;
       }
-      else 
+      else if (SK==kmax+1) // Ceiling
         EK = EK + SK;
+      else // Internal
+          EK = EK + SK -1;
 
       // Assign value for each wall cell
       for(ii=SI; ii<=EI; ii++)
