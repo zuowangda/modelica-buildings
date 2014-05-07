@@ -6,6 +6,5 @@ NaturalConvection
 NaturalConvectionWithControl
 ForcedConvection
 MixedConvection
-MixedConvectionWithControl
 WindowWithoutShade
 WindowWithShade
