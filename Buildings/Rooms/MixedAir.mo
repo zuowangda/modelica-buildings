@@ -24,10 +24,10 @@ public
         iconTransformation(extent={{-240,140},{-200,180}})));
 initial equation
 for i in 1:NSurBou loop
-  Modelica.Utilities.Streams.print(string="CFD:surf_surBou[" + String(i)+ "].Q_flow(t=0) =" + String(surf_surBou[i].Q_flow));
-  Modelica.Utilities.Streams.print(string="CFD:air.conSurBou[" + String(i)+ "].Q_flow(t=0) =" + String(air.conSurBou[i].Q_flow));
-  Modelica.Utilities.Streams.print(string="CFD:surf_surBou[" + String(i)+ "].T(t=0) =" + String(surf_surBou[i].T));
-  Modelica.Utilities.Streams.print(string="CFD:air.conSurBou[" + String(i)+ "].T(t=0) =" + String(air.conSurBou[i].T));
+  Modelica.Utilities.Streams.print(string="MixedAir:surf_surBou[" + String(i)+ "].Q_flow(t=0) =" + String(surf_surBou[i].Q_flow));
+  Modelica.Utilities.Streams.print(string="MixedAir:air.conSurBou[" + String(i)+ "].Q_flow(t=0) =" + String(air.conSurBou[i].Q_flow));
+  Modelica.Utilities.Streams.print(string="MixedAir:surf_surBou[" + String(i)+ "].T(t=0) =" + String(surf_surBou[i].T));
+  Modelica.Utilities.Streams.print(string="MixedAir:air.conSurBou[" + String(i)+ "].T(t=0) =" + String(air.conSurBou[i].T));
 end for;
 
 equation
