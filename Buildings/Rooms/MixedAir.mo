@@ -22,6 +22,14 @@ public
     "Control signal for the shading device (removed if no shade is present)"
     annotation (Placement(transformation(extent={{-300,160},{-260,200}}),
         iconTransformation(extent={{-240,140},{-200,180}})));
+initial equation
+for i in 1:NSurBou loop
+  Modelica.Utilities.Streams.print(string="CFD:surf_surBou[" + String(i)+ "].Q_flow(t=0) =" + String(surf_surBou[i].Q_flow));
+  Modelica.Utilities.Streams.print(string="CFD:air.conSurBou[" + String(i)+ "].Q_flow(t=0) =" + String(air.conSurBou[i].Q_flow));
+  Modelica.Utilities.Streams.print(string="CFD:surf_surBou[" + String(i)+ "].T(t=0) =" + String(surf_surBou[i].T));
+  Modelica.Utilities.Streams.print(string="CFD:air.conSurBou[" + String(i)+ "].T(t=0) =" + String(air.conSurBou[i].T));
+end for;
+
 equation
   connect(heaGai.qGai_flow, qGai_flow) annotation (Line(
       points={{-222,100},{-252,100},{-252,80},{-280,80}},
